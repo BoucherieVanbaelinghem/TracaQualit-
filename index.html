@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2e6b4f"><link rel="icon" href="icon.svg"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><script src="seed.js"></script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2e6b4f"><link rel="icon" href="icon.svg"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Qualité Vanbaelinghem</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap">
@@ -362,12 +362,13 @@ function listen(name,q,asMap){
   LOADED[name]=true;kick();
  },function(e){DBERR=(e&&e.code)||'erreur';kick()});
 }
-
 /* ===== Stockage local (hors claude.ai) : IndexedDB + mémoire, même interface que la base partagée ===== */
 async function localDB(){
  var idb=await new Promise(function(ok,ko){var r=indexedDB.open('qualite-vanbaelinghem',1);r.onupgradeneeded=function(){r.result.createObjectStore('docs')};r.onsuccess=function(){ok(r.result)};r.onerror=function(){ko(r.error)}});
  var mem={},subs=[];
  await new Promise(function(ok){var tx=idb.transaction('docs','readonly'),c=tx.objectStore('docs').openCursor();c.onsuccess=function(){var cu=c.result;if(cu){var k=cu.key.split('/');(mem[k[0]]=mem[k[0]]||{})[k[1]]=cu.value;cu.continue()}else ok()};c.onerror=ok});
+ var seeded=false;try{seeded=localStorage.getItem('qv-seeded-v1')==='1'}catch(e){}
+ if(!seeded&&window.__QV_SEED){Object.keys(window.__QV_SEED).forEach(function(c){Object.keys(window.__QV_SEED[c]).forEach(function(id){mem[c]=mem[c]||{};if(!mem[c][id]){mem[c][id]=window.__QV_SEED[c][id];try{var tx=idb.transaction('docs','readwrite');tx.objectStore('docs').put(mem[c][id],c+'/'+id)}catch(e){}}})});try{localStorage.setItem('qv-seeded-v1','1')}catch(e){}}
  function persist(coll,id,val){try{var tx=idb.transaction('docs','readwrite'),st=tx.objectStore('docs');if(val===null)st.delete(coll+'/'+id);else st.put(val,coll+'/'+id)}catch(e){}}
  function fire(coll){subs.forEach(function(s){if(s.coll===coll)s.run()})}
  function cmp(a,b){return a<b?-1:a>b?1:0}
@@ -1245,7 +1246,7 @@ function drawFlow(){
  document.getElementById('modal').innerHTML='<div class="sheet"><h2>'+esc(F.title)+'</h2>'+(F.subt?'<div class="sub-h">'+esc(F.subt)+'</div>':'')+(F.prod&&F.tab!=='prod'?'<div class="sub-h" style="color:var(--accent);font-weight:600">'+esc(F.prod.name)+'</div>':'')+'<div class="stabs" role="tablist">'+F.tabs.map(function(k){return '<button role="tab" data-k="tab" data-v="'+k+'" aria-selected="'+(F.tab===k)+'">'+TL[k]+'</button>'}).join('')+'</div><div class="sbody">'+fBody()+'</div><div class="sfoot"><span class="hint" id="hint">'+esc(v.hint||'')+'</span><button class="btn ghost" data-k="cancel">Annuler</button><button class="btn primary" id="okbtn" data-k="ok" '+(v.ok&&!F.busy?'':'disabled')+'>Valider</button></div></div>'}
 
 /* onglet Fabrication (Traçabilité) : favoris partagés (db reglages/favoris) + derniers produits enregistrés, le plus récent en premier */
-var DEFAULT_FAV=['Sel','Poivre','Persil','Oignon frit','Saumon congelé'];
+var DEFAULT_FAV=[];
 function favList(){var r=(D.reglages||{}).favoris;return r&&Array.isArray(r.items)?r.items.slice():DEFAULT_FAV.slice()}
 async function favStore(l){var ok=await put('reglages','favoris',Object.assign({},(D.reglages||{}).favoris||{},{items:l,by:operator(),ts:Date.now()}));if(ok){D.reglages=D.reglages||{};D.reglages.favoris=Object.assign({},D.reglages.favoris||{},{items:l})}return ok}
 function recentProds(){var rows=[],seen={};
@@ -1254,6 +1255,7 @@ function recentProds(){var rows=[],seen={};
  rows.sort(function(a,b){return b.ts-a.ts});
  return rows.filter(function(x){var k=x.name.toLowerCase().trim();if(seen[k])return false;seen[k]=1;return true}).slice(0,24)}
 function assocName(name,cat,fabId){
+ if(!fabId){var nk=name.toLowerCase().trim(),lp=D.productions.filter(function(p){return (p.items||[]).some(function(it){return it.name&&it.name.toLowerCase().trim()===nk})}).sort(function(x,y){return (y.ts||0)-(x.ts||0)})[0];if(lp){fabId=lp.id;if(!cat){var li=(lp.items||[]).filter(function(it){return it.name&&it.name.toLowerCase().trim()===nk})[0];cat=li&&li.cat||''}}}
  F.prod={id:'fav-'+sid(name),name:name};if(fabId)F.prod.fabId=fabId;F.label=name;F.itemName=name;F.itemCat=cat||'';
  var nm=name.toLowerCase().trim(),e=D.catalogue.filter(function(c){return c.module==='etiq'&&c.dlcJours>0&&c.name.toLowerCase().trim()===nm})[0];
  F.prodDlc=e?+e.dlcJours:0;F.dlcAuto=false;if(F.prodDlc>0&&!F.lots.length&&!F.lotIn){F.dlcIn=isoAdd(F.date,F.prodDlc);F.dlcAuto=true}}
@@ -1268,25 +1270,25 @@ function entriesFor(name){var nm=String(name||'').toLowerCase().trim(),out=[],by
 function fmtTs(ts){if(!ts)return '—';var d=new Date(ts);return frd(dKey(d),{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+hhmm(d)}
 function favNrm(x){return String(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim()}
 function fabTab(){
- return '<input type="search" id="favq" placeholder="Rechercher un produit ou un ingrédient" value="'+esc(F.favQ||'')+'" autocomplete="off" style="width:100%;margin-bottom:10px">'+(F.prod?'<div class="selprod">Fabrication : '+esc(F.prod.name)+'</div>':'<p class="meta" style="margin:0 0 10px">Touchez un favori ou un produit récent pour l’associer à cette fiche.</p>')+'<div id="favres">'+favRes()+'</div>'}
+ return '<input type="search" id="favq" placeholder="Rechercher une fabrication" value="'+esc(F.favQ||'')+'" autocomplete="off" style="width:100%;margin-bottom:10px">'+(F.prod?'<div class="selprod">Fabrication : '+esc(F.prod.name)+'</div>':'<p class="meta" style="margin:0 0 10px">Touchez une fabrication favorite ou récente pour l’associer à cette fiche.</p>')+'<div id="favres">'+favRes()+'</div>'}
 function favRes(){
  var q=favNrm(F.favQ),favAll=favList(),fav=q?favAll.filter(function(x){return favNrm(x).indexOf(q)>-1}):favAll,cur=F.prod?F.prod.name.toLowerCase().trim():'',rec=recentProds().filter(function(x){return !q||favNrm(x.name).indexOf(q)>-1}),ed=!!F.favEdit;
  function isFav(n){return favAll.some(function(x){return x.toLowerCase().trim()===n.toLowerCase().trim()})}
  var h='';
- h+='<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><b style="flex:1">Favoris</b><button class="btn sm" data-k="favedit">'+(ed?'Terminer':'Modifier')+'</button></div>';
+ h+='<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><b style="flex:1">Fabrications favorites</b><button class="btn sm" data-k="favedit">'+(ed?'Terminer':'Modifier')+'</button></div>';
  h+='<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:10px">'+fav.map(function(n){
   return ed?'<button class="tile item edit" data-k="favdel" data-v="'+esc(n)+'" style="min-height:64px"><h3>'+esc(n)+'</h3><span class="meta">✕ Retirer</span></button>'
-   :(function(){var en=entriesFor(n),la=en.length?en[en.length-1].ts:0;return '<button class="tile item" data-k="pickname" data-v="'+esc(n)+'" style="min-height:64px'+(cur===n.toLowerCase().trim()?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(n)+'</h3>'+(la?'<span class="meta">Entrée '+frd(dKey(new Date(la)),{day:'2-digit',month:'2-digit'})+'</span>':'')+'</button>'})()}).join('')+'</div>';
+   :(function(){var en=entriesFor(n),la=en.length?en[en.length-1].ts:0;return '<button class="tile item" data-k="pickname" data-v="'+esc(n)+'" style="min-height:64px'+(cur===n.toLowerCase().trim()?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(n)+'</h3>'+(la?'<span class="meta">Entrée '+frd(dKey(new Date(la)),{day:'2-digit',month:'2-digit'})+'</span>':'')+'</button>'})()}).join('')+'</div>'+(fav.length?'':'<p class="meta" style="margin:-2px 0 12px">'+(q?'Aucune fabrication favorite ne correspond.':'Aucune fabrication favorite pour le moment. Touchez ☆ sur une fabrication ci-dessous pour l’ajouter, ou saisissez son nom.')+'</p>');
  if(F.prod&&favAll.some(function(x){return x.toLowerCase().trim()===cur})){var ee=entriesFor(F.prod.name);
   h+='<div class="group" style="margin-bottom:14px"><h3>Entrées de « '+esc(F.prod.name)+' » · de la plus ancienne à la plus récente</h3>'+(ee.length?ee.slice(-12).map(function(x){return '<button class="sess" data-k="pickentry" data-lot="'+esc(x.lot)+'" data-dlc="'+esc(x.dlc)+'"><span style="flex:1"><b>'+fmtTs(x.ts)+'</b><br><span class="meta">'+esc(x.src)+(x.lot?' · Lot '+esc(x.lot):'')+(x.dlc?' · DLC '+esc(frd(x.dlc)):'')+'</span></span></button>'}).join(''):'<span class="meta">Aucune entrée enregistrée pour ce produit.</span>')+'</div>'}
- h+='<div style="display:flex;gap:8px;margin-bottom:16px"><input type="text" id="favin" placeholder="Ajouter un ingrédient favori" style="flex:1"><button class="btn" data-k="favadd">Ajouter</button></div>';
+ h+='<div style="display:flex;gap:8px;margin-bottom:16px"><input type="text" id="favin" placeholder="Ajouter une fabrication favorite" style="flex:1"><button class="btn" data-k="favadd">Ajouter</button></div>';
  h+='<b>Derniers enregistrés</b>';
  h+=rec.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:8px">'+rec.map(function(x){var d=x.ts?new Date(x.ts):null;
   return '<div style="position:relative"><button class="tile item" data-k="pickname" data-v="'+esc(x.name)+'" data-c="'+esc(x.cat||'')+'" data-fid="'+esc(x.fabId||'')+'" style="min-height:70px;width:100%'+(cur===x.name.toLowerCase().trim()?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(x.name)+'</h3>'+(d?'<span class="meta">'+(dKey(d)===today()?'Aujourd’hui':frd(dKey(d),{day:'2-digit',month:'2-digit'}))+' · '+hhmm(d)+'</span>':'')+'</button><button class="star" data-k="favtog" data-v="'+esc(x.name)+'" aria-label="'+(isFav(x.name)?'Retirer des favoris':'Ajouter aux favoris')+'" style="position:absolute;top:0;right:0">'+(isFav(x.name)?'★':'☆')+'</button></div>'}).join('')+'</div>':'<p class="meta" style="margin-top:8px">Aucun enregistrement pour le moment.</p>';
  if(q.length>=2){var seen={};rec.forEach(function(x){seen[favNrm(x.name)]=1});fav.forEach(function(x){seen[favNrm(x)]=1});
-  var hits=D.catalogue.filter(function(c){if(!c.name||favNrm(c.name).indexOf(q)<0)return false;var k=favNrm(c.name);if(seen[k])return false;seen[k]=1;return true}).sort(function(a,b){return a.name.localeCompare(b.name,'fr')}).slice(0,24);
-  if(hits.length)h+='<b style="display:block;margin-top:14px">Produits</b><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:8px">'+hits.map(function(c){return '<button class="tile item" data-k="pickname" data-v="'+esc(c.name)+'" data-c="'+esc(c.cat||'')+'" style="min-height:64px'+(cur===c.name.toLowerCase().trim()?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(c.name)+'</h3></button>'}).join('')+'</div>'}
- if(q&&!fav.length&&!rec.length&&h.indexOf('Produits')<0)h+='<p class="meta" style="margin-top:12px">Aucun résultat pour « '+esc(F.favQ)+' ».</p>';
+  var hits=D.catalogue.filter(function(c){if(!c.name||c.module!=='etiq'||favNrm(c.name).indexOf(q)<0)return false;var k=favNrm(c.name);if(seen[k])return false;seen[k]=1;return true}).sort(function(a,b){return a.name.localeCompare(b.name,'fr')}).slice(0,24);
+  if(hits.length)h+='<b style="display:block;margin-top:14px">Fabrications du catalogue</b><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:8px">'+hits.map(function(c){return '<div style="position:relative"><button class="tile item" data-k="pickname" data-v="'+esc(c.name)+'" data-c="'+esc(c.cat||'')+'" style="min-height:64px;width:100%'+(cur===c.name.toLowerCase().trim()?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(c.name)+'</h3></button><button class="star" data-k="favtog" data-v="'+esc(c.name)+'" aria-label="Ajouter aux favoris" style="position:absolute;top:0;right:0">☆</button></div>'}).join('')+'</div>'}
+ if(q&&!fav.length&&!rec.length&&h.indexOf('Fabrications du catalogue')<0)h+='<p class="meta" style="margin-top:12px">Aucun résultat pour « '+esc(F.favQ)+' ».</p>';
  return h}
 function tabInd(anim){var st=document.querySelector('#modal .tside .stabs');if(!st)return;var i=st.querySelector('.tind'),b=st.querySelector('[aria-selected="true"]');if(!i)return;
  if(!b){i.style.opacity='0';return}
