@@ -1247,7 +1247,7 @@ function fabPickList(){var lim=addDays(today(),-2),rows=[];D.productions.forEach
  return '<b>Fabrications récentes</b><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin:8px 0 16px">'+rows.map(function(x){var on=F.prod&&F.prod.fabId===x.p.id&&F.prod.name===x.it.name;return '<button class="tile item" data-k="pickfab" data-v="'+esc(x.p.id+'|'+x.i)+'" style="min-height:70px'+(on?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(x.it.name)+'</h3><span class="meta">'+(x.p.date===today()?'Aujourd’hui':frd(x.p.date,{day:'2-digit',month:'2-digit'}))+' · qté '+esc(String(x.it.qty).replace('.',','))+(x.p.op?' · '+esc(x.p.op):'')+'</span></button>'}).join('')+'</div><b>Autres productions</b><div style="height:8px"></div>'}
 function prodGrid(){
  var cats=catList('prod'),cur=F.prodCat||cats[0],q=(F.prodQ||'').trim().toLowerCase();
- var its=D.catalogue.filter(function(x){return x.module==='prod'&&(q?x.name.toLowerCase().indexOf(q)>=0:x.cat===cur)}).sort(byName);
+ var qn=favNrm(q),its=D.catalogue.filter(function(x){return x.module==='prod'&&(qn?smartMatch(x.name,qn)>=0:x.cat===cur)}).sort(function(a,b){return qn?(smartMatch(a.name,qn)-smartMatch(b.name,qn)||byName(a,b)):byName(a,b)});
  return '<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">'+(its.length?its.map(function(x){return '<button class="tile item" data-k="pick" data-v="'+esc(x.id)+'" style="min-height:70px"><h3>'+esc(x.name)+'</h3>'+(q?'<span class="meta">'+esc(x.cat||'')+'</span>':'')+'</button>'}).join(''):'<div class="empty" style="grid-column:1/-1">Aucune production'+(q?' pour cette recherche':' dans cette catégorie')+'.</div>')+'</div>'}
 function pendingLot(){return !!F.dlcIn&&F.tabs.indexOf('lots')>=0&&!!(F.lotIn||(F.lotsSeen&&!F.dlcAuto))}
 function fBody(){
@@ -1309,8 +1309,8 @@ function latestProd(name){var nk=String(name||'').toLowerCase().trim(),best=null
 function fabNames(q){var seen={},out=[];function add(n,c){if(!n)return;var k=favNrm(n);if(seen[k])return;seen[k]=1;out.push({name:n,cat:c||''})}
  D.productions.forEach(function(p){(p.items||[]).forEach(function(it){add(it.name,it.cat)})});
  D.catalogue.forEach(function(c){if(c.module==='prod'||c.module==='etiq')add(c.name,c.cat)});
- q=favNrm(q);var m=out.filter(function(x){return favNrm(x.name).indexOf(q)>-1});
- m.sort(function(a,b){var la=latestProd(a.name),lb=latestProd(b.name);return (lb?lb.ts||0:0)-(la?la.ts||0:0)||a.name.localeCompare(b.name,'fr')});return m.slice(0,14)}
+ q=favNrm(q);var m=[];out.forEach(function(x){var sc=smartMatch(x.name,q);if(sc>=0){x.sc=sc;m.push(x)}});
+ m.sort(function(a,b){var la=latestProd(a.name),lb=latestProd(b.name);return a.sc-b.sc||(lb?lb.ts||0:0)-(la?la.ts||0:0)||a.name.localeCompare(b.name,'fr')});return m.slice(0,40)}
 function recentIngr(){var rows=[],seen={};D.releves.forEach(function(r){if(r.module==='trace'&&r.prod)rows.push({name:r.prod,ts:r.ts||0})});rows.sort(function(a,b){return b.ts-a.ts});return rows.filter(function(x){var k=x.name.toLowerCase().trim();if(seen[k])return false;seen[k]=1;return true}).slice(0,24)}
 function recentDishes(){var rows=[],seen={};D.productions.forEach(function(p){(p.items||[]).forEach(function(it){if(it.name)rows.push({name:it.name,ts:p.ts||0,fabId:p.id})})});rows.sort(function(a,b){return b.ts-a.ts});return rows.filter(function(x){var k=x.name.toLowerCase().trim();if(seen[k])return false;seen[k]=1;return true}).slice(0,24)}
 function assocName(name,cat,fabId){
@@ -1327,6 +1327,9 @@ function entriesFor(name){var nm=String(name||'').toLowerCase().trim(),out=[],by
  D.productions.forEach(function(p){(p.items||[]).forEach(function(it){(it.ingr||[]).forEach(function(g){if(m(g.name))out.push({ts:tsOf(p.ts,p.date),src:'Fabrication du jour',lot:g.lot||'',dlc:''})})})});
  out.sort(function(a,b){return a.ts-b.ts});return out}
 function fmtTs(ts){if(!ts)return '—';var d=new Date(ts);return frd(dKey(d),{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+hhmm(d)}
+/* recherche intelligente : chaque lettre tapée filtre en direct ; les noms qui commencent par la saisie passent d’abord, puis ceux dont un mot commence ainsi, puis les autres */
+function smartMatch(name,q){var n=favNrm(name),ws=String(q||'').split(/\s+/).filter(Boolean);if(!ws.length)return -1;var nw=n.split(/[^a-z0-9]+/),sc=0;
+ for(var i=0;i<ws.length;i++){var w=ws[i];if(n.indexOf(w)===0)sc+=0;else if(nw.some(function(x){return x.indexOf(w)===0}))sc+=1;else if(n.indexOf(w)>-1)sc+=2;else return -1}return sc}
 function favNrm(x){return String(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim()}
 /* étiquettes retrouvables : fiches de traçabilité, réceptions et ingrédients des fabrications (photo et/ou lot) */
 function tagOf(r){return {id:r.id,kind:r.module==='reception'?'Réception':'Traçabilité',name:r.prod||r.label||r.itemName||'',ts:r.ts||0,who:r.who||'',photos:r.photos||[],lots:r.lots||[],sup:'',fabId:r.module==='trace'?(r.fabId||''):''}}
@@ -1351,7 +1354,7 @@ function recHtml(){
  var all=D.recettes.slice().sort(function(a,b){return favNrm(a.name).localeCompare(favNrm(b.name),'fr')});
  function tile(r){return '<button class="tile item" data-k="recpick" data-v="'+esc(r.id)+'" style="min-height:64px"><h3>'+esc(r.name)+'</h3><span class="meta">'+esc(r.cat||'')+((r.ingr||[]).length?(r.cat?' · ':'')+r.ingr.length+' ingrédient'+(r.ingr.length>1?'s':''):'')+'</span></button>'}
  h+='<div style="display:flex;align-items:center;gap:10px;margin:4px 0 6px"><b style="flex:1">Recette</b>'+(rc?'<button class="btn sm" data-k="recclr">Changer</button>':'<button class="btn sm" data-k="recall">'+(F.recAll?'Masquer la liste':'Toutes les recettes')+'</button>')+'</div>';
- if(q.length>=2){var rs=all.filter(function(r){return favNrm(r.name).indexOf(q)>-1}).slice(0,8);
+ if(q.length>=1){var rs=all.map(function(r){return {r:r,sc:smartMatch(r.name,q)}}).filter(function(x){return x.sc>=0}).sort(function(a,b){return a.sc-b.sc||favNrm(a.r.name).localeCompare(favNrm(b.r.name),'fr')}).slice(0,8).map(function(x){return x.r});
   if(rs.length)h+='<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:12px">'+rs.map(tile).join('')+'</div>'}
  if(!rc){
   if(F.recAll)h+=all.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+all.map(tile).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Aucune recette enregistrée.</p>';
@@ -1378,8 +1381,8 @@ function favRes(){
  if(F.prod||F.recipe){h+='<button class="btn sm" data-k="recent" style="margin:0 0 12px">'+(F.recent?'Masquer les réceptions récentes':'Réceptions récentes (7 jours)')+'</button>';
   if(F.recent){var rr=recentRecv();h+=rr.length?'<div style="margin-bottom:16px">'+rr.map(tagCard).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Aucune réception avec photo ou lot ces 7 derniers jours.</p>'}}
  if(q){var res=fabNames(F.favQ);
-  h+='<div style="border:1px solid var(--line,#cfd8dc);border-radius:12px;overflow:hidden;margin:0 0 16px;background:var(--card,#fff)"><div class="meta" style="padding:8px 12px;border-bottom:1px solid var(--line,#e0e6ea)">Fabrications trouvées</div>'+(res.length?res.map(function(x){var lt=lastTxt(x.name);
-   return '<div style="display:flex;align-items:center;border-bottom:1px solid var(--line,#eef1f3)"><button class="sess" data-k="pickdish" data-v="'+esc(x.name)+'" style="flex:1;border:0;text-align:left"><span style="flex:1"><b>'+esc(x.name)+'</b><br><span class="meta">'+esc(x.cat||'')+(lt?' · '+lt:'')+'</span></span></button><button class="btn sm" data-k="usefab" data-v="'+esc(x.name)+'" style="margin-right:6px">↪ Ingrédient</button><button class="star" data-k="fftog" data-v="'+esc(x.name)+'" aria-label="'+(isFF(x.name)?'Retirer des favoris':'Mettre en favori')+'" style="position:static;font-size:1.6rem;padding:0 16px">'+(isFF(x.name)?'★':'☆')+'</button></div>'}).join(''):'<p class="meta" style="padding:12px">Aucune fabrication trouvée.</p>')+'</div>'}
+  h+='<div style="border:1px solid var(--line,#cfd8dc);border-radius:12px;overflow:hidden;margin:0 0 16px;background:var(--card,#fff)"><div class="meta" style="padding:8px 12px;border-bottom:1px solid var(--line,#e0e6ea)">Fabrications trouvées ('+res.length+')</div><div style="max-height:min(46vh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch">'+(res.length?res.map(function(x){var lt=lastTxt(x.name);
+   return '<div style="display:flex;align-items:center;border-bottom:1px solid var(--line,#eef1f3)"><button class="sess" data-k="pickdish" data-v="'+esc(x.name)+'" style="flex:1;border:0;text-align:left"><span style="flex:1"><b>'+esc(x.name)+'</b><br><span class="meta">'+esc(x.cat||'')+(lt?' · '+lt:'')+'</span></span></button><button class="btn sm" data-k="usefab" data-v="'+esc(x.name)+'" style="margin-right:6px">↪ Ingrédient</button><button class="star" data-k="fftog" data-v="'+esc(x.name)+'" aria-label="'+(isFF(x.name)?'Retirer des favoris':'Mettre en favori')+'" style="position:static;font-size:1.6rem;padding:0 16px">'+(isFF(x.name)?'★':'☆')+'</button></div>'}).join(''):'<p class="meta" style="padding:12px">Aucune fabrication trouvée.</p>')+'</div></div>'}
  h+='<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><b style="flex:1">Fabrications favorites</b><button class="btn sm" data-k="ffedit">'+(F.ffEdit?'Terminer':'Modifier')+'</button></div>';
  var ffs=q?ff.filter(function(x){return favNrm(x).indexOf(q)>-1}):ff;
  h+=ffs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+ffs.map(function(n){var lt=lastTxt(n);
