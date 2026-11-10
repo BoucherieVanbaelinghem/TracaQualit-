@@ -196,7 +196,7 @@ html.kb .tpage .thead,html.kb .tpage .tcam{display:none}
 html.kb .tpage .tmain{grid-template-columns:1fr;grid-template-rows:1fr}
 html.kb .tside .stabs{display:none}
 html.kb .tside .sbody{padding:8px 12px}
-html.kb #favq,html.kb #pq{position:sticky;top:0;z-index:3;background:var(--surface,#fff);margin-bottom:6px}
+html.kb #favbar,html.kb #pq{position:sticky;top:0;z-index:3;background:var(--surface,#fff);margin-bottom:6px}
 html.kb .tfoot{display:none}
 .tcam{background:#000;position:relative;display:flex;flex-direction:column;min-height:0}
 .tview{flex:1;position:relative;overflow:hidden;background:#111;min-height:200px}
@@ -267,6 +267,55 @@ textarea{min-height:110px;resize:vertical}
 .note-ex{font-size:.85rem;color:var(--muted);margin:0}
 @media (max-width:560px){.pad{grid-template-columns:repeat(3,64px)} .fields.three{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ---------- téléphone (≤600px) : mêmes fonctions, affichage compact ---------- */
+@media (max-width:600px){
+ body{font-size:15px}
+ input,select,textarea{font-size:16px!important}
+ header.bar{gap:8px;padding:10px 14px;margin-inline:-14px}
+ header.bar .brand{font-size:1.02rem;flex:1 1 0;min-width:140px}
+ header.bar .spacer{display:none}
+ .subnav{overflow-x:auto;flex-wrap:nowrap;max-width:100%}.subnav a{flex:none}
+ .pseg{max-width:100%;overflow-x:auto}
+ .gnav{display:flex!important;overflow-x:auto;gap:6px}.gnav button{flex:none;min-height:44px;padding:0 14px}
+ header.bar .brand small{font-size:.7rem}
+ header.bar .clock{display:flex;gap:8px;align-items:baseline;text-align:left;font-size:.8rem}
+ header.bar .clock b{display:inline;font-size:1rem}
+ header.bar .btn{min-height:42px;padding:0 12px}
+ .title-row h1{font-size:1.35rem}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .tile{padding:12px;min-height:96px;gap:6px;border-radius:14px;min-width:0}
+ .tile h3{font-size:.95rem;overflow-wrap:anywhere}
+ .tile .sub,.tile .meta{font-size:.78rem;overflow-wrap:anywhere}
+ .tile svg{width:26px;height:26px}
+ .btn{min-height:46px;padding:0 14px;max-width:100%}
+ .btn.sm{min-height:40px;padding:0 12px}
+ .sess{min-width:0;flex-wrap:wrap;gap:8px}.sess>span[style*="flex:1"]{flex:1 1 150px!important;min-width:0;overflow-wrap:anywhere}
+ .selprod,.sheet,.banner{overflow-wrap:anywhere}
+ #modal{padding:0}
+ #modal .sheet{width:100%;max-height:var(--vvh,100vh);border-radius:18px 18px 0 0;align-self:flex-end}
+ #modal.on{align-items:flex-end}
+ #modal.full.on{align-items:stretch}
+ .sfoot{flex-wrap:wrap;gap:8px;padding:10px 12px}.sfoot .hint{flex:1 1 100%}.sfoot .btn{flex:1 1 auto}
+ .fields,.fields.two,.fields.three,.g3{grid-template-columns:1fr}
+ .tfoot{flex-wrap:wrap;gap:6px}.tfoot .hint{flex:1 1 100%;font-size:.8rem}.tfoot .btn.pill{flex:1 1 auto;min-width:0;font-size:.85rem;padding:0 10px}
+ .tside .stabs{overflow-x:auto;-webkit-overflow-scrolling:touch}.tside .stabs button{flex:none;padding:0 12px;font-size:.88rem}
+ .tmain{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.tcam,.tside,.tview{min-width:0;max-width:100%}.tside{overflow:hidden}.tside .stabs{max-width:100%;flex:none;min-height:46px}.tside .sbody{min-height:0;flex:1 1 0}.tpage{min-height:0}
+ .tview{min-height:0;height:clamp(150px,28vh,230px);flex:none}
+ .tcam .ttool{display:none}
+ .tview .nocam{padding:8px}.tview .nocam p,.tview .nocam .btn.sm{display:none}
+ .tview .nocam .btn{min-height:52px!important;padding:0 20px!important;font-size:1rem!important}
+ .tshut{left:12px;bottom:12px;width:48px;height:48px}
+ .thead{padding:8px 12px}
+ .tfoot{padding:8px 12px;gap:8px;flex-wrap:wrap}
+ .tfoot .hint{flex:1 1 100%;margin:0;font-size:.75rem;line-height:1.2}
+ .tfoot .btn.pill{flex:1 1 0;min-height:44px;padding:0 8px;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;line-height:44px}
+ .tside .sbody{padding:12px}
+ table{display:block;overflow-x:auto;max-width:100%}
+ .dock{flex-wrap:wrap;gap:8px}.dock .btn{flex:1 1 auto;min-width:0}
+ .split{grid-template-columns:1fr}
+ .pad button{min-height:48px!important;height:48px}.pad{gap:8px}
+}
+
 .trbox{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.trrow{background:var(--surface-2);border-radius:10px;padding:10px 12px;margin-top:8px}.trtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.trph{justify-content:flex-start;margin-top:8px}.trph img{width:84px;height:84px}
 .gnav{margin:6px 0 12px}.gsearch{max-width:900px;margin:0 0 10px}.gsearch input{width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:10px;padding:0 14px;background:var(--surface);color:var(--ink);font:inherit}.gitem{display:flex;align-items:center;gap:8px}.gopen{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:none;border:0;text-align:left;color:var(--ink);font:inherit;min-height:56px;cursor:pointer}.ingcard select,.fields select{min-height:46px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;padding:0 8px;width:100%}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.g3 input,.g3 select{width:100%;min-height:46px;border:1.5px solid var(--line);border-radius:8px;padding:0 10px;background:var(--surface);color:var(--ink);font:inherit}@media(max-width:700px){.g3{grid-template-columns:1fr}}
@@ -368,16 +417,44 @@ function listen(name,q,asMap){
   LOADED[name]=true;kick();
  },function(e){DBERR=(e&&e.code)||'erreur';kick()});
 }
-/* ===== Stockage local (hors claude.ai) : IndexedDB + mémoire, même interface que la base partagée ===== */
+/* ===== Stockage local (hors claude.ai) : IndexedDB + mémoire, même interface que la base partagée, + synchronisation optionnelle (serveur Cloudflare) ===== */
+var QVSYNC=null;
 async function localDB(){
  var idb=await new Promise(function(ok,ko){var r=indexedDB.open('qualite-vanbaelinghem',1);r.onupgradeneeded=function(){r.result.createObjectStore('docs')};r.onsuccess=function(){ok(r.result)};r.onerror=function(){ko(r.error)}});
- var mem={},subs=[];
- await new Promise(function(ok){var tx=idb.transaction('docs','readonly'),c=tx.objectStore('docs').openCursor();c.onsuccess=function(){var cu=c.result;if(cu){var k=cu.key.split('/');(mem[k[0]]=mem[k[0]]||{})[k[1]]=cu.value;cu.continue()}else ok()};c.onerror=ok});
+ var mem={},subs=[],meta={ver:{},cur:0,q:[],lastTs:0};
+ await new Promise(function(ok){var tx=idb.transaction('docs','readonly'),c=tx.objectStore('docs').openCursor();c.onsuccess=function(){var cu=c.result;if(cu){if(cu.key==='~sync'){meta=Object.assign(meta,cu.value)}else if(String(cu.key).charAt(0)!=='~'){var k=cu.key.split('/');(mem[k[0]]=mem[k[0]]||{})[k[1]]=cu.value}cu.continue()}else ok()};c.onerror=ok});
  var seeded=false;try{seeded=localStorage.getItem('qv-seeded-v1')==='1'}catch(e){}
  if(!seeded&&window.__QV_SEED){Object.keys(window.__QV_SEED).forEach(function(c){Object.keys(window.__QV_SEED[c]).forEach(function(id){mem[c]=mem[c]||{};if(!mem[c][id]){mem[c][id]=window.__QV_SEED[c][id];try{var tx=idb.transaction('docs','readwrite');tx.objectStore('docs').put(mem[c][id],c+'/'+id)}catch(e){}}})});try{localStorage.setItem('qv-seeded-v1','1')}catch(e){}}
  function persist(coll,id,val){try{var tx=idb.transaction('docs','readwrite'),st=tx.objectStore('docs');if(val===null)st.delete(coll+'/'+id);else st.put(val,coll+'/'+id)}catch(e){}}
+ function saveMeta(){try{var tx=idb.transaction('docs','readwrite');tx.objectStore('docs').put(meta,'~sync')}catch(e){}}
  function fire(coll){subs.forEach(function(s){if(s.coll===coll)s.run()})}
  function cmp(a,b){return a<b?-1:a>b?1:0}
+ /* ---- synchronisation ---- */
+ var cfg=null;try{cfg=JSON.parse(localStorage.getItem('qv-sync')||'null')}catch(e){}
+ var st={err:'',last:0,busy:false,pulling:false},timer=null,flushT=null;
+ function nextTs(){var t=Math.max(Date.now(),(meta.lastTs||0)+1);meta.lastTs=t;return t}
+ function touch(coll,id,val){if(!cfg)return;var ts=nextTs(),k=coll+'/'+id;meta.ver[k]=ts;meta.q=meta.q.filter(function(x){return !(x.c===coll&&x.id===id)});meta.q.push({c:coll,id:id,v:val,ts:ts});saveMeta();kick()}
+ function kick(){if(!cfg)return;clearTimeout(flushT);flushT=setTimeout(cycle,400)}
+ async function api(path,opt){var r=await fetch(cfg.url.replace(/\/+$/,'')+path,Object.assign({headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'}},opt||{}));if(r.status===401)throw new Error('Code refusé');if(!r.ok)throw new Error('Serveur '+r.status);return r.json()}
+ async function flush(){while(meta.q.length){var batch=meta.q.slice(0,10);await api('/push',{method:'POST',body:JSON.stringify({ops:batch})});meta.q=meta.q.filter(function(x){return !batch.some(function(b){return b.c===x.c&&b.id===x.id&&b.ts===x.ts})});saveMeta()}}
+ async function pull(){var more=true,guard=0;while(more&&guard++<200){var r=await api('/pull?since='+meta.cur),colls={};
+  r.docs.forEach(function(d){var k=d.c+'/'+d.id;if((meta.ver[k]||0)>=d.ts)return;if(meta.q.some(function(x){return x.c===d.c&&x.id===d.id}))return;meta.ver[k]=d.ts;if(d.v===null){if(mem[d.c])delete mem[d.c][d.id];persist(d.c,d.id,null)}else{(mem[d.c]=mem[d.c]||{})[d.id]=d.v;persist(d.c,d.id,d.v)}colls[d.c]=1});
+  meta.cur=r.cursor;saveMeta();Object.keys(colls).forEach(fire);more=!!r.more}}
+ async function cycle(){if(!cfg||st.busy)return;st.busy=true;try{await flush();await pull();st.err='';st.last=Date.now()}catch(e){st.err=(e&&e.message)||'Erreur réseau'}st.busy=false;if(QVSYNC&&QVSYNC.onchange)QVSYNC.onchange()}
+ function start(){clearInterval(timer);if(!cfg)return;timer=setInterval(function(){if(!document.hidden)cycle()},5000);cycle()}
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)cycle()});window.addEventListener('online',cycle);
+ QVSYNC=window.QVSYNC={
+  on:function(){return !!cfg},
+  cfg:function(){return cfg?{url:cfg.url}:null},
+  label:function(){return !cfg?'Local':st.err?'Synchro ✕':'Synchro ✓'},
+  status:function(){return !cfg?'Cet appareil fonctionne seul (pas de synchronisation).':st.err?'Erreur : '+st.err+(meta.q.length?' · '+meta.q.length+' modification(s) en attente':''):'Connecté · '+(st.last?'dernière synchro à '+new Date(st.last).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'en cours…')+(meta.q.length?' · '+meta.q.length+' en attente':'')},
+  connect:async function(url,token){var c0=cfg;cfg={url:String(url||'').trim(),token:String(token||'').trim()};try{var r=await fetch(cfg.url.replace(/\/+$/,'')+'/ping',{headers:{'Authorization':'Bearer '+cfg.token}});if(r.status===401)throw new Error('Code refusé');if(!r.ok)throw new Error('Serveur '+r.status)}catch(e){cfg=c0;throw e}
+   try{localStorage.setItem('qv-sync',JSON.stringify(cfg))}catch(e){}start()},
+  disconnect:function(){cfg=null;try{localStorage.removeItem('qv-sync')}catch(e){}clearInterval(timer);meta.q=[];saveMeta()},
+  sendAll:async function(){if(!cfg)throw new Error('Non connecté');var n=0;Object.keys(mem).forEach(function(c){Object.keys(mem[c]).forEach(function(id){var ts=nextTs(),k=c+'/'+id;meta.ver[k]=ts;meta.q=meta.q.filter(function(x){return !(x.c===c&&x.id===id)});meta.q.push({c:c,id:id,v:mem[c][id],ts:ts});n++})});saveMeta();await cycle();return n},
+  now:cycle,onchange:null};
+ if(cfg)start();
+ /* ---- requêtes ---- */
  function query(coll,w,ob,lim){
   return {
    where:function(f,op,v){return query(coll,w.concat([[f,op,v]]),ob,lim)},
@@ -396,9 +473,9 @@ async function localDB(){
  return {collection:function(coll){
   var q=query(coll,[],null,0);
   q.doc=function(id){return {
-   set:async function(d){(mem[coll]=mem[coll]||{})[id]=JSON.parse(JSON.stringify(d));persist(coll,id,mem[coll][id]);fire(coll)},
-   update:async function(d){var o=(mem[coll]||{})[id];if(!o)throw {code:'not_found'};Object.assign(o,JSON.parse(JSON.stringify(d)));persist(coll,id,o);fire(coll)},
-   delete:async function(){if(mem[coll])delete mem[coll][id];persist(coll,id,null);fire(coll)},
+   set:async function(d){(mem[coll]=mem[coll]||{})[id]=JSON.parse(JSON.stringify(d));persist(coll,id,mem[coll][id]);touch(coll,id,mem[coll][id]);fire(coll)},
+   update:async function(d){var o=(mem[coll]||{})[id];if(!o)throw {code:'not_found'};Object.assign(o,JSON.parse(JSON.stringify(d)));persist(coll,id,o);touch(coll,id,o);fire(coll)},
+   delete:async function(){if(mem[coll])delete mem[coll][id];persist(coll,id,null);touch(coll,id,null);fire(coll)},
    get:async function(){var o=(mem[coll]||{})[id];return {exists:!!o,id:id,data:function(){return o}}}}};
   return q}};
 }
@@ -533,7 +610,7 @@ function fsCodeDialog(mode,onOk){
  [].forEach.call(m.querySelectorAll('input'),function(e){e.onkeydown=function(ev){if(ev.key==='Enter')ok()}})}
 
 /* Options (code 1234) : données de test pour essayer l'application comme en production, effaçables en un geste. Tout est marqué sim:true. */
-var OPT_CODE='1234',SIM_COLL=['dlc','releves','productions'];
+var OPT_CODE='1234',SIM_COLL=['dlc','releves','productions','recettes','ingredients'];
 function simIds(){var r=((D.reglages||{}).sim||{}).ids||{},o={};SIM_COLL.forEach(function(c){var set={};(r[c]||[]).forEach(function(i){set[i]=1});(D[c]||[]).forEach(function(x){if(x.sim)set[x.id]=1});o[c]=Object.keys(set)});return o}
 function simCount(){var o=simIds();return SIM_COLL.reduce(function(n,c){return n+o[c].length},0)}
 function optCodeDialog(){
@@ -544,14 +621,29 @@ function optCodeDialog(){
  document.getElementById('ocX').onclick=closeForm;document.getElementById('ocOk').onclick=ok;i.onkeydown=function(e){if(e.key==='Enter')ok()}}
 function openOptions(msg,confirmDel){
  var m=document.getElementById('modal'),n=simCount();FORM={onSave:null};
- m.innerHTML='<div class="sheet" style="width:min(520px,100%)"><h2>Options</h2><div class="sub-h">Données de test</div><div class="sbody" style="min-height:0"><p style="margin:0 0 12px">Crée des <b>ingrédients reçus</b>, des <b>plats étiquetés</b>, des <b>fabrications</b> et des <b>fiches de traçabilité</b> fictifs, pour essayer l’application comme en production (suivi des DLC, historique, favoris, recherche de lot…).</p><p class="meta" style="margin:0 0 14px">Les données de test sont repérées et peuvent toutes être effacées d’un seul geste. Les vraies données ne sont jamais touchées.</p><div class="banner" style="margin:0 0 6px">'+(n?n+' élément(s) de test présent(s)':'Aucune donnée de test pour le moment')+'</div>'+(msg?'<p class="meta" style="margin:8px 0 0">'+esc(msg)+'</p>':'')+'</div><div class="sfoot" style="flex-wrap:wrap"><button class="btn ghost" id="osX" style="margin-right:auto">Fermer</button><button class="btn danger" id="osDel" '+(n?'':'disabled')+'>'+(confirmDel?'Confirmer : tout effacer':'Tout effacer')+'</button><button class="btn primary" id="osGen">Générer des données de test</button></div></div>';
+ m.innerHTML='<div class="sheet" style="width:min(520px,100%)"><h2>Options</h2><div class="sub-h">Données de test</div><div class="sbody" style="min-height:0"><p style="margin:0 0 12px">Crée des <b>recettes</b> (couscous, tajine, chili…), leurs <b>ingrédients reçus</b> avec photo d’étiquette, lot et DLC, des <b>plats étiquetés</b>, des <b>fabrications du jour</b> et des <b>fiches de traçabilité</b> fictifs, pour essayer l’application comme en production (suivi des DLC, historique, favoris, recherche de lot…).</p><p class="meta" style="margin:0 0 14px">Les données de test sont repérées et peuvent toutes être effacées d’un seul geste. Vos fournisseurs, ingrédients et recettes réels ne sont jamais touchés.</p><div class="banner" style="margin:0 0 6px">'+(n?n+' élément(s) de test présent(s)':'Aucune donnée de test pour le moment')+'</div>'+(msg?'<p class="meta" style="margin:8px 0 0">'+esc(msg)+'</p>':'')+'</div><div class="sfoot" style="flex-wrap:wrap"><button class="btn ghost" id="osX" style="margin-right:auto">Fermer</button><button class="btn danger" id="osDel" '+(n?'':'disabled')+'>'+(confirmDel?'Confirmer : tout effacer':'Tout effacer')+'</button><button class="btn primary" id="osGen">Générer des données de test</button></div></div>';
  fShow();
  document.getElementById('osX').onclick=closeForm;
  document.getElementById('osGen').onclick=async function(){this.disabled=true;this.textContent='Création…';var c=await simGenerate();openOptions(c?c+' éléments de test créés.':'Création impossible (base indisponible).')};
  document.getElementById('osDel').onclick=async function(){if(!confirmDel){openOptions(msg,true);return}this.disabled=true;this.textContent='Effacement…';var c=await simClear();openOptions(c+' élément(s) de test effacé(s).')}}
+
+/* Synchronisation (version autonome GitHub) : téléphone ↔ tablette via le serveur de l'entreprise */
+function syncDialog(msg){
+ var m=document.getElementById('modal'),on=QVSYNC.on(),c=QVSYNC.cfg();FORM={onSave:null};
+ m.innerHTML='<div class="sheet" style="width:min(520px,100%)"><h2>Synchronisation</h2><div class="sub-h">Téléphone et tablette partagent les mêmes données</div><div class="sbody" style="min-height:0"><div class="banner" style="margin:0 0 10px">'+esc(QVSYNC.status())+'</div>'+(msg?'<p class="meta" style="margin:0 0 10px">'+esc(msg)+'</p>':'')+
+  (on?'<p class="meta" style="margin:0 0 10px">Serveur : '+esc(c.url)+'</p><div style="display:flex;flex-direction:column;gap:8px"><button class="btn" id="syNow">Synchroniser maintenant</button><button class="btn" id="syAll">Envoyer toutes les données de cet appareil</button><button class="btn danger" id="syOff">Déconnecter cet appareil</button></div><p class="meta" style="margin:10px 0 0">« Envoyer toutes les données » sert une seule fois, depuis la tablette, pour initialiser le serveur.</p>':
+  '<div class="fields"><div><label class="f" for="syU">Adresse du serveur</label><input type="url" id="syU" placeholder="https://qualite-sync.xxx.workers.dev" autocomplete="off" autocapitalize="off"></div><div><label class="f" for="syT">Code d’accès</label><input type="password" id="syT" autocomplete="off"></div></div>')+
+  '</div><div class="sfoot"><button class="btn ghost" id="syX">Fermer</button>'+(on?'':'<button class="btn primary" id="syGo">Connecter</button>')+'</div></div>';
+ fShow();var q=function(i){return document.getElementById(i)};
+ q('syX').onclick=closeForm;
+ if(on){q('syNow').onclick=async function(){this.disabled=true;await QVSYNC.now();syncDialog('Synchronisation faite.')};
+  q('syAll').onclick=async function(){this.disabled=true;this.textContent='Envoi…';try{var n=await QVSYNC.sendAll();syncDialog(n+' document(s) envoyé(s).')}catch(e){syncDialog('Échec : '+e.message)}};
+  q('syOff').onclick=function(){QVSYNC.disconnect();syncDialog('Cet appareil n’est plus synchronisé.');render()}}
+ else q('syGo').onclick=async function(){var u=q('syU').value.trim(),t=q('syT').value.trim();if(!u||!t){syncDialog('Renseignez l’adresse et le code.');return}this.disabled=true;this.textContent='Connexion…';try{await QVSYNC.connect(u,t);syncDialog('Connecté.');render()}catch(e){syncDialog('Échec : '+(e.message||'serveur injoignable'))}}}
+function simGenerate_marker(){}
 async function simGenerate(){
  if(!DB){toast('Base partagée indisponible.');return 0}
- var DAY=86400000,now=Date.now(),who='Test',ids={dlc:[],releves:[],productions:[]},jobs=[],seq=0;
+ var DAY=86400000,now=Date.now(),who='Test',ids={dlc:[],releves:[],productions:[],recettes:[],ingredients:[]},jobs=[],seq=0;
  function stamp(daysAgo,h,mi){var d=new Date(now-daysAgo*DAY);d.setHours(h,mi,0,0);return d}
  function add(coll,doc){var id=rid()+(seq++);doc.sim=true;ids[coll].push(id);jobs.push(function(){return put(coll,id,doc)});return id}
  function rel(mod,name,d,lots,extra){var id=rid()+(seq++);var rec=Object.assign({ts:d.getTime(),date:dKey(d),time:pad(d.getHours())+':'+pad(d.getMinutes()),module:mod,refId:'',label:name,itemName:name,moment:'maintenant',momentLabel:'Maintenant',who:who,note:'Donnée de test',status:'ok',qty:1,lots:lots,sim:true},extra||{});ids.releves.push(id);jobs.push(function(){return put('releves',id,rec)});return id}
@@ -564,7 +656,34 @@ async function simGenerate(){
   var r0=rel('etiq',nm,d,[{lot:lot,dlc:dl}],{qty:q,mention:'DLC',itemCat:'Prépa traiteur'});
   add('dlc',{module:'etiq',name:nm,cat:'Prépa traiteur',fab:dKey(d),dlc:dl,lot:lot,qty:q,mention:'DLC',who:who,closed:false,recordId:r0,ts:d.getTime()});
   if(i<4)rel('trace',nm,new Date(d.getTime()+600000),[{lot:lot,dlc:dl}],{prod:nm})});
- [2,1,0].forEach(function(ago,k){var d=stamp(ago,7,30),items=PL.slice(k*2,k*2+3).map(function(nm,j){return {recId:'sim',name:nm,cat:'Prépa traiteur',qty:4+j,comment:'',ingr:ING.slice(j,j+4).map(function(g){return {name:g[0],variant:'',lot:lotOf[g[0]]||'',supplier:'Fournisseur test',prevu:Math.round((0.2+j*0.1)*1000)/1000}}),mods:[],controls:[],emb:[]}});
+
+ /* recettes crédibles + ingrédients (les ingrédients réels du même nom sont réutilisés, jamais dupliqués) */
+ function slug(x){return favNrm(x).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+ function addId(coll,id,doc){doc.sim=true;ids[coll].push(id);jobs.push(function(){return put(coll,id,doc)});return id}
+ var G=[['Merguez','viandes',10,'Boucherie Martin'],['Cuisse de poulet','viandes',7,'Metro'],['Epaule d’agneau','viandes',6,'Boucherie Martin'],['Boeuf haché','viandes',4,'Boucherie Martin'],['Semoule moyenne','epicerie',365,'Metro'],['Courgette','legumes',6,'Halles de Dunkerque'],['Carotte','legumes',14,'Halles de Dunkerque'],['Navet','legumes',14,'Halles de Dunkerque'],['Oignon','legumes',30,'Halles de Dunkerque'],['Poivron rouge','legumes',8,'Halles de Dunkerque'],['Aubergine','legumes',7,'Halles de Dunkerque'],['Ail','legumes',30,'Halles de Dunkerque'],['Pois chiches','epicerie',365,'Metro'],['Haricots rouges','epicerie',365,'Metro'],['Tomates concassées','epicerie',300,'Metro'],['Concentré de tomate','epicerie',300,'Metro'],['Olives vertes','epicerie',120,'Metro'],['Citron confit','epicerie',120,'Metro'],['Lait de coco','epicerie',300,'Metro'],['Crème fraîche','cremerie',20,'Metro'],['Huile d’olive','epicerie',300,'Metro'],['Ras el hanout','epices',365,'Épices du Nord'],['Cumin moulu','epices',365,'Épices du Nord'],['Harissa','epices',200,'Épices du Nord'],['Curry','epices',365,'Épices du Nord'],['Paprika fumé','epices',365,'Épices du Nord'],['Piment doux','epices',365,'Épices du Nord'],['Curcuma','epices',365,'Épices du Nord'],['Gingembre moulu','epices',365,'Épices du Nord'],['Safran','epices',365,'Épices du Nord'],['Coriandre fraîche','legumes',7,'Halles de Dunkerque'],['Herbes de Provence','epices',365,'Épices du Nord'],['Pommes de terre','legumes',20,'Halles de Dunkerque'],['Beurre','cremerie',30,'Metro'],['Lait entier','cremerie',10,'Metro'],['Noix de muscade','epices',365,'Épices du Nord'],['Chapelure','epicerie',180,'Metro'],['Gruyère râpé','cremerie',30,'Metro'],['Reblochon','cremerie',20,'Fromagerie du Nord'],['Lardons fumés','viandes',12,'Boucherie Martin'],['Vin blanc sec','epicerie',365,'Metro'],['Thym','epices',365,'Épices du Nord'],['Persil plat','legumes',7,'Halles de Dunkerque'],['Cannelle','epices',365,'Épices du Nord'],['Bouillon de volaille','epicerie',365,'Metro'],['Sel fin','epicerie',365,'Metro'],['Poivre noir','epices',365,'Épices du Nord']];
+ var GI={},GS={};
+ G.forEach(function(g){var ex=(D.ingredients||[]).filter(function(x){return !x.sim&&favNrm(x.name)===favNrm(g[0])})[0];GS[g[0]]=g;
+  if(ex){GI[g[0]]={id:ex.id,variant:(ex.variants&&ex.variants[0]&&ex.variants[0].name)||''}}
+  else{var id='sim-'+slug(g[0]);addId('ingredients',id,{name:g[0],cat:g[1],fav:false,active:g[3],variants:[{name:g[3],lot:'',supplier:g[3]}]});GI[g[0]]={id:id,variant:g[3]}}});
+ var R=[['Couscous royal',true,[['Merguez',1.2],['Cuisse de poulet',1.5],['Epaule d’agneau',1],['Semoule moyenne',1],['Courgette',.8],['Carotte',.8],['Navet',.5],['Pois chiches',.4],['Oignon',.4],['Concentré de tomate',.1],['Ras el hanout',.03],['Cumin moulu',.01],['Harissa',.05],['Coriandre fraîche',.02],['Huile d’olive',.1]]],
+  ['Tajine de poulet au citron',true,[['Cuisse de poulet',2],['Citron confit',.2],['Olives vertes',.3],['Oignon',.5],['Ail',.05],['Gingembre moulu',.01],['Curcuma',.01],['Safran',.002],['Coriandre fraîche',.03],['Huile d’olive',.08]]],
+  ['Ratatouille aux merguez',false,[['Merguez',1.5],['Courgette',1],['Aubergine',.8],['Poivron rouge',.6],['Tomates concassées',.8],['Oignon',.4],['Ail',.04],['Herbes de Provence',.01],['Huile d’olive',.08]]],
+  ['Chili con carne',false,[['Boeuf haché',2],['Haricots rouges',.8],['Tomates concassées',1],['Oignon',.5],['Poivron rouge',.5],['Cumin moulu',.015],['Paprika fumé',.02],['Piment doux',.01],['Concentré de tomate',.1]]],
+  ['Poulet curry coco',false,[['Cuisse de poulet',2],['Lait de coco',.8],['Crème fraîche',.3],['Oignon',.4],['Curry',.03],['Gingembre moulu',.01],['Coriandre fraîche',.02]],
+  ],
+  ['Hachis parmentier',true,[['Boeuf haché',2],['Pommes de terre',2.5],['Oignon',.4],['Ail',.03],['Beurre',.25],['Lait entier',.4],['Noix de muscade',.003],['Chapelure',.1],['Gruyère râpé',.2],['Persil plat',.02],['Thym',.005],['Sel fin',.03],['Poivre noir',.005]]],
+  ['Tartiflette',true,[['Pommes de terre',2.5],['Reblochon',1],['Lardons fumés',.6],['Oignon',.5],['Crème fraîche',.4],['Vin blanc sec',.15],['Ail',.02],['Sel fin',.02],['Poivre noir',.004]]],
+  ['Tajine de poulet',false,[['Cuisse de poulet',2],['Oignon',.6],['Olives vertes',.25],['Ail',.04],['Curcuma',.01],['Gingembre moulu',.01],['Cannelle',.005],['Safran',.001],['Coriandre fraîche',.03],['Persil plat',.02],['Bouillon de volaille',.5],['Huile d’olive',.08]]]];
+ R.forEach(function(r){add('recettes',{name:r[0],cat:'plats cuisines',fav:r[1],comment:'',plan:{},etapes:[],mesures:[],ingr:r[2].map(function(l){return {ing:GI[l[0]].id,variant:GI[l[0]].variant,qty:l[1]}})})});
+ /* réceptions de test (2 par ingrédient : la plus récente il y a 1 à 3 jours) avec photo d'étiquette, lot et DLC */
+ function svgTag(nm,lot,dl,sup){var t='<svg xmlns="http://www.w3.org/2000/svg" width="360" height="240"><rect width="360" height="240" fill="#fff" stroke="#222" stroke-width="4"/><text x="20" y="50" font-size="26" font-family="sans-serif" font-weight="700">'+nm.replace(/&/g,'&amp;')+'</text><text x="20" y="95" font-size="18" font-family="sans-serif">Fournisseur : '+sup+'</text><text x="20" y="135" font-size="20" font-family="sans-serif">Lot : '+lot+'</text><text x="20" y="170" font-size="20" font-family="sans-serif">DLC : '+dl+'</text><text x="20" y="215" font-size="13" font-family="sans-serif" fill="#999">ÉTIQUETTE DE TEST</text></svg>';return 'data:image/svg+xml;utf8,'+encodeURIComponent(t)}
+ var lot2={};
+ G.forEach(function(g,i){[2+(i%2),6+(i%2)].forEach(function(ago,k){var d=stamp(ago,8+k,5+i),dl=dKey(new Date(d.getTime()+g[2]*DAY)),lot='T'+dKey(d).slice(2).replace(/-/g,'')+'-'+(100+i*7+k);if(k===0)lot2[g[0]]={lot:lot,dlc:dl};
+  var r0=rel('reception',g[0],d,[{lot:lot,dlc:dl}],{itemCat:g[1],prod:g[0],photos:[svgTag(g[0],lot,dl,g[3])],supplier:g[3]});
+  add('dlc',{module:'reception',name:g[0],cat:g[1],fab:dKey(d),dlc:dl,lot:lot,qty:1,who:who,closed:false,recordId:r0,ts:d.getTime()})})});
+ /* fabrications : aujourd'hui (sans traçabilité, à faire) + 2 jours précédents */
+ var RID=R.map(function(r){return 'sim-'});
+ [[2,[0,1]],[1,[2,3]],[0,[0,1,3,5,6,7]]].forEach(function(pd){var d=stamp(pd[0],7,30),items=pd[1].map(function(ri,j){var r=R[ri],rid=ids.recettes[ri];return {recId:rid,name:r[0],cat:'plats cuisines',qty:4+j,comment:'',ingr:pd[0]>0?r[2].map(function(l){var g=GS[l[0]];return {name:l[0],variant:GI[l[0]].variant,lot:(lot2[l[0]]||{}).lot||'',supplier:g[3],prevu:l[1]}}):[],mods:[],controls:[],emb:[]}});
   add('productions',{ts:d.getTime(),date:dKey(d),time:pad(d.getHours())+':'+pad(d.getMinutes()),op:who,who:who,items:items})});
  var res=[];for(var i=0;i<jobs.length;i+=10){res=res.concat(await Promise.all(jobs.slice(i,i+10).map(function(f){return f()})))}
  var prev=simIds();SIM_COLL.forEach(function(c){var set={};prev[c].concat(ids[c]).forEach(function(x){set[x]=1});ids[c]=Object.keys(set)});
@@ -574,7 +693,7 @@ async function simGenerate(){
 async function simClear(){
  if(!DB)return 0;var o=simIds(),jobs=[];SIM_COLL.forEach(function(c){o[c].forEach(function(id){jobs.push([c,id])})});
  var n=0;for(var i=0;i<jobs.length;i+=10){var r=await Promise.all(jobs.slice(i,i+10).map(function(j){return drop(j[0],j[1])}));n+=r.filter(Boolean).length}
- var empty={dlc:[],releves:[],productions:[]};await put('reglages','sim',{ids:empty,ts:Date.now(),by:'options'});D.reglages=D.reglages||{};D.reglages.sim={ids:empty};
+ var empty={dlc:[],releves:[],productions:[],recettes:[],ingredients:[]};await put('reglages','sim',{ids:empty,ts:Date.now(),by:'options'});D.reglages=D.reglages||{};D.reglages.sim={ids:empty};
  SIM_COLL.forEach(function(c){D[c]=(D[c]||[]).filter(function(x){return !x.sim})});kick();return n}
 function fsLeave(){fsSetPref(false);fsExit();render();toast('Plein écran désactivé sur cette tablette.')}
 function fsAskExit(){if(!DB){fsLeave();return}if(!fsCode())fsCodeDialog('set',fsLeave);else fsCodeDialog('ask',fsLeave)}
@@ -582,7 +701,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.11-c</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.17-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -600,10 +719,10 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.11-c</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.17-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
- '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?'Connecté':'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
+ '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
  '<section class="whomain"><h1>Qui utilise l’application ?</h1><div class="wholist">'+
  names.map(function(p,i){var c=AVC[i%AVC.length];return '<button class="whocard" data-a="pick" data-v="'+esc(p)+'"><span class="wav" style="background:'+c[0]+';color:'+c[1]+'">'+esc(p[0].toUpperCase())+'</span><b>'+esc(p)+'</b><span class="wgo">'+ic('chev')+'</span></button>'}).join('')+
  '<button class="whocard" data-a="addProfile" style="border:2px dashed var(--line);box-shadow:none"><span class="wav" style="background:var(--surface-2);color:var(--muted)">+</span><b>Ajouter un nom</b></button></div><div class="whover"><span class="pill ghost">Version '+APPV+'</span></div></section></div>'}
@@ -1150,6 +1269,7 @@ function resultText(r){
  if(r.arrivee!=null)p.push('arrivée <b class="num">'+comma(r.arrivee)+' °C</b>');
  if(r.qty)p.push('× '+r.qty);
  if(r.lots&&r.lots.length)p.push(r.lots.length+' lot(s)');if(r.lotBete)p.push('Bête '+esc(r.lotBete));
+ if(r.action)p.push('Action : '+esc(r.action));
  return p.join('<br>')||'Fait'}
 var HM=['timer','clean','temp','reception','trace','etiq','livraison','dlc','gaz','congel','refroid','fab'];
 function mailBody(r){var U=function(x){return String(x==null?'':x).toUpperCase()},mod=HMLAB[r.module]||MODS[r.module]||r.module,dt=frd(r.date,{day:'2-digit',month:'2-digit',year:'numeric'})+' '+(r.time||'');
@@ -1160,6 +1280,7 @@ function mailBody(r){var U=function(x){return String(x==null?'':x).toUpperCase()
  if((r.lots||[]).length)det.push('Lots : '+r.lots.map(function(l){return l.lot+(l.dlc?' / DLC '+frd(l.dlc,{day:'2-digit',month:'2-digit',year:'numeric'}):'')}).join(' ; '));
  if((r.photos||[]).length)det.push('Photos : '+r.photos.length);
  det.push('État : '+(LAB[r.status]||r.status));
+ if(r.action)det.push('Action corrective : '+r.action);
  if(r.note)det.push('Note : '+r.note);
  return ['Vous avez reçu un message de la part d’un utilisateur Qualité Vanbaelinghem','','Expédié par l’utilisateur : '+U(operator()),'Enseigne SARL VANBAELINGHEM (59229)','',mod+' : '+U(r.label)+' Date : '+dt+' '+det.join(' / ')+' Signature: '+U(r.who||''),'','Important : ce message est généré automatiquement par l’application Qualité Vanbaelinghem.'].join('\n')}
 var HMLAB={timer:'Timer',clean:'Nettoyages postes',temp:'Température frigo',reception:'Réception de marchandise',trace:'Traçabilité',etiq:'Étiquettes produits',livraison:'Température livraison plat',dlc:'Suivi des DLC',gaz:'Gaz barquette',congel:'Congélation produits',refroid:'Refroidissement',fab:'Fabrication du jour'};
@@ -1223,7 +1344,11 @@ function render(){
 
 /* ---------- fenêtre de saisie ---------- */
 var F=null;
-var TL={checks:'Check-list',temp:'Température',mesures:'Mesures',moment:'Moment',lots:'N° lot / DLC',notes:'Notes',prod:'Production',photos:'Photos'};
+var TL={checks:'Check-list',temp:'Température',mesures:'Mesures',moment:'Moment',lots:'N° lot / DLC',notes:'Notes',prod:'Production',photos:'Photos',alerte:'Alerte'};
+/* température frigo non conforme : mêmes actions correctives que ePackPro (couleur = gravité) */
+var ACTIONS=[{t:'COUPURE ELECTRIQUE / REARMER LE COMPTEUR',c:'vert'},{t:'DEGIVRAGE / CONTROLER LA T° ULTERIEUREMENT',c:'orange'},{t:'MAINTENANCE EN COURS',c:'orange'},{t:'OUVERTURE DE PORTE FREQUENTE / REPRENDRE LA T° ULTERIEUREMENT',c:'orange'},{t:'PORTE MAL FERMEE / BIEN FERMER LA PORTE',c:'vert'},{t:'PROBLEME RESOLU',c:'vert'},{t:'PANNE / APPELER SAV / DEPLACER LES DENREES',c:'rouge'}],ACOL={vert:'#2e9e4f',orange:'#f5a623',rouge:'#e53935'};
+function alertOn(){return !!F&&F.module==='temp'&&fStatus()!=='ok'}
+function flowTabs(){var t=F.tabs.filter(function(k){return k!=='alerte'});if(alertOn()){var i=t.indexOf('temp');t.splice(i<0?t.length:i+1,0,'alerte')}return t}
 function fShow(){document.getElementById('modal').className='on'}
 function stopCam(){if(F&&F.stream){try{F.stream.getTracks().forEach(function(t){t.stop()})}catch(e){}F.stream=null}}
 function fHide(){stopCam();document.getElementById('modal').className='';document.getElementById('modal').innerHTML='';F=null}
@@ -1241,12 +1366,32 @@ function fStatus(){
  if(F.spec&&F.value!==''&&!isNaN(parseFloat(F.value)))s=worse(s,tstat(F.spec,parseFloat(F.value)));
  if(F.checks&&!F.checked.every(Boolean))s=worse(s,'partiel');
  s=worse(s,mesStatus());return s}
+/* mode « plat » : une production choisie, ses ingrédients avec leurs photos, un seul « J'ai terminé » */
+function dishRec(){return !!F&&F.layout==='trace'&&F.dishes&&F.dishes.length&&F.recipe?D.recettes.filter(function(x){return x.id===F.recipe.id})[0]||null:null}
+function stashIng(){if(F.recIng){F.ingSess=F.ingSess||{};F.ingSess[F.recIng]={photos:(F.photos||[]).slice(),lots:(F.lots||[]).map(function(l){return {lot:l.lot,dlc:l.dlc}}),cat:F.itemCat||''}}}
+function selIng(name,cat){stashIng();F.ingSess=F.ingSess||{};var d=F.ingSess[name];F.photos=d?d.photos.slice():[];F.lots=d?d.lots.map(function(l){return {lot:l.lot,dlc:l.dlc}}):[];F.lotIn='';F.dlcIn='';F.dlcAuto=false;F.srcTag='';assocName(name,cat||'','');F.recIng=name}
+function ingEntries(){stashIng();var o=[];Object.keys(F.ingSess||{}).forEach(function(n){var d=F.ingSess[n];if(d&&((d.photos||[]).length||(d.lots||[]).length))o.push(n)});return o}
+function needIngPick(){if(dishRec()&&!F.recIng){toast('Touchez d’abord l’ingrédient à photographier.');return true}return false}
+function dishCards(){return F.dishes.map(function(d){var pr=null,it=null;D.productions.forEach(function(p){if(p.id===d.fabId)(p.items||[]).forEach(function(x){if(x.name===d.name&&!it){pr=p;it=x}})});
+ return '<div class="selprod" style="display:flex;align-items:center;gap:12px;margin-bottom:10px;border:2px solid var(--accent)"><div style="flex:1"><b style="font-size:1.3rem">'+esc(d.name)+'</b>'+(it?'<br><span class="meta">'+(pr.ts?hhmm(new Date(pr.ts))+' · ':'')+'qté '+esc(String(it.qty==null?'':it.qty).replace('.',','))+(pr.op||pr.who?' · '+esc(pr.op||pr.who):'')+'</span>':'')+'</div><button class="btn sm" data-k="dishdel" data-v="'+esc(d.name)+'" aria-label="Retour à la liste des productions" style="background:#d93636;border-color:#d93636;color:#fff">‹ Retour</button></div>'}).join('')}
+function ingTagSel(g){var en=tagsFor(favNrm(g.name),10);if(!en.length)return '<div class="meta" style="margin:8px 0 2px">Aucune entrée précédente pour cet ingrédient : prenez la photo.</div>';
+ return '<select data-tagsel="1" data-ing="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" aria-label="Dernières entrées de '+esc(g.name)+'" style="width:100%;margin:10px 0 2px;min-height:52px;font-size:1rem"><option value="">Étiquette perdue : choisir parmi les dernières entrées…</option>'+en.map(function(t){var d=t.ts?new Date(t.ts):null;return '<option value="'+esc(t.id)+'">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · '+hhmm(d)+' · ':'')+esc(t.kind)+((t.lots||[]).length?' · Lot '+esc(t.lots[0].lot):'')+((t.lots||[]).length&&t.lots[0].dlc?' · DLC '+esc(frd(t.lots[0].dlc)):'')+(t.sup?' · '+esc(t.sup):'')+'</option>'}).join('')+'</select>'}
+function dishPhotosHtml(){var rc=dishRec(),h=dishCards();
+ if(!rc){var all=D.recettes.slice().sort(function(a,b){return favNrm(a.name).localeCompare(favNrm(b.name),'fr')}),w0=favNrm(F.dishes[0].name).split(/\s+/)[0]||'',sg=all.filter(function(r){return smartMatch(r.name,w0)>=0});
+  h+='<p class="meta" style="margin:0 0 8px">Aucune recette liée à « '+esc(F.dishes[0].name)+' ». Choisissez la recette pour voir ses ingrédients, ou photographiez directement l’étiquette du plat.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">'+(sg.length?sg:all).slice(0,10).map(function(r){return '<button class="btn sm" data-k="recdish" data-v="'+esc(r.id)+'">'+esc(r.name)+'</button>'}).join('')+'</div>'}
+ if(!rc)return h+(F.photos.length?'<div class="tph">'+F.photos.map(function(p,i){return '<figure><img alt="Photo jointe" src="'+p+'"><button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button></figure>'}).join('')+'</div>':'<div class="tnone">Prenez la photo de l’étiquette.</div>');
+ stashIng();var ings=recIngs(rc);
+ h+='<p class="meta" style="margin:0 0 8px">Touchez un ingrédient, puis prenez sa photo.</p>';
+ return h+ings.map(function(g){var on=F.recIng===g.name,d=(F.ingSess||{})[g.name]||{photos:[],lots:[]},ph=on?F.photos:d.photos,n=ph.length+((on?F.lots:d.lots)||[]).length;
+  return '<div class="selprod" style="margin-bottom:8px'+(on?';outline:3px solid var(--accent)':'')+'"><button class="sess" data-k="photoing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" style="width:100%;text-align:left"><span style="flex:1"><b>'+esc(g.name)+'</b><br><span class="meta">'+(on?'📷 Les photos vont ici':(n?'✓ '+ph.length+' photo'+(ph.length>1?'s':''):'À photographier'))+'</span></span><span class="btn sm">'+(on?'Choisi':'Choisir')+'</span></button>'+(on?ingTagSel(g):'')+(ph.length?'<div class="tph" style="margin-top:8px">'+ph.map(function(p,i){return '<figure><img alt="Photo" src="'+p+'">'+(on?'<button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button>':'')+'</figure>'}).join('')+'</div>':'')+'</div>'}).join('')}
 function validity(){
  var st=fStatus();
  if(F.spec&&F.specRequired&&(F.value===''||isNaN(parseFloat(F.value))))return {ok:false,hint:'Saisissez la température.'};
- if(F.needProd&&!F.prod)return {ok:false,hint:F.layout==='trace'?'Associez une fabrication (recette), puis choisissez l’ingrédient.':'Associez une fabrication.'};
+ if(dishRec()){stashIng();return ingEntries().length||pendingLot()?{ok:true}:{ok:false,hint:'Touchez un ingrédient, puis prenez sa photo.'}}
+ if(F.needProd&&!F.prod&&!(F.layout==='trace'&&F.dishes&&F.dishes.length&&!F.recipe))return {ok:false,hint:F.layout==='trace'?'Associez une fabrication (recette), puis choisissez l’ingrédient.':'Associez une fabrication.'};
  if(F.needProof&&!F.photos.length&&!F.lots.length&&!pendingLot())return {ok:false,hint:'Ajoutez une photo ou un lot.'};
- if(st!=='ok'&&!F.note.trim())return {ok:false,hint:'Écart constaté : indiquez l’action corrective dans Notes.'};
+ if(st!=='ok'&&F.module==='temp'&&F.action==null)return {ok:true,hint:'Écart : choisissez l’action corrective.'};
+ if(st!=='ok'&&F.module!=='temp'&&!F.note.trim())return {ok:false,hint:'Écart constaté : indiquez l’action corrective dans Notes.'};
  return {ok:true}}
 function fabPickList(){var lim=addDays(today(),-2),rows=[];D.productions.forEach(function(p){if(p.date>=lim)(p.items||[]).forEach(function(it,i){rows.push({p:p,it:it,i:i})})});
  if(!rows.length)return '<p class="meta" style="margin:0 0 12px">Aucune fabrication enregistrée ces 3 derniers jours (Fabrication du jour).</p>';
@@ -1258,6 +1403,13 @@ function prodGrid(){
 function pendingLot(){return !!F.dlcIn&&F.tabs.indexOf('lots')>=0&&!!(F.lotIn||(F.lotsSeen&&!F.dlcAuto))}
 function fBody(){
  var t=F.tab;
+ if(t==='alerte'){
+  return '<div style="background:#d93636;color:#fff;text-align:center;font-weight:700;font-size:1.25rem;padding:10px;border-radius:10px;margin-bottom:10px">Alerte</div>'+
+   '<label class="f" for="mnote">Commentaire libre</label><textarea id="mnote" rows="2" placeholder="Commentaire libre" style="width:100%">'+esc(F.note)+'</textarea>'+
+   '<p style="font-weight:700;margin:14px 0 8px;font-size:.9rem">1. QUELLE ACTION CORRECTIVE PRENEZ-VOUS ?</p>'+
+   ACTIONS.map(function(a,i){var on=F.action===i;return '<button data-k="act" data-v="'+i+'" aria-pressed="'+on+'" style="display:block;width:100%;min-height:54px;margin:0 0 6px;padding:8px 14px;text-align:center;font-weight:600;font-size:.95rem;background:'+(on?'#e8f3ec':'var(--surface,#fff)')+';border:1px solid var(--line,#cfd8dc);border-left:10px solid '+ACOL[a.c]+';border-radius:10px;'+(on?'outline:3px solid var(--accent)':'')+'">'+(on?'✓ ':'')+esc(a.t)+'</button>'}).join('')+
+   '<p style="font-weight:700;margin:14px 0 6px;font-size:.9rem">Prendre une photo ?</p><button class="btn" data-k="photo" style="min-height:52px">📷 Prendre une photo</button><input type="file" id="mfile" accept="image/*" capture="environment" hidden>'+
+   (F.photos.length?'<div class="tph" style="margin-top:8px">'+F.photos.map(function(p,i){return '<figure><img alt="Photo jointe" src="'+p+'"><button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button></figure>'}).join('')+'</div>':'')}
  if(t==='temp'){var sp=F.spec,s=(F.value!==''&&!isNaN(parseFloat(F.value)))?tstat(sp,parseFloat(F.value)):'';
   return '<div class="limits num"><span>Min : '+comma(sp.min)+' °C</span><span>Max : '+comma(sp.max)+' °C</span><span>Limite : '+comma(sp.limite)+' °C</span></div>'+(sp.assume?'<p class="note-ex" style="text-align:center;margin-bottom:8px">Seuils par défaut, à confirmer avec votre PMS.</p>':'')+'<div class="readout num '+s+'" id="ro"><span id="rv">'+(F.value?comma(F.value):'')+'</span><small>°C</small></div><div class="pad">'+
   ['1','2','3','4','5','6','7','8','9','+/-','0','.'].map(function(k){return '<button data-k="'+k+'">'+(k==='.'?',':k==='+/-'?'+ / −':k)+'</button>'}).join('')+'<button data-k="del" style="grid-column:1 / -1;width:100%" aria-label="Effacer">⌫ Effacer</button></div>'}
@@ -1280,7 +1432,7 @@ function fBody(){
 function drawFlow(){
  if(F.layout==='trace'){drawTrace();return}
  var v=validity();
- document.getElementById('modal').innerHTML='<div class="sheet"><h2>'+esc(F.title)+'</h2>'+(F.subt?'<div class="sub-h">'+esc(F.subt)+'</div>':'')+(F.prod&&F.tab!=='prod'?'<div class="sub-h" style="color:var(--accent);font-weight:600">'+esc(F.prod.name)+'</div>':'')+'<div class="stabs" role="tablist">'+F.tabs.map(function(k){return '<button role="tab" data-k="tab" data-v="'+k+'" aria-selected="'+(F.tab===k)+'">'+TL[k]+'</button>'}).join('')+'</div><div class="sbody">'+fBody()+'</div><div class="sfoot"><span class="hint" id="hint">'+esc(v.hint||'')+'</span><button class="btn ghost" data-k="cancel">Annuler</button><button class="btn primary" id="okbtn" data-k="ok" '+(v.ok&&!F.busy?'':'disabled')+'>Valider</button></div></div>'}
+ document.getElementById('modal').innerHTML='<div class="sheet"><h2>'+esc(F.title)+'</h2>'+(F.subt?'<div class="sub-h">'+esc(F.subt)+'</div>':'')+(F.prod&&F.tab!=='prod'?'<div class="sub-h" style="color:var(--accent);font-weight:600">'+esc(F.prod.name)+'</div>':'')+'<div class="stabs" role="tablist">'+flowTabs().map(function(k){return '<button role="tab" data-k="tab" data-v="'+k+'" aria-selected="'+(F.tab===k)+'"'+(k==='alerte'?' style="background:#d93636;color:#fff"':'')+'>'+TL[k]+'</button>'}).join('')+'</div><div class="sbody">'+fBody()+'</div><div class="sfoot"><span class="hint" id="hint">'+esc(v.hint||'')+'</span><button class="btn ghost" data-k="cancel">Annuler</button><button class="btn primary" id="okbtn" data-k="ok" '+(v.ok&&!F.busy?'':'disabled')+'>Valider</button></div></div>'}
 
 /* onglet Fabrication (Traçabilité) : favoris partagés (db reglages/favoris) + derniers produits enregistrés, le plus récent en premier */
 var DEFAULT_FAV=[];
@@ -1358,28 +1510,55 @@ function recDone(name){var t=today(),rn=F.recipe?favNrm(F.recipe.name):'',k=favN
 function recHtml(){
  var q=favNrm(F.favQ),rc=F.recipe?D.recettes.filter(function(x){return x.id===F.recipe.id})[0]:null,cur=F.prod?favNrm(F.prod.name):'',h='';
  var all=D.recettes.slice().sort(function(a,b){return favNrm(a.name).localeCompare(favNrm(b.name),'fr')});
- function tile(r){return '<button class="tile item" data-k="recpick" data-v="'+esc(r.id)+'" style="min-height:64px"><h3>'+esc(r.name)+'</h3><span class="meta">'+esc(r.cat||'')+((r.ingr||[]).length?(r.cat?' · ':'')+r.ingr.length+' ingrédient'+(r.ingr.length>1?'s':''):'')+'</span></button>'}
- h+='<div style="display:flex;align-items:center;gap:10px;margin:4px 0 6px"><b style="flex:1">Recette</b>'+(rc?'<button class="btn sm" data-k="recclr">Changer</button>':'<button class="btn sm" data-k="recall">'+(F.recAll?'Masquer la liste':'Toutes les recettes')+'</button>')+'</div>';
+ function tile(r){return '<div style="position:relative"><button class="tile item" data-k="recpick" data-v="'+esc(r.id)+'" style="min-height:64px;width:100%"><h3>'+esc(r.name)+'</h3><span class="meta">'+esc(r.cat||'')+((r.ingr||[]).length?(r.cat?' · ':'')+r.ingr.length+' ingrédient'+(r.ingr.length>1?'s':''):'')+'</span></button><button class="star" data-k="rfav" data-v="'+esc(r.id)+'" aria-label="'+(r.fav?'Retirer des favoris':'Mettre en favori')+'" style="position:absolute;top:2px;right:6px;font-size:1.5rem;padding:6px 8px;background:transparent;border:0">'+(r.fav?'★':'☆')+'</button></div>'}
+ h+='<div style="display:flex;align-items:center;gap:10px;margin:4px 0 6px"><b style="flex:1">'+(rc?'Recette':'Recettes favorites')+'</b>'+(rc?'<button class="btn sm" data-k="recclr">Changer</button>':'')+'</div>';
  if(q.length>=1){var rs=all.map(function(r){return {r:r,sc:smartMatch(r.name,q)}}).filter(function(x){return x.sc>=0}).sort(function(a,b){return a.sc-b.sc||favNrm(a.r.name).localeCompare(favNrm(b.r.name),'fr')}).slice(0,8).map(function(x){return x.r});
   if(rs.length)h+='<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:12px">'+rs.map(tile).join('')+'</div>'}
  if(!rc){
-  if(F.recAll)h+=all.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+all.map(tile).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Aucune recette enregistrée.</p>';
-  else{var fr=all.filter(function(r){return r.fav});
-   h+=fr.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+fr.map(tile).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Choisissez une recette (recherche ci-dessus ou « Toutes les recettes ») pour voir ses ingrédients.</p>'}
+  var fr=all.filter(function(r){return r.fav});
+  h+=fr.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+fr.map(tile).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Aucune recette favorite. Tapez son nom dans la recherche puis touchez ☆, ou marquez-la en favori dans Recettes.</p>';
  }else{var ings=recIngs(rc);
   h+='<div class="selprod">Recette : <b>'+esc(rc.name)+'</b> · '+ings.length+' ingrédient'+(ings.length>1?'s':'')+'<br><span class="meta">Touchez un ingrédient : ajoutez sa photo, ou reprenez son étiquette si celle de la réception est perdue.</span></div>'+
   (ings.length?'<div style="margin-bottom:16px">'+ings.map(function(g){var on=cur===favNrm(g.name),dn=recDone(g.name),nt=tagsFor(favNrm(g.name),99).length;
    var sel='';if(!dn){var en=tagsFor(favNrm(g.name),10);sel=en.length?'<select data-tagsel="1" data-ing="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" aria-label="Dernières entrées de '+esc(g.name)+'" style="width:100%;margin:2px 0 10px;min-height:48px"><option value="">Traçabilité manquante : choisir parmi les dernières entrées…</option>'+en.map(function(t){var d=t.ts?new Date(t.ts):null;return '<option value="'+esc(t.id)+'">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · ':'')+esc(t.kind)+((t.lots||[]).length?' · Lot '+esc(t.lots[0].lot):'')+((t.lots||[]).length&&t.lots[0].dlc?' · DLC '+esc(frd(t.lots[0].dlc)):'')+(t.sup?' · '+esc(t.sup):'')+'</option>'}).join('')+'</select>':'<div class="meta" style="margin:2px 0 10px">Traçabilité manquante · aucune entrée précédente.</div>'}
    return '<div><button class="sess" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" style="width:100%;text-align:left'+(on?';outline:3px solid var(--accent)':'')+'"><span style="flex:1"><b>'+esc(g.name)+'</b><br><span class="meta">'+(dn?'✓ Fiche faite à '+hhmm(new Date(dn.ts)):'À photographier')+' · '+(nt?nt+' étiquette'+(nt>1?'s':'')+' retrouvée'+(nt>1?'s':''):'aucune étiquette retrouvée')+(g.sup?' · '+esc(g.sup):'')+'</span></span><span class="btn sm">'+(on?'Choisi':'Choisir')+'</span></button>'+sel+'</div>'}).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Cette recette ne contient aucun ingrédient.</p>')}
  return h}
+/* catégorie « Production du jour » : fabrications enregistrées aujourd'hui (Fabrication du jour), à toucher pour les associer à la fiche */
+function pjourHtml(){var t=today(),rows=[];
+ D.productions.forEach(function(p){if(p.date!==t)return;(p.items||[]).forEach(function(it,i){if(it.name)rows.push({p:p,it:it,i:i})})});
+ rows.sort(function(a,b){return (b.p.ts||0)-(a.p.ts||0)});
+ var h='<div style="display:flex;align-items:center;gap:10px;margin:4px 0 6px"><b style="flex:1">Production du jour ('+rows.length+')</b></div>';
+ if(!rows.length)return h+'<p class="meta" style="margin:0 0 16px">Aucune production enregistrée aujourd’hui (Fabrication du jour).</p>';
+ return h+'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+rows.map(function(x){var on=(F.dishes||[]).some(function(d){return d.name===x.it.name&&(!d.fabId||d.fabId===x.p.id)}),d=new Date(x.p.ts||0);
+  return '<button class="tile item" data-k="pjour" data-v="'+esc(x.p.id+'|'+x.i)+'" style="min-height:70px'+(on?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(x.it.name)+'</h3><span class="meta">'+(x.p.ts?hhmm(d)+' · ':'')+'qté '+esc(String(x.it.qty==null?'':x.it.qty).replace('.',','))+(x.p.op||x.p.who?' · '+esc(x.p.op||x.p.who):'')+'</span></button>'}).join('')+'</div>'}
+/* page « Recette du jour » : ingrédients + dernières étiquettes reçues, à reprendre ou imprimer */
+var RECTAGS={};
+function recPage(){
+ if(F.recView==='pick'){var dn0=F.recWant||'',all0=D.recettes.slice().sort(function(a,b){return favNrm(a.name).localeCompare(favNrm(b.name),'fr')}),w0=favNrm(dn0).split(/\s+/)[0]||'',sg=w0?all0.filter(function(r){return smartMatch(r.name,w0)>=0}):[];
+  var lst=(sg.length?sg:all0).slice(0,40);
+  return '<div style="display:flex;align-items:center;gap:10px;margin:0 0 12px"><button class="btn" data-k="recback" style="min-height:52px">‹ Retour</button><b style="flex:1;font-size:1.2rem">'+esc(dn0)+'</b></div><p class="meta" style="margin:0 0 10px">Aucune recette liée à cette production. Choisissez la recette :</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">'+lst.map(function(r){return '<button class="tile item" data-k="recpick" data-v="'+esc(r.id)+'" style="min-height:64px"><h3>'+esc(r.name)+'</h3></button>'}).join('')+'</div>'}
+ var rc=D.recettes.filter(function(x){return x.id===F.recipe.id})[0];if(!rc)return '<p class="meta">Recette introuvable.</p>';
+ var ings=recIngs(rc),h='<div style="display:flex;align-items:center;gap:10px;margin:0 0 12px"><button class="btn" data-k="recback" style="min-height:52px">‹ Retour</button><b style="flex:1;font-size:1.25rem">'+esc(rc.name)+'</b><span class="meta">'+ings.length+' ingrédient'+(ings.length>1?'s':'')+'</span></div><p class="meta" style="margin:0 0 10px">Touchez un ingrédient pour choisir parmi ses dernières entrées.</p>';
+ if(!ings.length)return h+'<p class="meta">Cette recette ne contient aucun ingrédient.</p>';
+ RECTAGS={};
+ h+=ings.map(function(g){var op=F.recOpen===g.name,dn=recDone(g.name),tg=op?tagsFor(favNrm(g.name),10):[],sub='';
+  if(op){tg.forEach(function(t){RECTAGS[t.id]=t});
+   sub=tg.length?'<select data-tagsel="1" data-ing="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" aria-label="Dernières entrées de '+esc(g.name)+'" style="width:100%;margin:8px 0 6px;min-height:52px;font-size:1rem"><option value="">Choisir une entrée de '+esc(g.name)+'…</option>'+tg.map(function(t){var d=t.ts?new Date(t.ts):null;return '<option value="'+esc(t.id)+'">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · '+hhmm(d)+' · ':'')+esc(t.kind)+((t.lots||[]).length?' · Lot '+esc(t.lots[0].lot):'')+((t.lots||[]).length&&t.lots[0].dlc?' · DLC '+esc(frd(t.lots[0].dlc)):'')+(t.sup?' · '+esc(t.sup):'')+'</option>'}).join('')+'</select><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-k="tagprint" data-v="'+esc(tg[0].id)+'">🖨 Imprimer la dernière</button><button class="btn sm" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'">Photographier</button></div>':'<div class="meta" style="margin:8px 0">Aucune entrée précédente pour cet ingrédient.</div><button class="btn sm" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'">Photographier</button>'}
+  return '<div class="selprod" style="margin-bottom:10px"><button class="sess" data-k="recopen" data-v="'+esc(g.name)+'" style="width:100%;text-align:left"><span style="flex:1"><b style="font-size:1.1rem">'+esc(g.name)+'</b><br><span class="meta">'+(dn?'✓ Fiche faite à '+hhmm(new Date(dn.ts)):'Traçabilité à faire')+'</span></span><span class="btn sm">'+(op?'▲':'▼')+'</span></button>'+sub+'</div>'}).join('');
+ return h}
+function printTag(t){var w=window.open('','_blank');if(!w){toast('Impression bloquée par le navigateur.');return}
+ var d=t.ts?new Date(t.ts):null;
+ w.document.write('<!doctype html><meta charset="utf-8"><title>'+esc(t.name)+'</title><style>body{font:16px sans-serif;margin:20px}img{max-width:100%;margin:8px 0;display:block}</style><h2>'+esc(t.name)+'</h2><p>'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+hhmm(d):'')+(t.sup?' · '+esc(t.sup):'')+'</p>'+(t.lots||[]).map(function(l){return '<p><b>Lot '+esc(l.lot)+'</b>'+(l.dlc?' · DLC '+esc(frd(l.dlc)):'')+'</p>'}).join('')+(t.photos||[]).map(function(ph){return '<img src="'+ph+'">'}).join(''));
+ w.document.close();setTimeout(function(){try{w.focus();w.print()}catch(e){}},500)}
 function fabTab(){
- return '<input type="search" id="favq" placeholder="Rechercher une recette, une fabrication ou un produit (ex. poulet)" value="'+esc(F.favQ||'')+'" autocomplete="off" style="width:100%;margin-bottom:10px">'+((F.dishes&&F.dishes.length)?'<div class="selprod"><div style="margin-bottom:6px">Fabrications de cette fiche :</div>'+F.dishes.map(function(d){return '<button class="btn sm" data-k="dishdel" data-v="'+esc(d.name)+'" style="margin:0 6px 6px 0">'+esc(d.name)+' ✕</button>'}).join('')+'</div>':'')+(F.srcFab?'<div class="selprod">Traçabilité reprise de « '+esc(F.srcFab.name)+' » · '+F.srcFab.ids.length+' fiche'+(F.srcFab.ids.length>1?'s':'')+' · '+fmtTs(F.srcFab.ts)+'</div>':'')+(F.prod?'<div class="selprod">Ingrédient : '+esc(F.prod.name)+'</div>':'<p class="meta" style="margin:0 0 10px">Choisissez une recette (ou une fabrication), puis l’ingrédient photographié.</p>')+'<div id="favres">'+favRes()+'</div>'}
+ if(F.recView==='pick'||(F.recView&&F.recipe))return recPage();
+ return (F.srchOpen?'<div id="favbar" style="display:flex;gap:8px;margin-bottom:10px"><input type="search" id="favq" placeholder="Rechercher (ex. burger)" value="'+esc(F.favQ||'')+'" autocomplete="off" style="flex:1"><button class="btn" data-k="srchx" aria-label="Fermer la recherche" style="min-width:56px">✕</button></div>':'<div id="favbar" style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn" data-k="srch" aria-label="Rechercher" title="Rechercher" style="min-width:64px;min-height:52px;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button></div>')+((F.dishes&&F.dishes.length)?'<div class="selprod"><div style="margin-bottom:6px">Fabrications de cette fiche :</div>'+F.dishes.map(function(d){return '<button class="btn sm" data-k="dishdel" data-v="'+esc(d.name)+'" style="margin:0 6px 6px 0">'+esc(d.name)+' ✕</button>'}).join('')+'</div>':'')+(F.srcFab?'<div class="selprod">Traçabilité reprise de « '+esc(F.srcFab.name)+' » · '+F.srcFab.ids.length+' fiche'+(F.srcFab.ids.length>1?'s':'')+' · '+fmtTs(F.srcFab.ts)+'</div>':'')+(F.prod?'<div class="selprod">Ingrédient : '+esc(F.prod.name)+'</div>':'<p class="meta" style="margin:0 0 10px">Choisissez une recette (ou une fabrication), puis l’ingrédient photographié.</p>')+'<div id="favres">'+favRes()+'</div>'}
 function favRes(){
  var q=favNrm(F.favQ),favAll=favList(),fav=q?favAll.filter(function(x){return favNrm(x).indexOf(q)>-1}):favAll,cur=F.prod?F.prod.name.toLowerCase().trim():'',ed=!!F.favEdit,ff=favFabList();
  function isFav(n){return favAll.some(function(x){return x.toLowerCase().trim()===n.toLowerCase().trim()})}
  function isFF(n){return ff.some(function(x){return x.toLowerCase().trim()===n.toLowerCase().trim()})}
  function lastTxt(n){var lp=latestProd(n);if(!lp||!lp.ts)return '';var d=new Date(lp.ts);return 'Dernière : '+(dKey(d)===today()?'aujourd’hui':frd(dKey(d),{day:'2-digit',month:'2-digit'}))+' · '+hhmm(d)}
- var h=recHtml();
+ var h=F.recipe?recHtml()+pjourHtml():pjourHtml()+recHtml();
  var tq=q.length>=2?q:(F.prod?favNrm(F.prod.name):'');
  if(tq){var tg=tagsFor(tq,10),lbl=q.length>=2?F.favQ:F.prod.name;
   if(tg.length)h+='<b style="display:block;margin:4px 0 8px">Dernières étiquettes de traçabilité « '+esc(lbl)+' »</b><div style="margin-bottom:16px">'+tg.map(tagCard).join('')+'</div>';
@@ -1387,14 +1566,8 @@ function favRes(){
  if(F.prod||F.recipe){h+='<button class="btn sm" data-k="recent" style="margin:0 0 12px">'+(F.recent?'Masquer les réceptions récentes':'Réceptions récentes (7 jours)')+'</button>';
   if(F.recent){var rr=recentRecv();h+=rr.length?'<div style="margin-bottom:16px">'+rr.map(tagCard).join('')+'</div>':'<p class="meta" style="margin:0 0 16px">Aucune réception avec photo ou lot ces 7 derniers jours.</p>'}}
  var hRes='';if(q){var res=fabNames(F.favQ);
-  hRes='<div style="border:1px solid var(--line,#cfd8dc);border-radius:12px;overflow:hidden;margin:0 0 16px;background:var(--card,#fff)"><div class="meta" style="padding:8px 12px;border-bottom:1px solid var(--line,#e0e6ea)">Fabrications trouvées ('+res.length+')</div><div style="max-height:calc(var(--vvh,100vh) - 190px);min-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch">'+(res.length?res.map(function(x){var lt=lastTxt(x.name);
-   return '<div style="display:flex;align-items:center;border-bottom:1px solid var(--line,#eef1f3)"><button class="sess" data-k="pickdish" data-v="'+esc(x.name)+'" style="flex:1;border:0;text-align:left"><span style="flex:1"><b>'+esc(x.name)+'</b><br><span class="meta">'+esc(x.cat||'')+(lt?' · '+lt:'')+'</span></span></button><button class="btn sm" data-k="usefab" data-v="'+esc(x.name)+'" style="margin-right:6px">↪ Ingrédient</button><button class="star" data-k="fftog" data-v="'+esc(x.name)+'" aria-label="'+(isFF(x.name)?'Retirer des favoris':'Mettre en favori')+'" style="position:static;font-size:1.6rem;padding:0 16px">'+(isFF(x.name)?'★':'☆')+'</button></div>'}).join(''):'<p class="meta" style="padding:12px">Aucune fabrication trouvée.</p>')+'</div></div>'}
- h+='<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><b style="flex:1">Fabrications favorites</b><button class="btn sm" data-k="ffedit">'+(F.ffEdit?'Terminer':'Modifier')+'</button></div>';
- var ffs=q?ff.filter(function(x){return favNrm(x).indexOf(q)>-1}):ff;
- h+=ffs.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px">'+ffs.map(function(n){var lt=lastTxt(n);
-  return F.ffEdit?'<button class="tile item edit" data-k="fftog" data-v="'+esc(n)+'" style="min-height:64px"><h3>'+esc(n)+'</h3><span class="meta">✕ Retirer</span></button>'
-   :'<div><button class="tile item" data-k="pickdish" data-v="'+esc(n)+'" style="width:100%;min-height:64px'+(F.dishes&&F.dishes.some(function(d){return d.name===n})?';outline:3px solid var(--accent)':'')+'"><h3>'+esc(n)+'</h3>'+(lt?'<span class="meta">'+lt+'</span>':'<span class="meta">Pas encore fabriquée</span>')+'</button><button class="btn sm" data-k="usefab" data-v="'+esc(n)+'" style="width:100%;margin-top:4px">↪ Utiliser comme ingrédient</button></div>'}).join('')+'</div>'
-  :'<p class="meta" style="margin:0 0 16px">'+(q?'Aucune fabrication favorite ne correspond.':'Aucune fabrication favorite. Tapez son nom dans la recherche ci-dessus puis touchez ☆ pour l’ajouter. Elle reprendra automatiquement la dernière fabrication faite.')+'</p>';
+  hRes='<div style="border:1px solid var(--line,#cfd8dc);border-radius:12px;overflow:hidden;margin:0 0 16px;background:var(--surface,#fff)"><div class="meta" style="padding:8px 14px;border-bottom:1px solid var(--line,#e0e6ea)">Fabrications trouvées ('+res.length+') · touchez pour ajouter</div><div style="max-height:calc(var(--vvh,100vh) - 190px);min-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch">'+(res.length?res.map(function(x){var lt=lastTxt(x.name),on=(F.dishes||[]).some(function(d){return d.name===x.name});
+   return '<button data-k="pickdish" data-v="'+esc(x.name)+'" style="display:block;width:100%;text-align:left;padding:14px 16px;border:0;border-bottom:1px solid var(--line,#eef1f3);border-radius:0;background:transparent;color:inherit;font:inherit;min-height:60px"><b>'+(on?'✓ ':'')+esc(x.name)+'</b><br><span class="meta">'+esc(x.cat||'')+(lt?' · '+lt:'')+'</span></button>'}).join(''):'<p class="meta" style="padding:12px">Aucune fabrication trouvée.</p>')+'</div></div>'}
  h+='<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><b style="flex:1">Ingrédients favoris</b><button class="btn sm" data-k="favedit">'+(ed?'Terminer':'Modifier')+'</button></div>';
  h+=fav.length?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:10px">'+fav.map(function(n){
   return ed?'<button class="tile item edit" data-k="favdel" data-v="'+esc(n)+'" style="min-height:64px"><h3>'+esc(n)+'</h3><span class="meta">✕ Retirer</span></button>'
@@ -1410,9 +1583,10 @@ function tabInd(anim){var st=document.querySelector('#modal .tside .stabs');if(!
  i.style.opacity='1';i.style.width=b.offsetWidth+'px';i.style.transform='translateX('+b.offsetLeft+'px)';
  if(!anim){void i.offsetWidth;i.style.transition=''}}
 function drawTrace(){
+ saveDraft();
  var v=validity(),t=F.tab,body;
  if(F.pickingProd){var sv=F.tab;F.tab='prod';body=fBody();F.tab=sv}
- else if(t==='photos')body=F.photos.length?'<div class="tph">'+F.photos.map(function(p,i){return '<figure><img alt="Photo jointe" src="'+p+'"><button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button></figure>'}).join('')+'</div>':'<div class="tnone"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Aucune photo</div>';
+ else if(t==='photos')body=(F.dishes&&F.dishes.length)?dishPhotosHtml():pjourHtml()+(F.photos.length?'<div class="tph">'+F.photos.map(function(p,i){return '<figure><img alt="Photo jointe" src="'+p+'"><button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button></figure>'}).join('')+'</div>':'<div class="tnone"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Aucune photo</div>');
  else if(t==='fab')body=fabTab();
  else if(t==='notes')body='<label class="f" for="mnote">Saisissez votre note</label><textarea id="mnote" placeholder="Commentaire libre">'+esc(F.note)+'</textarea>';
  else body=fBody();
@@ -1441,17 +1615,24 @@ async function startCam(){
   if(!F||F.layout!=='trace'){st.getTracks().forEach(function(t){t.stop()});return}
   F.camBusy=false;F.stream=st;drawTrace()}catch(e){if(late&&gp)gp.then(function(x){try{x.getTracks().forEach(function(t){t.stop()})}catch(_){}},function(){});if(F&&F.layout==='trace'){F.camBusy=false;F.camErr=(e&&e.name)||'erreur';F.camMsg=(e&&e.message&&e.message!==e.name)?String(e.message).slice(0,80):'';drawTrace()}}}
 function shoot(){
+ if(needIngPick())return;
  var vd=document.getElementById('tvid');
  if(vd&&F.stream&&vd.videoWidth){var k=Math.min(1,640/Math.max(vd.videoWidth,vd.videoHeight)),c=document.createElement('canvas');c.width=Math.round(vd.videoWidth*k);c.height=Math.round(vd.videoHeight*k);c.getContext('2d').drawImage(vd,0,0,c.width,c.height);F.photos.push(c.toDataURL('image/jpeg',.6));F.tab='photos';F.pickingProd=false;drawTrace();return}
  var f=document.getElementById('mfile');if(f)f.click()}
 function refreshFoot(){var v=validity(),b=document.getElementById('okbtn'),h=document.getElementById('hint');if(b)b.disabled=!(v.ok&&!F.busy);if(h)h.textContent=v.hint||'';
  var ro=document.getElementById('ro');if(ro){var s=(F.value!==''&&!isNaN(parseFloat(F.value)))?tstat(F.spec,parseFloat(F.value)):'';ro.className='readout num '+s;document.getElementById('rv').textContent=F.value?comma(F.value):''}}
-async function saveFlow(){
- var v=validity();if(!v.ok||F.busy)return;F.busy=true;refreshFoot();
+async function saveFlow(single){
+ var v=validity();if(!v.ok||F.busy)return;
+ if(!single&&dishRec()){var en=ingEntries();if(en.length>1&&!(en.length===1)){for(var ei=0;ei<en.length-1;ei++){var dd=F.ingSess[en[ei]];F.photos=dd.photos.slice();F.lots=dd.lots.map(function(l){return {lot:l.lot,dlc:l.dlc}});F.lotIn='';F.dlcIn='';assocName(en[ei],dd.cat||'','');F.recIng=en[ei];await saveFlow(true);if(F.busy)return}
+   var dl=F.ingSess[en[en.length-1]];F.photos=dl.photos.slice();F.lots=dl.lots.map(function(l){return {lot:l.lot,dlc:l.dlc}});assocName(en[en.length-1],dl.cat||'','');F.recIng=en[en.length-1]}
+  else if(en.length===1){var d1=F.ingSess[en[0]];if(F.recIng!==en[0]){F.photos=d1.photos.slice();F.lots=d1.lots.map(function(l){return {lot:l.lot,dlc:l.dlc}});assocName(en[0],d1.cat||'','');F.recIng=en[0]}}}
+ if(!F.prod&&F.layout==='trace'&&F.dishes&&F.dishes.length&&!F.recipe){assocName(F.dishes[0].name,'',F.dishes[0].fabId||'')}
+ if(alertOn()&&F.action==null){F.tab='alerte';drawFlow();toast('Choisissez l’action corrective.');return}F.busy=true;refreshFoot();
  if(pendingLot()){F.lots.push({lot:(F.lotIn||'').trim()||autoLot(),dlc:F.dlcIn});F.lotIn='';F.dlcIn=''}
  var now=new Date(),st=fStatus(),mm=F.moment==='maintenant'?'Maintenant':F.moment==='matin'?'Matin':'Soir';
  var r={id:rid(),ts:now.getTime(),date:F.date,time:pad(now.getHours())+':'+pad(now.getMinutes()),module:F.module,refId:F.ref||'',label:F.label||F.title,moment:F.moment,momentLabel:mm,who:operator(),note:F.note.trim(),status:st};
  if(F.photos.length)r.photos=F.photos.slice();
+ if(alertOn()&&F.action!=null&&ACTIONS[F.action]){r.action=ACTIONS[F.action].t;r.actionNiveau=ACTIONS[F.action].c}
  if(F.spec&&F.value!==''&&!isNaN(parseFloat(F.value))){r.value=parseFloat(F.value);r.min=F.spec.min;r.max=F.spec.max;r.limite=F.spec.limite}
  if(F.checks){r.checksTotal=F.checks.length;r.checksDone=F.checked.filter(Boolean).length;r.undone=F.checks.filter(function(_,i){return !F.checked[i]})}
  if(F.mesuresOn){var m={};['tin','tout','dur'].forEach(function(k){if(F.mesures[k]!==undefined&&F.mesures[k]!=='')m[k]=parseFloat(F.mesures[k])});if(Object.keys(m).length)r.mesures=m}
@@ -1469,6 +1650,8 @@ async function saveFlow(){
   if(ok&&F.lots.length){for(var i=0;i<F.lots.length;i++){var l=F.lots[i];if(l.dlc)await put('dlc',rid(),{module:F.module,name:F.itemName||r.label,cat:F.itemCat||'',fab:r.date,dlc:l.dlc,lot:l.lot,who:operator(),closed:false,recordId:r.id,ts:r.ts})}}
  }
  if(!ok){F.busy=false;refreshFoot();return}
+ if(single){F.busy=false;return}
+ if(F.layout==='trace')clearDraft();
  var after=F.after;fHide();toast(r.value!=null?comma(r.value)+' °C enregistré'+(st==='ok'?'':' ('+LAB[st].toLowerCase()+')'):'Enregistré');
  if(after)after(r);kick()}
 function compress(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.55))};im.src=fr.result};fr.readAsDataURL(file)}
@@ -1482,7 +1665,22 @@ function openRecep(cat){var s=D.fournisseurs.filter(function(x){return x.id===S.
  var sp=cat.temp===false?null:{min:cat.min,max:cat.max,limite:cat.limite,assume:cat.confirme===false};
  openFlow({module:'reception',title:cat.name,subt:'Réception · '+(s?s.name:''),label:(s?s.name:'')+' · '+cat.name,itemName:cat.name+' ('+(s?s.name:'')+')',itemCat:cat.name,checks:RECEP_CHECKS,spec:sp,specRequired:!!sp,tabs:sp?['checks','temp','moment','lots','notes']:['checks','moment','lots','notes'],after:function(){S.recDone.push(cat.name);kick()}})}
 var LASTDISH=null,LASTREC=null;
-function openTrace(){openFlow({module:'trace',layout:'trace',title:'Traçabilité',label:'Traçabilité',needProd:true,needProof:true,camBusy:true,tabs:['photos','fab','moment','lots','notes']});if(F&&LASTDISH&&Date.now()-LASTDISH.ts<3*3600*1000)F.dishes=LASTDISH.list.map(function(d){return {name:d.name,fabId:d.fabId}});if(F&&LASTREC&&Date.now()-LASTREC.ts<3*3600*1000&&D.recettes.some(function(z){return z.id===LASTREC.id}))F.recipe={id:LASTREC.id,name:LASTREC.name};startCam();
+/* brouillon de traçabilité : le travail en cours est gardé 10 min (retour par mégarde, fermeture intempestive) tant que « J'ai terminé » n'a pas été touché */
+var DRAFT_KEY='qv-draft-trace-v1',DRAFT_MIN=10,DRAFT_FIELDS=['photos','lots','lotIn','dlcIn','dlcAuto','note','date','moment','dishes','recipe','recIng','ingSess','prod','label','itemName','itemCat','prodDlc','tab','srcTag','srcFab','recView','recOpen','recWant'];
+function draftHas(){if(!F)return false;var g=false;if((F.photos||[]).length||(F.lots||[]).length||F.lotIn||(F.note||'').trim())g=true;Object.keys(F.ingSess||{}).forEach(function(k){var d=F.ingSess[k];if(d&&((d.photos||[]).length||(d.lots||[]).length))g=true});return g}
+function saveDraft(){if(!F||F.layout!=='trace'||!draftHas())return;var f={};DRAFT_FIELDS.forEach(function(k){if(F[k]!==undefined)f[k]=F[k]});
+ var o={ts:Date.now(),who:operator(),f:f};try{localStorage.setItem(DRAFT_KEY,JSON.stringify(o))}catch(e){try{var f2=JSON.parse(JSON.stringify(f));f2.photos=[];Object.keys(f2.ingSess||{}).forEach(function(k){f2.ingSess[k].photos=[]});o.f=f2;localStorage.setItem(DRAFT_KEY,JSON.stringify(o))}catch(e2){}}}
+function clearDraft(){try{localStorage.removeItem(DRAFT_KEY)}catch(e){}}
+function getDraft(){try{var o=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null');if(!o||!o.f)return null;if(Date.now()-o.ts>DRAFT_MIN*60000||o.who!==operator()){if(Date.now()-o.ts>DRAFT_MIN*60000)clearDraft();return null}return o}catch(e){return null}}
+setInterval(function(){if(F&&F.layout==='trace')saveDraft()},4000);
+function traceEntry(){var d=getDraft();if(!d){openTrace();return}
+ var f=d.f,mins=Math.max(0,Math.round((Date.now()-d.ts)/60000)),np=(f.photos||[]).length;Object.keys(f.ingSess||{}).forEach(function(k){if(k!==f.recIng)np+=((f.ingSess[k]||{}).photos||[]).length});
+ var nm=((f.dishes||[]).map(function(x){return x.name}).join(', '))||'sans plat',ig=f.recIng?' › '+f.recIng:'';
+ var m=document.getElementById('modal');FORM={onSave:null};
+ m.innerHTML='<div class="sheet" style="width:min(460px,100%)"><h2>Reprendre le travail en cours ?</h2><div class="sub-h">Une fiche de traçabilité n’a pas été terminée</div><div class="sbody" style="min-height:0"><div class="selprod"><b>'+esc(nm)+esc(ig)+'</b><br><span class="meta">'+np+' photo'+(np>1?'s':'')+' · il y a '+(mins<1?'moins d’1':mins)+' min</span></div></div><div class="sfoot"><button class="btn ghost" id="drNew">Recommencer</button><button class="btn primary" id="drGo">Reprendre</button></div></div>';
+ fShow();document.getElementById('drNew').onclick=function(){clearDraft();closeForm();openTrace()};
+ document.getElementById('drGo').onclick=function(){closeForm();openTrace(d)}}
+function openTrace(dr){openFlow({module:'trace',layout:'trace',title:'Traçabilité',label:'Traçabilité',needProd:true,needProof:true,camBusy:true,tabs:['photos','fab','moment','lots','notes']});if(F&&LASTDISH&&Date.now()-LASTDISH.ts<3*3600*1000)F.dishes=LASTDISH.list.map(function(d){return {name:d.name,fabId:d.fabId}});if(F&&LASTREC&&Date.now()-LASTREC.ts<3*3600*1000&&D.recettes.some(function(z){return z.id===LASTREC.id}))F.recipe={id:LASTREC.id,name:LASTREC.name};if(dr&&F){DRAFT_FIELDS.forEach(function(k){if(dr.f[k]!==undefined)F[k]=dr.f[k]});F.photos=F.photos||[];F.lots=F.lots||[];F.tab=dr.f.tab||'photos';drawFlow();toast('Travail en cours repris.')}startCam();
  }
 function openLiv(x){openFlow({module:'livraison',title:x.name,subt:'1. départ',spec:Object.assign({assume:true},LIV_SPEC),specRequired:true,tabs:['temp','moment','notes'],label:x.name,
  customSave:async function(r,now){return put('sessions',rid(),{open:true,itemId:x.id,name:x.name,departTemp:r.value,departTime:r.time,departDate:r.date,departNote:r.note,who:operator(),ts:r.ts})}})}
@@ -1519,27 +1717,39 @@ document.addEventListener('click',async function(ev){
   if(k==='ok'){saveFlow();return}
   if(k==='shot'){shoot();return}
   if(k==='camretry'){if(F.layout==='trace'){startCam();drawTrace()}return}
-  if(k==='assoc'){if(F.layout==='trace'){F.tab='fab';F.favQ='';drawFlow();return}F.pickingProd=true;drawFlow();return}
+  if(k==='assoc'){if(F.layout==='trace'){F.tab='fab';F.favQ='';F.srchOpen=false;drawFlow();return}F.pickingProd=true;drawFlow();return}
   if(k==='tab'){F.tab=v;F.pickingProd=false;if(v==='lots')F.lotsSeen=true;drawFlow();return}
   if(k==='mom'){F.moment=v;drawFlow();return}
   if(k==='chk'){var i=+el.getAttribute('data-i');F.checked[i]=!F.checked[i];drawFlow();return}
   if(k==='all'){var tg=!F.checked.every(Boolean);F.checked=F.checked.map(function(){return tg});drawFlow();return}
-  if(k==='photo'){document.getElementById('mfile').click();return}
+  if(k==='photo'){if(needIngPick())return;document.getElementById('mfile').click();return}
+  if(k==='recdish'){var rcd=D.recettes.filter(function(z){return z.id===v})[0];if(rcd){F.recipe={id:rcd.id,name:rcd.name};F.recIng='';F.ingSess={};F.photos=[];F.lots=[];F.prod=null}drawFlow();return}
+  if(k==='photoing'){selIng(v,el.getAttribute('data-c')||'');drawFlow();return}
   if(k==='rmph'){F.photos.splice(+el.getAttribute('data-i'),1);drawFlow();return}
   if(k==='pcat'){F.prodCat=v;F.prodQ='';drawFlow();return}
   if(k==='pickentry'){var el0=el;F.lotIn=el0.getAttribute('data-lot')||F.lotIn;var dd=el0.getAttribute('data-dlc');if(dd){F.dlcIn=dd;F.dlcAuto=false}F.tab='lots';F.lotsSeen=true;drawFlow();toast('Lot repris : '+(F.lotIn||'—'));return}
   if(k==='pickname'){assocName(v,el.getAttribute('data-c'),el.getAttribute('data-fid'));drawFlow();return}
-  if(k==='pickdish'){F.dishes=F.dishes||[];var dx=F.dishes.findIndex(function(d){return d.name===v});if(dx>=0)F.dishes.splice(dx,1);else{var lpd=latestProd(v);F.dishes.push({name:v,fabId:lpd?lpd.id:''})}F.favQ='';drawFlow();return}
+  if(k==='pickdish'){F.dishes=F.dishes||[];var dx=F.dishes.findIndex(function(d){return d.name===v});if(dx>=0)F.dishes.splice(dx,1);else{var lpd=latestProd(v);if(F.recipe&&favNrm(F.recipe.name)!==favNrm(v)){F.recipe=null;F.recIng='';F.ingSess={}}F.dishes.push({name:v,fabId:lpd?lpd.id:''})}F.favQ='';F.srchOpen=false;drawFlow();return}
   if(k==='usefab'){var us=srcFiches(v);if(!us.length){toast('Aucune fiche de traçabilité trouvée pour « '+v+' ».');return}
    var ulp=latestProd(v);assocName(v,'',ulp?ulp.id:'');var seenP={};F.photos=F.photos||[];us.forEach(function(r){(r.photos||[]).forEach(function(ph){if(F.photos.length<6&&!seenP[ph]&&F.photos.indexOf(ph)<0){seenP[ph]=1;F.photos.push(ph)}});(r.lots||[]).forEach(function(l){if(!F.lots.some(function(x){return x.lot===l.lot&&x.dlc===l.dlc}))F.lots.push({lot:l.lot,dlc:l.dlc})})});
-   F.srcFab={name:v,ids:us.map(function(r){return r.id}),ts:us[us.length-1].ts||0};F.lotIn='';F.dlcIn='';F.dlcAuto=false;F.favQ='';F.tab='photos';toast('Traçabilité de « '+v+' » reprise ('+us.length+' fiche'+(us.length>1?'s':'')+').');drawFlow();return}
-  if(k==='recpick'){var rcx=D.recettes.filter(function(z){return z.id===v})[0];if(!rcx)return;F.recipe={id:rcx.id,name:rcx.name};F.recIng='';F.dishes=F.dishes||[];
+   F.srcFab={name:v,ids:us.map(function(r){return r.id}),ts:us[us.length-1].ts||0};F.lotIn='';F.dlcIn='';F.dlcAuto=false;F.favQ='';F.srchOpen=false;F.tab='photos';toast('Traçabilité de « '+v+' » reprise ('+us.length+' fiche'+(us.length>1?'s':'')+').');drawFlow();return}
+  if(k==='recpick'){var rcx=D.recettes.filter(function(z){return z.id===v})[0];if(!rcx)return;F.recView=F.recWant?true:false;F.recWant='';F.recOpen='';F.recipe={id:rcx.id,name:rcx.name};F.recIng='';F.dishes=F.dishes||[];
    if(!F.dishes.some(function(d){return d.name===rcx.name})){var lpr=latestProd(rcx.name);F.dishes.push({name:rcx.name,fabId:lpr?lpr.id:''})}
-   F.favQ='';F.recAll=false;LASTREC={id:rcx.id,name:rcx.name,ts:Date.now()};drawFlow();return}
-  if(k==='recclr'){F.recipe=null;F.recIng='';drawFlow();return}
+   F.favQ='';F.srchOpen=false;F.recAll=false;LASTREC={id:rcx.id,name:rcx.name,ts:Date.now()};drawFlow();return}
+  if(k==='rfav'){var rfx=D.recettes.filter(function(z){return z.id===v})[0];if(rfx)patch('recettes',v,{fav:!rfx.fav}).then(function(){setTimeout(drawFlow,60)});return}
+  if(k==='pjour'){var pj=v.split('|'),pp2=D.productions.filter(function(z){return z.id===pj[0]})[0],pit2=pp2&&(pp2.items||[])[+pj[1]];if(!pit2)return;F.dishes=F.dishes||[];
+   var dix=F.dishes.findIndex(function(d){return d.name===pit2.name});
+   if(dix>=0&&F.dishes[dix].fabId===pp2.id&&F.recipe&&F.recipe.name===pit2.name&&F.tab==='fab'){F.recView=true;F.favQ='';F.srchOpen=false;drawFlow();return}
+   if(dix>=0&&F.dishes[dix].fabId===pp2.id){F.dishes.splice(dix,1);if(F.recipe&&F.recipe.name===pit2.name){F.recipe=null;F.recIng=''}}
+   else{if(F.dishes.length&&F.dishes[0].name!==pit2.name){F.recipe=null;F.recIng='';F.ingSess={};F.photos=[];F.lots=[];F.prod=null}F.dishes=[{name:pit2.name,fabId:pp2.id}];var rcj=pit2.recId?D.recettes.filter(function(z){return z.id===pit2.recId})[0]:null;if(!rcj)rcj=D.recettes.filter(function(z){return favNrm(z.name)===favNrm(pit2.name)})[0];if(!rcj){var bs=-1,bw=favNrm(pit2.name);D.recettes.forEach(function(z){var sc=smartMatch(z.name,bw);if(sc>=0&&(bs<0||sc<bs)){bs=sc;rcj=z}})}if(!rcj&&F.tab==='fab'){F.recWant=pit2.name;F.recView='pick'}if(rcj){F.recipe={id:rcj.id,name:rcj.name};F.recIng='';F.recView=(F.tab==='fab');F.recOpen='';LASTREC={id:rcj.id,name:rcj.name,ts:Date.now()}}}
+   F.favQ='';F.srchOpen=false;drawFlow();return}
+  if(k==='recclr'){F.recipe=null;F.recIng='';F.recView=false;drawFlow();return}
+  if(k==='recback'){F.recView=false;F.recWant='';drawFlow();return}
+  if(k==='recopen'){F.recOpen=F.recOpen===v?'':v;drawFlow();return}
+  if(k==='tagprint'){if(RECTAGS[v])printTag(RECTAGS[v]);return}
   if(k==='recall'){F.recAll=!F.recAll;drawFlow();return}
   if(k==='recent'){F.recent=!F.recent;drawFlow();return}
-  if(k==='recing'){assocName(v,el.getAttribute('data-c')||'','');F.recIng=v;F.favQ='';F.recent=false;F.tab='fab';drawFlow();return}
+  if(k==='recing'){F.recView=false;selIng(v,el.getAttribute('data-c')||'');F.favQ='';F.srchOpen=false;F.recent=false;F.tab='fab';drawFlow();return}
   if(k==='usetag'){var ut=null;
    if(String(v).indexOf('p|')===0){var pp0=v.split('|'),pr=D.productions.filter(function(z){return z.id===pp0[1]})[0],pit=pr&&(pr.items||[])[+pp0[2]],pg=pit&&(pit.ingr||[])[+pp0[3]];
     if(pg)ut={id:v,module:'fab',prod:pg.name,label:pg.name,photos:pg.photos||[],lots:pg.lot?[{lot:pg.lot,dlc:''}]:[],fabId:''}}
@@ -1547,16 +1757,19 @@ document.addEventListener('click',async function(ev){
    if(!ut)return;
    if(F.prod&&(F.recIng||ut.module!=='trace')){}else assocName(ut.prod||ut.label,'',ut.fabId||'');F.photos=F.photos||[];var nph=0;(ut.photos||[]).forEach(function(ph){if(F.photos.length<6&&F.photos.indexOf(ph)<0){F.photos.push(ph);nph++}});
    (ut.lots||[]).forEach(function(l){if(!F.lots.some(function(x){return x.lot===l.lot&&x.dlc===l.dlc}))F.lots.push({lot:l.lot,dlc:l.dlc})});
-   F.srcTag=ut.id;F.lotIn='';F.dlcIn='';F.dlcAuto=false;F.favQ='';F.tab='photos';toast('Étiquette « '+(ut.prod||ut.label)+' » reprise ('+nph+' photo'+(nph>1?'s':'')+', '+(ut.lots||[]).length+' lot'+((ut.lots||[]).length>1?'s':'')+').');drawFlow();return}
+   F.srcTag=ut.id;F.lotIn='';F.dlcIn='';F.dlcAuto=false;F.favQ='';F.srchOpen=false;F.tab='photos';toast('Étiquette « '+(ut.prod||ut.label)+' » reprise ('+nph+' photo'+(nph>1?'s':'')+', '+(ut.lots||[]).length+' lot'+((ut.lots||[]).length>1?'s':'')+').');drawFlow();return}
   if(k==='ffedit'){F.ffEdit=!F.ffEdit;drawFlow();return}
   if(k==='fftog'){var fl=favFabList(),fx=fl.findIndex(function(x){return x.toLowerCase()===v.toLowerCase()});if(fx>=0)fl.splice(fx,1);else fl.push(v);favFabStore(fl).then(drawFlow);return}
-  if(k==='dishdel'){F.dishes=(F.dishes||[]).filter(function(d){return d.name!==v});if(F.recipe&&F.recipe.name===v){F.recipe=null;F.recIng=''}drawFlow();return}
+  if(k==='dishdel'){F.dishes=(F.dishes||[]).filter(function(d){return d.name!==v});if(!F.dishes.length){F.ingSess={};F.photos=[];F.lots=[];F.prod=null;F.recIng='';F.recView=false}if(F.recipe&&F.recipe.name===v){F.recipe=null;F.recIng=''}drawFlow();return}
   if(k==='favedit'){F.favEdit=!F.favEdit;drawFlow();return}
   if(k==='favadd'){var fi=document.getElementById('favin'),fn=((fi&&fi.value)||'').trim();if(!fn)return;var fl=favList();if(!fl.some(function(x){return x.toLowerCase()===fn.toLowerCase()}))fl.push(fn);favStore(fl).then(function(ok){if(ok)toast('Favori ajouté.');drawFlow()});return}
   if(k==='favdel'){favStore(favList().filter(function(x){return x!==v})).then(drawFlow);return}
   if(k==='favtog'){var tl=favList(),ix=tl.findIndex(function(x){return x.toLowerCase()===v.toLowerCase()});if(ix>=0)tl.splice(ix,1);else tl.push(v);favStore(tl).then(drawFlow);return}
   if(k==='pickfab'){var pv=v.split('|'),pp=D.productions.filter(function(z){return z.id===pv[0]})[0],fit=pp&&(pp.items||[])[+pv[1]];if(fit){F.prod={id:'fab-'+pp.id+'-'+pv[1],name:fit.name,fabId:pp.id};F.label=fit.name;F.itemName=fit.name;F.itemCat=fit.cat||'';var fnm=fit.name.toLowerCase().trim(),fe=D.catalogue.filter(function(c){return c.module==='etiq'&&c.dlcJours>0&&c.name.toLowerCase().trim()===fnm})[0];F.prodDlc=fe?+fe.dlcJours:0;F.dlcAuto=false;if(F.prodDlc>0&&!F.lots.length&&!F.lotIn){F.dlcIn=isoAdd(F.date,F.prodDlc);F.dlcAuto=true}F.tab=F.layout==='trace'?F.tab:'photos';F.pickingProd=false;drawFlow()}return}
   if(k==='pick'){var x=D.catalogue.filter(function(c){return c.id===v})[0];if(x){F.prod={id:x.id,name:x.name};F.label=x.name;F.itemName=x.name;F.itemCat=x.cat;F.prodDlc=+x.dlcJours||0;if(!F.prodDlc){var nm=x.name.toLowerCase().trim(),e=D.catalogue.filter(function(c){return c.module==='etiq'&&c.dlcJours>0&&c.name.toLowerCase().trim()===nm})[0];if(e)F.prodDlc=+e.dlcJours}F.dlcAuto=false;if(F.prodDlc>0&&!F.lots.length&&!F.lotIn){F.dlcIn=isoAdd(F.date,F.prodDlc);F.dlcAuto=true}F.tab=F.layout==='trace'?F.tab:'photos';F.pickingProd=false;drawFlow()}return}
+  if(k==='srch'){F.srchOpen=true;drawFlow();var fi=document.getElementById('favq');if(fi)fi.focus();return}
+  if(k==='srchx'){F.srchOpen=false;F.favQ='';drawFlow();return}
+  if(k==='act'){F.action=+v;drawFlow();return}
   if(k==='autolot'){F.lotIn=autoLot();drawFlow();return}
   if(k==='addlot'){if(!F.dlcIn){toast('Indiquez la DLC.');return}F.lots.push({lot:(F.lotIn||'').trim()||autoLot(),dlc:F.dlcIn});F.lotIn='';F.dlcIn='';F.dlcAuto=false;if(F.prodDlc>0){F.dlcIn=isoAdd(F.date,F.prodDlc);F.dlcAuto=true}toast('Lot ajouté');drawFlow();return}
   if(k==='rmlot'){F.lots.splice(+el.getAttribute('data-i'),1);drawFlow();return}
@@ -1565,13 +1778,14 @@ document.addEventListener('click',async function(ev){
    else if(k==='+/-')F.value=F.value.charAt(0)==='-'?F.value.slice(1):'-'+F.value;
    else if(k==='.'){if(F.value.indexOf('.')<0)F.value+=(F.value===''||F.value==='-'?'0.':'.')}
    else if(F.value.replace(/[-.]/g,'').length<4)F.value+=k;
-   refreshFoot();return}
+   refreshFoot();if(alertOn()!==!!F._al){F._al=alertOn();if(!F._al){F.action=null;if(F.tab==='alerte')F.tab='temp'}drawFlow()}return}
   return}
  if(!a)return;
  if(a==='fs'){if(fsOn())fsAskExit();else{fsSetPref(true);fsEnter();render()}return}
  if(F||FORM)return;
  if(a==='pick'){S.profile=v;try{localStorage.setItem('qv2-profil',v)}catch(e){}S.screen='home';render();return}
  if(a==='addProfile'){openForm({title:'Ajouter un nom',fields:[{label:'Nom',val:''}],onSave:async function(x){if(!x[0])return false;return put('profils',sid(x[0]),{name:x[0]})}});return}
+ if(a==='wnet'&&window.QVSYNC){syncDialog();return}
  if(a==='wnet'){toast(DB?'Connecté : les données sont partagées entre les tablettes.':'Hors ligne : ouvrez le lien depuis Claude.');return}
  if(a==='wsupp'){toast('Assistance : Julien Danel, responsable qualité.');return}
  if(a==='wopt'){optCodeDialog();return}
@@ -1678,7 +1892,7 @@ document.addEventListener('click',async function(ev){
      del:c?async function(){return drop('categories',c.id)}:null,
      onSave:async function(w){if(!w[0])return false;return put('categories',c?c.id:sid(w[0]),{name:w[0],min:parseFloat(w[1])||0,max:parseFloat(w[2])||0,limite:parseFloat(w[3])||0,temp:!!w[4],confirme:true})}})},0);return true}});return}
  /* traçabilité */
- if(a==='newTrace'){openTrace();return}
+ if(a==='newTrace'){traceEntry();return}
  /* étiquettes */
  if(a==='labClear'){S.lab[S.screen]={};render();return}
  if(a==='labGo'){openLabelPreview(S.screen,null,'save');return}
@@ -1741,10 +1955,10 @@ document.addEventListener('input',function(ev){
  else if(id==='hQ'){S.hQ=ev.target.value;S.hN=60;kick()}
 });
 document.addEventListener('change',function(ev){
- if(F&&ev.target.getAttribute&&ev.target.getAttribute('data-tagsel')){var tv=ev.target.value;if(tv){var ig=ev.target.getAttribute('data-ing');if(ig&&(!F.prod||favNrm(F.prod.name)!==favNrm(ig))){assocName(ig,ev.target.getAttribute('data-c')||'','');}if(ig)F.recIng=ig;var tb=document.createElement('button');tb.setAttribute('data-k','usetag');tb.setAttribute('data-v',tv);tb.style.display='none';document.getElementById('modal').appendChild(tb);tb.click();tb.remove()}return}
+ if(F&&ev.target.getAttribute&&ev.target.getAttribute('data-tagsel')){var tv=ev.target.value;if(tv){var ig=ev.target.getAttribute('data-ing');if(ig&&(F.recIng!==ig||!F.prod))selIng(ig,ev.target.getAttribute('data-c')||'');var tb=document.createElement('button');tb.setAttribute('data-k','usetag');tb.setAttribute('data-v',tv);tb.style.display='none';document.getElementById('modal').appendChild(tb);tb.click();tb.remove()}return}
  if(TF&&ev.target.getAttribute&&ev.target.getAttribute('data-tf')){tfInput(ev.target);return}
  var id=ev.target.id;
- if(F&&id==='mfile'&&ev.target.files&&ev.target.files[0]){compress(ev.target.files[0],function(d){if(F){F.photos.push(d);drawFlow()}});return}
+ if(F&&id==='mfile'&&ev.target.files&&ev.target.files[0]){var ff0=ev.target.files[0];ev.target.value='';compress(ff0,function(d){if(F){F.photos.push(d);drawFlow()}});return}
   var ck=ev.target.getAttribute('data-ik');
  if(ck&&ev.target.tagName==='SELECT'){var ci=+ev.target.getAttribute('data-i'),val=ev.target.value;
   if(ck==='icat'||ck==='rcat'||ck==='rrcat'){
