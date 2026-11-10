@@ -493,7 +493,7 @@ function fsSetPref(on){try{localStorage.setItem('qv-fs',on?'1':'0')}catch(e){}}
 function fsOn(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
 function fsEnter(){var el=document.documentElement,f=el.requestFullscreen||el.webkitRequestFullscreen;if(!f||fsOn())return;try{var p=f.call(el);if(p&&p.catch)p.catch(function(){})}catch(e){}}
 function fsExit(){var f=document.exitFullscreen||document.webkitExitFullscreen;if(!f||!fsOn())return;try{var p=f.call(document);if(p&&p.catch)p.catch(function(){})}catch(e){}}
-function fsBtn(){return '<button class="btn ghost theme fsb" data-a="fs" aria-label="'+(fsPref()?'Quitter le plein écran':'Passer en plein écran')+'" title="Plein écran">'+(fsPref()?'⤡':'⛶')+'</button>'}
+function fsBtn(){return '<button class="btn ghost theme fsb" data-a="fs" aria-label="'+(fsOn()?'Quitter le plein écran':'Passer en plein écran')+'" title="Plein écran">'+(fsOn()?'⤡':'⛶')+'</button>'}
 /* pas de plein écran sur un appui qui ouvre la caméra : Chrome refuse alors l'accès à la caméra */
 var FS_SKIP='[data-a="fs"],[data-a="newTrace"],[data-a="fphoto"],[data-k="camretry"],[data-k="photo"],[data-k="shot"],#ffile,#fshot';
 document.addEventListener('click',function(ev){if(fsPref()&&!fsOn()&&!(F&&F.layout==='trace')&&!(ev.target.closest&&ev.target.closest(FS_SKIP)))fsEnter()},true);
@@ -1551,7 +1551,7 @@ document.addEventListener('click',async function(ev){
    refreshFoot();return}
   return}
  if(!a)return;
- if(a==='fs'){if(fsPref())fsAskExit();else{fsSetPref(true);fsEnter();render()}return}
+ if(a==='fs'){if(fsOn())fsAskExit();else{fsSetPref(true);fsEnter();render()}return}
  if(F||FORM)return;
  if(a==='pick'){S.profile=v;try{localStorage.setItem('qv2-profil',v)}catch(e){}S.screen='home';render();return}
  if(a==='addProfile'){openForm({title:'Ajouter un nom',fields:[{label:'Nom',val:''}],onSave:async function(x){if(!x[0])return false;return put('profils',sid(x[0]),{name:x[0]})}});return}
