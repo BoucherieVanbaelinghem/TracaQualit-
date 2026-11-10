@@ -582,7 +582,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.11-b</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
