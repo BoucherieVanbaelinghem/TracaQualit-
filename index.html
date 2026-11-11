@@ -361,7 +361,7 @@ var MODCATS={
  timer:['Minuteurs']
 };
 var RECEP_CHECKS=['Aspect du produit','DLC / DLUO / DDM produits','État du conditionnement','Conformité de la commande (poids, quantités)'];
-var GAZ_CHECKS=['CO2 conforme (entre 30 et 50)','O2 conforme (entre 0 et 1)','Photo prise dans « Notes »'];
+var GAZ_CHECKS=['CO2 conforme (entre 30 et 50)','O2 conforme (entre 0 et 1)','Photo prise'];
 var REFR_CHECKS=['T°C entrée > 63 °C','T°C sortie < 10 °C','Durée < 2 h'];
 var LIV_SPEC={min:0,max:4,limite:7};
 var Q=1,H=7,MO=30,AN=365;
@@ -731,7 +731,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.29-d</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.29-e</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -749,7 +749,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.29-d</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.29-e</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -1479,6 +1479,8 @@ function prodGrid(){
  var qn=favNrm(q),its=D.catalogue.filter(function(x){return x.module==='prod'&&(qn?smartMatch(x.name,qn)>=0:x.cat===cur)}).sort(function(a,b){return qn?(smartMatch(a.name,qn)-smartMatch(b.name,qn)||byName(a,b)):byName(a,b)});
  return '<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">'+(its.length?its.map(function(x){return '<button class="tile item" data-k="pick" data-v="'+esc(x.id)+'" style="min-height:70px"><h3>'+esc(x.name)+'</h3>'+(q?'<span class="meta">'+esc(x.cat||'')+'</span>':'')+'</button>'}).join(''):'<div class="empty" style="grid-column:1/-1">Aucune production'+(q?' pour cette recherche':' dans cette catégorie')+'.</div>')+'</div>'}
 function pendingLot(){return !!F.dlcIn&&F.tabs.indexOf('lots')>=0&&!!(F.lotIn||(F.lotsSeen&&!F.dlcAuto))}
+function camBlock(){var ph=F.photos.length?'<div class="photos">'+F.photos.map(function(p,i){return '<figure><img alt="Photo jointe" src="'+p+'"><button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button></figure>'}).join('')+'</div>':'<span class="none">Aucune photo</span>';
+ return '<div class="photo" style="margin-top:14px"><button class="btn" data-k="photo" '+(F.photos.length>=3?'disabled':'')+'>📷 Prendre une photo</button><input type="file" id="mfile" accept="image/*" capture="environment" hidden>'+ph+'</div>'}
 function fBody(){
  var t=F.tab;
  if(t==='alerte'){
@@ -1492,7 +1494,7 @@ function fBody(){
   return '<div class="limits num"><span>Min : '+comma(sp.min)+' °C</span><span>Max : '+comma(sp.max)+' °C</span><span>Limite : '+comma(sp.limite)+' °C</span></div>'+(sp.assume?'<p class="note-ex" style="text-align:center;margin-bottom:8px">Seuils par défaut, à confirmer avec votre PMS.</p>':'')+'<div class="readout num '+s+'" id="ro"><span id="rv">'+(F.value?comma(F.value):'')+'</span><small>°C</small></div><div class="pad">'+
   ['1','2','3','4','5','6','7','8','9','+/-','0','.'].map(function(k){return '<button data-k="'+k+'">'+(k==='.'?',':k==='+/-'?'+ / −':k)+'</button>'}).join('')+'<button data-k="del" style="grid-column:1 / -1;width:100%" aria-label="Effacer">⌫ Effacer</button></div>'}
  if(t==='checks'){var all=F.checked.every(Boolean);
-  return '<div class="chkhead"><b>'+F.checked.filter(Boolean).length+' / '+F.checks.length+' points</b><button class="btn sm" data-k="all">'+(all?'Tout décocher':'Tout cocher')+'</button></div><div class="chk">'+F.checks.map(function(n,i){return '<button data-k="chk" data-i="'+i+'" aria-pressed="'+F.checked[i]+'"><span class="sw"></span>'+esc(n)+'</button>'}).join('')+'</div>'}
+  return '<div class="chkhead"><b>'+F.checked.filter(Boolean).length+' / '+F.checks.length+' points</b><button class="btn sm" data-k="all">'+(all?'Tout décocher':'Tout cocher')+'</button></div><div class="chk">'+F.checks.map(function(n,i){return '<button data-k="chk" data-i="'+i+'" aria-pressed="'+F.checked[i]+'"><span class="sw"></span>'+esc(n)+'</button>'}).join('')+'</div>'+(F.module==='gaz'?camBlock():'')}
  if(t==='mesures'){var m=F.mesures;
   return '<div class="fields"><div><label class="f" for="mtin">Température d’entrée (°C), attendue au-dessus de 63</label><input type="number" step="0.1" id="mtin" data-m="tin" value="'+esc(m.tin==null?'':m.tin)+'"></div><div><label class="f" for="mtout">Température de sortie (°C), attendue sous 10</label><input type="number" step="0.1" id="mtout" data-m="tout" value="'+esc(m.tout==null?'':m.tout)+'"></div><div><label class="f" for="mdur">Durée de refroidissement (minutes), attendue sous 120</label><input type="number" step="1" id="mdur" data-m="dur" value="'+esc(m.dur==null?'':m.dur)+'"></div><p class="note-ex">Facultatif. Un chiffre hors limite demande une action corrective.</p></div>'}
  if(t==='moment'){
