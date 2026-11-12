@@ -731,7 +731,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.29-f</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.30-b</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -749,7 +749,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.29-f</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.30-b</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -1238,9 +1238,37 @@ function lotRows(q){q=q.toLowerCase().trim();var out=[],seen={};if(q.length<2)re
  D.productions.forEach(function(p){(p.items||[]).forEach(function(it){(it.ingr||[]).forEach(function(g){if(m(g.lot))out.push({src:'Fabrication du jour',date:p.date,prod:it.name,detail:'Ingrédient : '+g.name+(g.supplier?' · '+g.supplier:''),lot:g.lot,dlc:'',who:p.op||''})});
   Object.keys(it.mods||{}).forEach(function(k){var o=it.mods[k];Object.keys(o).forEach(function(f){if(/^Lot/.test(f)&&m(o[f]))out.push({src:'Fabrication du jour',date:p.date,prod:it.name,detail:k+' · '+f,lot:o[f],dlc:'',who:p.op||''})})})})});
  return out.sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0})}
+var SCAN=null,ZXURL='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';
+function scanStop(){var q=SCAN;SCAN=null;if(!q)return;q.on=false;try{if(q.stream)q.stream.getTracks().forEach(function(t){t.stop()})}catch(e){}}
+function scanClose(){scanStop();var m=document.getElementById('modal');m.className='';m.innerHTML='';FORM=null}
+function scanDone(code){var c=String(code||'').trim();if(!c)return;scanClose();S.gq=c;render();toast('Lot lu : '+c)}
+function scanOpen(){var m=document.getElementById('modal');FORM={onSave:null};m.className='on';
+ m.innerHTML='<div class="sheet" style="width:min(560px,100%)"><h2>Scanner un code-barres</h2><div class="sbody" style="min-height:0"><video id="scv" autoplay playsinline muted style="width:100%;border-radius:12px;background:#000;max-height:55vh"></video><p class="meta" id="scm" style="margin:8px 0 0">Cadrez le code-barres de l’étiquette.</p><div class="fields" style="margin-top:10px"><div><label class="f" for="scman">Ou saisissez le numéro de lot</label><input type="text" id="scman" autocomplete="off" autocapitalize="off" spellcheck="false"></div></div></div><div class="sfoot"><button class="btn ghost" id="scX">Annuler</button><button class="btn primary" id="scOk">Chercher</button></div></div>';
+ document.getElementById('scX').onclick=scanClose;
+ document.getElementById('scOk').onclick=function(){var v=document.getElementById('scman').value.trim();if(v.length<2){toast('Saisissez au moins 2 caractères');return}scanDone(v)};
+ document.getElementById('scman').onkeydown=function(e){if(e.key==='Enter')document.getElementById('scOk').click()};
+ var st={on:true,stream:null};SCAN=st;
+ function msg(t){var e=document.getElementById('scm');if(e)e.textContent=t}
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){msg('Caméra non disponible : saisissez le numéro de lot.');return}
+ navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280}},audio:false}).then(function(stream){
+  if(!st.on){stream.getTracks().forEach(function(t){t.stop()});return}
+  st.stream=stream;var v=document.getElementById('scv');if(!v){scanStop();return}v.srcObject=stream;if(v.play)v.play().catch(function(){});
+  function loop(read){(function tick(){if(!st.on)return;if(v.readyState<2){setTimeout(tick,150);return}read(v,function(code){if(st.on&&code)scanDone(code);else setTimeout(tick,200)})})()}
+  if('BarcodeDetector' in window){
+   var fm=['code_128','code_39','ean_13','ean_8','itf','upc_a','qr_code'];
+   (BarcodeDetector.getSupportedFormats?BarcodeDetector.getSupportedFormats():Promise.resolve(fm)).then(function(fs){var w=fm.filter(function(f){return fs.indexOf(f)>-1}),det=new BarcodeDetector(w.length?{formats:w}:undefined);
+    loop(function(vid,cb){det.detect(vid).then(function(r){cb(r&&r[0]?r[0].rawValue:'')},function(){cb('')})})})
+  }else{
+   msg('Chargement du lecteur…');
+   var sc=document.createElement('script');sc.src=ZXURL;
+   sc.onload=function(){if(!st.on)return;msg('Cadrez le code-barres de l’étiquette.');var Z=window.ZXing,h=new Map();h.set(Z.DecodeHintType.POSSIBLE_FORMATS,[Z.BarcodeFormat.CODE_128,Z.BarcodeFormat.CODE_39,Z.BarcodeFormat.EAN_13,Z.BarcodeFormat.QR_CODE]);h.set(Z.DecodeHintType.TRY_HARDER,true);var rd=new Z.MultiFormatReader();rd.setHints(h);var cv=document.createElement('canvas');
+    loop(function(vid,cb){try{cv.width=vid.videoWidth;cv.height=vid.videoHeight;cv.getContext('2d').drawImage(vid,0,0);var bm=new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(cv)));cb(rd.decode(bm).getText())}catch(e){cb('')}})};
+   sc.onerror=function(){msg('Lecteur indisponible (pas de réseau) : saisissez le numéro de lot.')};
+   document.head.appendChild(sc)}
+ }).catch(function(e){msg(e&&e.name==='NotAllowedError'?'Autorisez la caméra pour scanner, ou saisissez le numéro de lot.':'Caméra indisponible : saisissez le numéro de lot.')})}
 function vLotSearch(){var q=S.gq||'',rows=lotRows(q);
  return '<div class="title-row"><button class="btn" data-a="go" data-v="atelier" aria-label="Retour">←</button><h1>Recherche par lot</h1></div><p class="meta" style="max-width:900px">Saisissez un numéro de lot pour retrouver où il a été reçu, étiqueté ou utilisé en fabrication.</p>'+
- '<div class="gsearch"><input type="search" id="gq" placeholder="N° de lot (2 caractères minimum)" aria-label="N° de lot" value="'+esc(q)+'"></div>'+
+ '<div class="gsearch" style="display:flex;gap:8px;align-items:center"><input type="search" id="gq" placeholder="N° de lot (2 caractères minimum)" aria-label="N° de lot" value="'+esc(q)+'" style="flex:1"><button class="btn primary" data-a="scan">📷 Scanner</button></div>'+
  (q.trim().length<2?'<div class="empty">Tapez un numéro de lot pour lancer la recherche.</div>':rows.length?'<div class="tw"><table><thead><tr><th>Date</th><th>Origine</th><th>Produit</th><th>N° lot</th><th>DLC</th><th>Signature</th></tr></thead><tbody>'+rows.map(function(x){return '<tr><td class="num">'+(x.date?frd(x.date,{day:'2-digit',month:'2-digit',year:'numeric'}):'')+'</td><td>'+esc(x.src)+'</td><td><b>'+esc(x.prod)+'</b>'+(x.detail?'<br><span class="meta">'+esc(x.detail)+'</span>':'')+'</td><td class="num">'+esc(x.lot)+'</td><td class="num">'+(x.dlc?frd(x.dlc):'')+'</td><td>'+esc(x.who)+'</td></tr>'}).join('')+'</tbody></table></div><p class="meta">'+rows.length+' résultat(s)</p>':'<div class="empty">Aucun résultat pour ce lot.</div>')}
 function vAlertes(){var H=S.alH==null?3:S.alH,l=D.dlc.filter(function(x){return x.dlc&&dDiff(x.dlc)<=H}).sort(function(a,b){return a.dlc<b.dlc?-1:a.dlc>b.dlc?1:0}),g={};
  l.forEach(function(x){var d=dDiff(x.dlc),k=d<0?'Dépassées':d===0?'Aujourd’hui':d===1?'Demain':'Dans '+d+' jours';(g[k]=g[k]||[]).push(x)});
@@ -1459,6 +1487,7 @@ function dishCards(){return F.dishes.map(function(d){var pr=null,it=null;D.produ
  return '<div class="selprod" style="display:flex;align-items:center;gap:12px;margin-bottom:10px;border:2px solid var(--accent)"><div style="flex:1"><b style="font-size:1.3rem">'+esc(d.name)+'</b>'+(it?'<br><span class="meta">'+(pr.ts?hhmm(new Date(pr.ts))+' · ':'')+'qté '+esc(String(it.qty==null?'':it.qty).replace('.',','))+(pr.op||pr.who?' · '+esc(pr.op||pr.who):'')+'</span>':'')+'</div><button class="btn sm" data-k="dishdel" data-v="'+esc(d.name)+'" aria-label="Retour à la liste des productions" style="background:#d93636;border-color:#d93636;color:#fff">‹ Retour</button></div>'}).join('')}
 function ingTagSel(g){var en=tagsFor(favNrm(g.name),10);if(!en.length)return '<div class="meta" style="margin:8px 0 2px">Aucune entrée précédente pour cet ingrédient : prenez la photo.</div>';
  return '<select data-tagsel="1" data-ing="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" aria-label="Dernières entrées de '+esc(g.name)+'" style="width:100%;margin:10px 0 2px;min-height:52px;font-size:1rem"><option value="">Étiquette perdue : choisir parmi les dernières entrées…</option>'+en.map(function(t){var d=t.ts?new Date(t.ts):null;return '<option value="'+esc(t.id)+'">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · '+hhmm(d)+' · ':'')+esc(t.kind)+((t.lots||[]).length?' · Lot '+esc(t.lots[0].lot):'')+((t.lots||[]).length&&t.lots[0].dlc?' · DLC '+esc(frd(t.lots[0].dlc)):'')+(t.sup?' · '+esc(t.sup):'')+'</option>'}).join('')+'</select>'}
+function addIngUi(){return '<div style="margin:4px 0 14px">'+(F.recAdd?'<div class="selprod"><b>Ingrédient ajouté à l’atelier</b><input id="recAddIn" list="recAddDl" placeholder="Nom de l’ingrédient" autocomplete="off" style="width:100%;margin:8px 0;min-height:52px;font-size:1.05rem"><datalist id="recAddDl">'+D.ingredients.map(function(x){return '<option value="'+esc(x.name)+'">'}).join('')+'</datalist><div style="display:flex;gap:8px"><button class="btn" data-k="recaddok" style="min-height:52px;flex:1">Ajouter</button><button class="btn" data-k="recaddno" style="min-height:52px">Annuler</button></div></div>':'<button class="btn" data-k="recaddshow" style="min-height:56px;width:100%">＋ Ajouter un ingrédient</button>')+'</div>'}
 function dishPhotosHtml(){var rc=dishRec(),h=dishCards();
  if(!rc){var all=D.recettes.slice().sort(function(a,b){return favNrm(a.name).localeCompare(favNrm(b.name),'fr')}),w0=favNrm(F.dishes[0].name).split(/\s+/)[0]||'',sg=all.filter(function(r){return smartMatch(r.name,w0)>=0});
   h+='<p class="meta" style="margin:0 0 8px">Aucune recette liée à « '+esc(F.dishes[0].name)+' ». Choisissez la recette pour voir ses ingrédients, ou photographiez directement l’étiquette du plat.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">'+(sg.length?sg:all).slice(0,10).map(function(r){return '<button class="btn sm" data-k="recdish" data-v="'+esc(r.id)+'">'+esc(r.name)+'</button>'}).join('')+'</div>'}
@@ -1466,7 +1495,7 @@ function dishPhotosHtml(){var rc=dishRec(),h=dishCards();
  stashIng();var ings=recIngs(rc);
  h+='<p class="meta" style="margin:0 0 8px">Touchez un ingrédient, puis prenez sa photo.</p>';
  return h+ings.map(function(g){var on=F.recIng===g.name,d=(F.ingSess||{})[g.name]||{photos:[],lots:[]},ph=on?F.photos:d.photos,n=ph.length+((on?F.lots:d.lots)||[]).length;
-  return '<div class="selprod" style="margin-bottom:8px'+(on?';outline:3px solid var(--accent)':'')+'"><button class="sess" data-k="photoing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" style="width:100%;text-align:left"><span style="flex:1"><b>'+esc(g.name)+'</b><br><span class="meta">'+(on?'📷 Les photos vont ici':(n?'✓ '+ph.length+' photo'+(ph.length>1?'s':''):'À photographier'))+'</span></span><span class="btn sm">'+(on?'Choisi':'Choisir')+'</span></button>'+(on?ingTagSel(g):'')+(ph.length?'<div class="tph" style="margin-top:8px">'+ph.map(function(p,i){return '<figure><img alt="Photo" src="'+p+'">'+(on?'<button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button>':'')+'</figure>'}).join('')+'</div>':'')+'</div>'}).join('')}
+  return '<div class="selprod" style="margin-bottom:8px'+(on?';outline:3px solid var(--accent)':'')+'"><button class="sess" data-k="photoing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" style="width:100%;text-align:left"><span style="flex:1"><b>'+esc(g.name)+'</b><br><span class="meta">'+(on?'📷 Les photos vont ici':(n?'✓ '+ph.length+' photo'+(ph.length>1?'s':''):'À photographier'))+'</span></span><span class="btn sm">'+(on?'Choisi':'Choisir')+'</span></button>'+(on?ingTagSel(g):'')+(ph.length?'<div class="tph" style="margin-top:8px">'+ph.map(function(p,i){return '<figure><img alt="Photo" src="'+p+'">'+(on?'<button data-k="rmph" data-i="'+i+'" aria-label="Retirer la photo">✕</button>':'')+'</figure>'}).join('')+'</div>':'')+'</div>'}).join('')+addIngUi()}
 function validity(){
  var st=fStatus();
  if(F.spec&&F.specRequired&&(F.value===''||isNaN(parseFloat(F.value))))return {ok:false,hint:'Saisissez la température.'};
@@ -1601,7 +1630,7 @@ function tagCard(t){var d=t.ts?new Date(t.ts):null,ph=(t.photos||[])[0];
  return '<button class="sess" data-k="usetag" data-v="'+esc(t.id)+'" style="width:100%;text-align:left">'+(ph?'<img alt="" src="'+ph+'" style="width:72px;height:72px;object-fit:cover;border-radius:10px;margin-right:12px">':'')+'<span style="flex:1"><b>'+esc(t.name)+'</b> <span class="meta">· '+esc(t.kind)+'</span><br><span class="meta">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · '+hhmm(d)+' · ':'')+esc(t.who||'')+(t.sup?' · '+esc(t.sup):'')+'</span>'+((t.lots||[]).length?'<br><span class="num">'+t.lots.map(function(l){return esc(l.lot)+(l.dlc?' · DLC '+esc(frd(l.dlc)):'')}).join(' ; ')+'</span>':'')+'</span><span class="btn sm">Reprendre</span></button>'}
 /* recettes : choisir une recette, puis photographier ses ingrédients */
 function recIngs(rc){var out=[],seen={};(rc.ingr||[]).forEach(function(l){var g=D.ingredients.filter(function(x){return x.id===l.ing})[0],nm=g?g.name:l.ing;if(!nm)return;var k=favNrm(nm);if(seen[k])return;seen[k]=1;
- var vs=(g&&g.variants)||[],v=vs.filter(function(y){return y.name===l.variant})[0]||vs.filter(function(y){return y.name===g.active})[0]||vs[0]||{};out.push({name:nm,cat:(g&&g.cat)||'',sup:v.supplier||''})});return out}
+ var vs=(g&&g.variants)||[],v=vs.filter(function(y){return y.name===l.variant})[0]||vs.filter(function(y){return y.name===g.active})[0]||vs[0]||{};out.push({name:nm,cat:(g&&g.cat)||'',sup:v.supplier||''})});((F&&F.extraIngs)||[]).forEach(function(x){if(!seen[favNrm(x.name)]){seen[favNrm(x.name)]=1;out.push({name:x.name,cat:x.cat||'',sup:'',extra:true})}});return out}
 function recDone(name){var t=today(),rn=F.recipe?favNrm(F.recipe.name):'',k=favNrm(name);
  return D.releves.filter(function(r){return r.module==='trace'&&r.date===t&&favNrm(r.prod)===k&&((r.dishes&&r.dishes.length)?r.dishes:(r.dish?[r.dish]:[])).some(function(d){return favNrm(d)===rn})}).sort(function(a,b){return (b.ts||0)-(a.ts||0)})[0]}
 function recHtml(){
@@ -1636,12 +1665,13 @@ function recPage(){
   return '<div style="display:flex;align-items:center;gap:10px;margin:0 0 12px"><button class="btn" data-k="recback" style="min-height:52px">‹ Retour</button><b style="flex:1;font-size:1.2rem">'+esc(dn0)+'</b></div><p class="meta" style="margin:0 0 10px">Aucune recette liée à cette production. Choisissez la recette :</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">'+lst.map(function(r){return '<button class="tile item" data-k="recpick" data-v="'+esc(r.id)+'" style="min-height:64px"><h3>'+esc(r.name)+'</h3></button>'}).join('')+'</div>'}
  var rc=D.recettes.filter(function(x){return x.id===F.recipe.id})[0];if(!rc)return '<p class="meta">Recette introuvable.</p>';
  var ings=recIngs(rc),h='<div style="display:flex;align-items:center;gap:10px;margin:0 0 12px"><button class="btn" data-k="recback" style="min-height:52px">‹ Retour</button><b style="flex:1;font-size:1.25rem">'+esc(rc.name)+'</b><span class="meta">'+ings.length+' ingrédient'+(ings.length>1?'s':'')+'</span></div><p class="meta" style="margin:0 0 10px">Touchez un ingrédient pour choisir parmi ses dernières entrées.</p>';
- if(!ings.length)return h+'<p class="meta">Cette recette ne contient aucun ingrédient.</p>';
+ var addUi=addIngUi();
+ if(!ings.length)return h+'<p class="meta">Cette recette ne contient aucun ingrédient.</p>'+addUi;
  RECTAGS={};
  h+=ings.map(function(g){var op=F.recOpen===g.name,dn=recDone(g.name),tg=op?tagsFor(favNrm(g.name),10):[],sub='';
   if(op){tg.forEach(function(t){RECTAGS[t.id]=t});
    sub=tg.length?'<select data-tagsel="1" data-ing="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" aria-label="Dernières entrées de '+esc(g.name)+'" style="width:100%;margin:8px 0 6px;min-height:52px;font-size:1rem"><option value="">Choisir une entrée de '+esc(g.name)+'…</option>'+tg.map(function(t){var d=t.ts?new Date(t.ts):null;return '<option value="'+esc(t.id)+'">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · '+hhmm(d)+' · ':'')+esc(t.kind)+((t.lots||[]).length?' · Lot '+esc(t.lots[0].lot):'')+((t.lots||[]).length&&t.lots[0].dlc?' · DLC '+esc(frd(t.lots[0].dlc)):'')+(t.sup?' · '+esc(t.sup):'')+'</option>'}).join('')+'</select><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-k="tagprint" data-v="'+esc(tg[0].id)+'">🖨 Imprimer la dernière</button><button class="btn sm" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'">Photographier</button></div>':'<div class="meta" style="margin:8px 0">Aucune entrée précédente pour cet ingrédient.</div><button class="btn sm" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'">Photographier</button>'}
-  return '<div class="selprod" style="margin-bottom:10px"><button class="sess" data-k="recopen" data-v="'+esc(g.name)+'" style="width:100%;text-align:left"><span style="flex:1"><b style="font-size:1.1rem">'+esc(g.name)+'</b><br><span class="meta">'+(dn?'✓ Fiche faite à '+hhmm(new Date(dn.ts)):'Traçabilité à faire')+'</span></span><span class="btn sm">'+(op?'▲':'▼')+'</span></button>'+sub+'</div>'}).join('');
+  return '<div class="selprod" style="margin-bottom:10px"><button class="sess" data-k="recopen" data-v="'+esc(g.name)+'" style="width:100%;text-align:left"><span style="flex:1"><b style="font-size:1.1rem">'+esc(g.name)+'</b><br><span class="meta">'+(g.extra?'<b>Ajouté · </b>':'')+(dn?'✓ Fiche faite à '+hhmm(new Date(dn.ts)):'Traçabilité à faire')+'</span></span><span class="btn sm">'+(op?'▲':'▼')+'</span></button>'+sub+'</div>'}).join('')+addUi;
  return h}
 function printTag(t){var w=window.open('','_blank');if(!w){toast('Impression bloquée par le navigateur.');return}
  var d=t.ts?new Date(t.ts):null;
@@ -1838,7 +1868,7 @@ document.addEventListener('click',async function(ev){
   if(k==='chk'){var i=+el.getAttribute('data-i');F.checked[i]=!F.checked[i];drawFlow();return}
   if(k==='all'){var tg=!F.checked.every(Boolean);F.checked=F.checked.map(function(){return tg});drawFlow();return}
   if(k==='photo'){if(needIngPick())return;document.getElementById('mfile').click();return}
-  if(k==='recdish'){var rcd=D.recettes.filter(function(z){return z.id===v})[0];if(rcd){F.recipe={id:rcd.id,name:rcd.name};F.recIng='';F.ingSess={};F.photos=[];F.lots=[];F.prod=null}drawFlow();return}
+  if(k==='recdish'){if(!F.recipe||F.recipe.id!==v){F.extraIngs=[];F.recAdd=false}var rcd=D.recettes.filter(function(z){return z.id===v})[0];if(rcd){F.recipe={id:rcd.id,name:rcd.name};F.recIng='';F.ingSess={};F.photos=[];F.lots=[];F.prod=null}drawFlow();return}
   if(k==='photoing'){selIng(v,el.getAttribute('data-c')||'');drawFlow();return}
   if(k==='rmph'){F.photos.splice(+el.getAttribute('data-i'),1);drawFlow();return}
   if(k==='pcat'){F.prodCat=v;F.prodQ='';drawFlow();return}
@@ -1848,7 +1878,7 @@ document.addEventListener('click',async function(ev){
   if(k==='usefab'){var us=srcFiches(v);if(!us.length){toast('Aucune fiche de traçabilité trouvée pour « '+v+' ».');return}
    var ulp=latestProd(v);assocName(v,'',ulp?ulp.id:'');var seenP={};F.photos=F.photos||[];us.forEach(function(r){(r.photos||[]).forEach(function(ph){if(F.photos.length<6&&!seenP[ph]&&F.photos.indexOf(ph)<0){seenP[ph]=1;F.photos.push(ph)}});(r.lots||[]).forEach(function(l){if(!F.lots.some(function(x){return x.lot===l.lot&&x.dlc===l.dlc}))F.lots.push({lot:l.lot,dlc:l.dlc})})});
    F.srcFab={name:v,ids:us.map(function(r){return r.id}),ts:us[us.length-1].ts||0};F.lotIn='';F.dlcIn='';F.dlcAuto=false;F.favQ='';F.srchOpen=false;F.tab='photos';toast('Traçabilité de « '+v+' » reprise ('+us.length+' fiche'+(us.length>1?'s':'')+').');drawFlow();return}
-  if(k==='recpick'){var rcx=D.recettes.filter(function(z){return z.id===v})[0];if(!rcx)return;F.recView=F.recWant?true:false;F.recWant='';F.recOpen='';F.recipe={id:rcx.id,name:rcx.name};F.recIng='';F.dishes=F.dishes||[];
+  if(k==='recpick'){if(!F.recipe||F.recipe.id!==v){F.extraIngs=[];F.recAdd=false}var rcx=D.recettes.filter(function(z){return z.id===v})[0];if(!rcx)return;F.recView=F.recWant?true:false;F.recWant='';F.recOpen='';F.recipe={id:rcx.id,name:rcx.name};F.recIng='';F.dishes=F.dishes||[];
    if(!F.dishes.some(function(d){return d.name===rcx.name})){var lpr=latestProd(rcx.name);F.dishes.push({name:rcx.name,fabId:lpr?lpr.id:''})}
    F.favQ='';F.srchOpen=false;F.recAll=false;LASTREC={id:rcx.id,name:rcx.name,ts:Date.now()};drawFlow();return}
   if(k==='rfav'){var rfx=D.recettes.filter(function(z){return z.id===v})[0];if(rfx)patch('recettes',v,{fav:!rfx.fav}).then(function(){setTimeout(drawFlow,60)});return}
@@ -1860,6 +1890,12 @@ document.addEventListener('click',async function(ev){
    F.favQ='';F.srchOpen=false;drawFlow();return}
   if(k==='recclr'){F.recipe=null;F.recIng='';F.recView=false;drawFlow();return}
   if(k==='recback'){F.recView=false;F.recWant='';drawFlow();return}
+  if(k==='recaddshow'){F.recAdd=true;drawFlow();setTimeout(function(){var i=document.getElementById('recAddIn');if(i)i.focus()},50);return}
+  if(k==='recaddno'){F.recAdd=false;drawFlow();return}
+  if(k==='recaddok'){var ai=document.getElementById('recAddIn'),an=ai?ai.value.trim():'';if(!an){toast('Saisissez le nom de l’ingrédient.');return}
+   var ag=D.ingredients.filter(function(x){return favNrm(x.name)===favNrm(an)})[0];F.extraIngs=F.extraIngs||[];
+   if(!F.extraIngs.some(function(x){return favNrm(x.name)===favNrm(an)}))F.extraIngs.push({name:ag?ag.name:an,cat:(ag&&ag.cat)||''});
+   F.recAdd=false;F.recOpen=ag?ag.name:an;if(dishRec())selIng(ag?ag.name:an,(ag&&ag.cat)||'');drawFlow();return}
   if(k==='recopen'){F.recOpen=F.recOpen===v?'':v;drawFlow();return}
   if(k==='tagprint'){if(RECTAGS[v])printTag(RECTAGS[v]);return}
   if(k==='recall'){F.recAll=!F.recAll;drawFlow();return}
@@ -1971,6 +2007,7 @@ document.addEventListener('click',async function(ev){
    onSave:async function(x){if(!x[0]||x[1]===''||x[2]===''||x[3]==='')return false;var d={kind:e0.kind,name:x[0],min:parseFloat(x[1]),max:parseFloat(x[2]),limite:parseFloat(x[3]),ordre:eq?(eq.ordre||0):D.equipements.length+1};return put('equipements',eq?eq.id:sid(e0.kind+'-'+x[0]),d)}});return}
  /* catalogue */
  if(a==='rfprint'){rfPrint();return}
+ if(a==='scan'){scanOpen();return}
  if(a==='rfpick'){var pk=rfList().filter(function(z){return z.key===v})[0];if(pk)rfSelOpen(pk.key,pk.name,'Production du jour');return}
  if(a==='rffin'){rfFinish();return}
  if(a==='rfcancel'){if(Object.keys(S.rfSel||{}).length){S.rfSel={};render();return}S.screen='home';S.edit=false;S.q='';S.supplier=null;S.recDone=[];render();return}
