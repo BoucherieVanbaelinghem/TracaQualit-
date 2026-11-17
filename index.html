@@ -740,7 +740,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.33-d</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.34-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -758,7 +758,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.33-d</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.34-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -2019,7 +2019,7 @@ document.addEventListener('click',async function(ev){
  if(a==='tedit1'){var rr=D.rappels.filter(function(z){return z.id===v})[0];if(rr&&S.edit)tfOpen(rr);return}
  if(a&&a.indexOf('mg')===0){await mgAct(a,v,el);return}
  if(a==='homeok'){S.homeEdit=false;render();return}
- if(a==='homereset'){try{localStorage.removeItem('qv-home-order')}catch(e){}render();return}
+ if(a==='homereset'){try{localStorage.removeItem('qv-home-order')}catch(e){}if(window.homeTornado&&homeTornado())return;render();return}
  if(a==='go'){if(v==='hist'){S.hMod='all';S.hAll=false;S.hItem='all';S.hCat='all';S.hNote='all';S.hMonth='all';S.hSt='all';S.hQ='';S.hFrom='';S.hTo='';S.hMenu=null}if(v==='ings'||v==='recs'||v==='embs'||v==='lotsearch')S.gq='';if(v==='fab'&&!S.fab.op&&S.profile)S.fab.op=S.profile;S.screen=v;S.edit=false;S.q='';S.supplier=null;S.recDone=[];S.dlcSel={};S.dlcAsk=false;render();window.scrollTo(0,0);return}
  if(a==='edit'){S.edit=!S.edit;render();return}
  if(a==='ttab'){S.tempTab=v;render();return}
@@ -2347,6 +2347,16 @@ document.addEventListener('selectstart',function(e){var t=e.target&&(e.target.no
    t.style.translate=dx+'px '+dy+'px';t.getBoundingClientRect();t.style.transition='translate .32s '+EASE;t.style.translate='0px 0px';
    clearTimeout(t._ft);t._ft=setTimeout(function(){t.style.transition='';t.style.translate=''},360)});
   return true}
+ window.homeTornado=function(){var g=grid(),ts=tiles();if(!g||!ts.length||!ts[0].animate||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return false;
+  var prev={};ts.forEach(function(t){var r=t.getBoundingClientRect();prev[t.getAttribute('data-hid')]={x:r.left+r.width/2,y:r.top+r.height/2}});
+  var byId={};ts.forEach(function(t){byId[t.getAttribute('data-hid')]=t});
+  HOME_DEF.forEach(function(id){if(byId[id])g.appendChild(byId[id])});
+  var gr=g.getBoundingClientRect(),C={x:gr.left+gr.width/2,y:gr.top+Math.min(gr.height,window.innerHeight-gr.top)/2},N=36,ease=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+  tiles().forEach(function(t,i){var r=t.getBoundingClientRect(),P={x:r.left+r.width/2,y:r.top+r.height/2},O=prev[t.getAttribute('data-hid')]||P,kf=[];
+   for(var k=0;k<=N;k++){var u=k/N,e=ease(u),Mx=O.x+(P.x-O.x)*e,My=O.y+(P.y-O.y)*e,th=Math.PI*2*1.5*e,sc=1-0.5*Math.sin(Math.PI*u),vx=Mx-C.x,vy=My-C.y,qx=C.x+sc*(vx*Math.cos(th)-vy*Math.sin(th)),qy=C.y+sc*(vx*Math.sin(th)+vy*Math.cos(th));
+    kf.push({translate:(qx-P.x)+'px '+(qy-P.y)+'px',rotate:(360*e*(i%2?1:-1))+'deg',scale:String(1-0.28*Math.sin(Math.PI*u))})}
+   t.animate(kf,{duration:1300,delay:i*14,easing:'linear',fill:'backwards'})});
+  return true};
  document.addEventListener('pointerdown',function(e){var t=e.target.closest&&e.target.closest('.htile');if(!t||S.screen!=='home'||!S.profile||e.button>0)return;
   if(S.homeEdit){var r=t.getBoundingClientRect();st={el:t,x:e.clientX,y:e.clientY,gx:e.clientX-r.left,gy:e.clientY-r.top,drag:false,last:0,lr:null};return}
   sx=e.clientX;sy=e.clientY;clearTimeout(tm);tm=setTimeout(function(){tm=0;S.homeEdit=true;render()},600)});
