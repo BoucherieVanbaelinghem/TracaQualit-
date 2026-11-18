@@ -463,6 +463,7 @@ async function localDB(){
  document.addEventListener('visibilitychange',function(){if(!document.hidden)cycle()});window.addEventListener('online',cycle);
  QVSYNC=window.QVSYNC={
   on:function(){return !!cfg},
+  ocr:async function(d){if(!cfg)throw new Error('off');return api('/ocr',{method:'POST',body:JSON.stringify({image:d})})},
   cfg:function(){return cfg?{url:cfg.url}:null},
   label:function(){return !cfg?'Local':st.err?'Synchro ✕':'Synchro ✓'},
   status:function(){return !cfg?'Cet appareil fonctionne seul (pas de synchronisation).':st.err?'Erreur : '+st.err+(meta.q.length?' · '+meta.q.length+' modification(s) en attente':''):'Connecté · '+(st.last?'dernière synchro à '+new Date(st.last).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'en cours…')+(meta.q.length?' · '+meta.q.length+' en attente':'')},
@@ -663,6 +664,8 @@ function optCodeDialog(){
  document.getElementById('ocX').onclick=closeForm;document.getElementById('ocOk').onclick=ok;i.onkeydown=function(e){if(e.key==='Enter')ok()}}
 
 var CHANGELOG=[
+['v10.39','18 nov. 2026','Lecture automatique du lot et de la DLC sur photo',['Traçabilité : à chaque photo d’étiquette, l’IA lit le n° de lot et la DLC et remplit les champs','Message « Aucun numéro de lot détecté, aucune DLC détectée » quand rien n’est lisible','Demande l’activation de « Workers AI » sur le serveur de synchronisation'],],
+['v10.38','18 nov. 2026','Étiquettes TSPL, logo, plus de fenêtre de sortie de cellule',['Étiquettes imprimées en TSPL (imprimante Bluetooth), format 58 × 30 mm réglable, avec réglage du décalage','Nouveau logo vert','Plus de fenêtre automatique pour les sorties de cellule : elles se confirment dans Refroidissement'],],
 ['v10.37','18 nov. 2026','Application Android et Bluetooth classique Zebra',['Application Android « Qualité Vanbaelinghem » (installée à la main) qui contient le logiciel','Impression des étiquettes en Bluetooth classique : choix de l’imprimante parmi celles jumelées à la tablette','Impressions de documents (bons de livraison, rapports) par l’impression Android, exports enregistrés dans Téléchargements']],
 ['v10.36','17 nov. 2026','Impression Zebra par Bluetooth',['Fenêtre Imprimante simplifiée : un seul bouton « Chercher une imprimante Bluetooth » (Wi-Fi retiré)','Envoi Bluetooth direct amélioré (blocs plus gros, repli automatique, diagnostic affiché)','Second chemin pour le Bluetooth classique : relais par l’application Zebra Browser Print']],
 ['v10.35','17 nov. 2026','Journal des mises à jour, réception et traçabilité améliorées',['Options : journal de toutes les mises à jour du projet, avec impression','Nettoyages postes : onglets Check-list / Moment / Notes de nouveau visibles','Étiquette perdue : recherche par mots (pluriels, mots composés) dans les réceptions, fiches et fabrications, jusqu’à 20 entrées','Réception : nouvelle fenêtre « Quel produit réceptionnez-vous ? » avec suggestions selon la catégorie et le fournisseur (fruits et légumes, viandes, poissons, épicerie, crémerie, surgelés)','Le produit reçu est enregistré et retrouvable en traçabilité','Accueil : icônes de même taille, tuiles à hauteur identique','Étiquettes : impression par Bluetooth (recherche de l’imprimante depuis l’application) (Wi-Fi retiré pour simplifier)']],
@@ -767,7 +770,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.38-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.39-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -785,7 +788,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.38-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.39-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -958,10 +961,7 @@ function cellDialog(x,ring){
   await patch('refroidissements',x.id,{open:false,endTs:now.getTime(),closedBy:operator()});
   closeForm();toast('Sortie de cellule enregistrée : '+x.name+(has&&tv>=10?' (température trop haute)':''));kick()};
  if(ring){playAlarm('Bell');try{navigator.vibrate&&navigator.vibrate([300,150,300])}catch(e){}}}
-setInterval(function(){
- if(!S.profile||!LOADED.refroidissements)return;var m=document.getElementById('modal');if(m.className||F||FORM||TF)return;
- var now=Date.now(),due=D.refroidissements.filter(function(x){return x.open&&x.endPlanned<=now&&!(CELL_SNOOZE[x.id]>now)}).sort(function(a,b){return a.endPlanned-b.endPlanned});
- if(due.length){CELL_SNOOZE[due[0].id]=now+10*60000;cellDialog(due[0],true)}},20000);
+/* plus de fenêtre automatique : les sorties de cellule se confirment dans Refroidissement */
 
 /* timer : rappels programmés (nom, message, alarme, récurrence) */
 var ALARMS=['Alarm','War alarm','Car alarm','Boat','Big Ben','Buzzer','Bell','Clock','Klaxon','Les Deschiens','Pacman','Usa Police 1','Usa Police 2','Usa Police 3'];
@@ -1378,7 +1378,7 @@ function prCur(){var ip=zIP();if(!ip)return null;return prList().filter(function
 function openPrinters(){
  F={tabs:[]};
  document.getElementById('modal').className='on';
- document.getElementById('modal').innerHTML='<div class="sheet"><h2>Imprimante</h2><div class="sbody" style="min-height:0;text-align:center">'+(prCur()?'<div class="selprod" style="margin-bottom:14px">🖨 '+esc(prCur().name)+' ✓</div>':'')+'<button class="btn primary" data-k="prBt" style="width:100%;min-height:60px;font-size:1.1rem">🔍 Chercher une imprimante Bluetooth</button>'+(qvN()&&zIP()&&zIP().indexOf('an:')===0?'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px"><button class="btn" data-k="anTest" data-v="id">Identifier</button><button class="btn" data-k="anTest" data-v="zpl">Test ZPL</button><button class="btn" data-k="anTest" data-v="tspl">Test TSPL</button><button class="btn" data-k="anTest" data-v="cpcl">Test CPCL</button><button class="btn" data-k="anTest" data-v="esc">Test ESC/POS</button></div><button class="btn" data-k="anLang" style="margin-top:10px;width:100%">Langage d’impression : '+zLang().toUpperCase()+' (changer)</button>':'')+(BTLOG?'<div class="meta" style="margin-top:12px;word-break:break-all">'+esc(BTLOG)+'</div>':'')+'</div>'+
+ document.getElementById('modal').innerHTML='<div class="sheet"><h2>Imprimante</h2><div class="sbody" style="min-height:0;text-align:center">'+(prCur()?'<div class="selprod" style="margin-bottom:14px">🖨 '+esc(prCur().name)+' ✓</div>':'')+'<button class="btn primary" data-k="prBt" style="width:100%;min-height:60px;font-size:1.1rem">🔍 Chercher une imprimante Bluetooth</button>'+(qvN()&&zIP()&&zIP().indexOf('an:')===0?'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px"><button class="btn" data-k="anTest" data-v="id">Identifier</button><button class="btn" data-k="anTest" data-v="zpl">Test ZPL</button><button class="btn" data-k="anTest" data-v="tspl">Test TSPL</button><button class="btn" data-k="anTest" data-v="cpcl">Test CPCL</button><button class="btn" data-k="anTest" data-v="esc">Test ESC/POS</button></div><div style="display:flex;gap:8px;margin-top:10px;align-items:center;justify-content:center"><button class="btn" data-k="anH">Hauteur étiquette : '+tsGet('qv-plh',30)+' mm</button><button class="btn" data-k="anOy" data-v="-8">⬆ Monter</button><button class="btn" data-k="anOy" data-v="8">⬇ Descendre</button></div><div class="meta">Décalage : '+tsGet('qv-poy',0)+' points</div><button class="btn" data-k="anLang" style="margin-top:10px;width:100%">Langage d’impression : '+zLang().toUpperCase()+' (changer)</button>':'')+(BTLOG?'<div class="meta" style="margin-top:12px;word-break:break-all">'+esc(BTLOG)+'</div>':'')+'</div>'+
  '<div class="sfoot"><button class="btn" data-k="cancel">Fermer</button></div></div>'}
 
 /* suivi DLC */
@@ -1828,7 +1828,7 @@ async function startCam(){
 function shoot(){
  if(needIngPick())return;
  var vd=document.getElementById('tvid');
- if(vd&&F.stream&&vd.videoWidth){var k=Math.min(1,640/Math.max(vd.videoWidth,vd.videoHeight)),c=document.createElement('canvas');c.width=Math.round(vd.videoWidth*k);c.height=Math.round(vd.videoHeight*k);c.getContext('2d').drawImage(vd,0,0,c.width,c.height);F.photos.push(c.toDataURL('image/jpeg',.6));F.tab='photos';F.pickingProd=false;drawTrace();return}
+ if(vd&&F.stream&&vd.videoWidth){var k=Math.min(1,640/Math.max(vd.videoWidth,vd.videoHeight)),c=document.createElement('canvas');c.width=Math.round(vd.videoWidth*k);c.height=Math.round(vd.videoHeight*k);c.getContext('2d').drawImage(vd,0,0,c.width,c.height);F.photos.push(c.toDataURL('image/jpeg',.6));if(F.tabs&&F.tabs.indexOf('lots')>=0){var k2=Math.min(1,1280/Math.max(vd.videoWidth,vd.videoHeight)),c2=document.createElement('canvas');c2.width=Math.round(vd.videoWidth*k2);c2.height=Math.round(vd.videoHeight*k2);c2.getContext('2d').drawImage(vd,0,0,c2.width,c2.height);readLabel(c2.toDataURL('image/jpeg',.82))}F.tab='photos';F.pickingProd=false;drawTrace();return}
  var f=document.getElementById('mfile');if(f)f.click()}
 function refreshFoot(){var v=validity(),b=document.getElementById('okbtn'),h=document.getElementById('hint');if(b)b.disabled=!(v.ok&&!F.busy&&(F.wstep!==3||(F.recProd||'').trim()));if(h)h.textContent=F.wstep===3&&!(F.recProd||'').trim()?'Indiquez le produit reçu.':(v.hint||'');
  var ro=document.getElementById('ro');if(ro){var s=(F.value!==''&&!isNaN(parseFloat(F.value)))?tstat(F.spec,parseFloat(F.value)):'';ro.className='readout num '+s;document.getElementById('rv').textContent=F.value?comma(F.value):''}}
@@ -1866,7 +1866,17 @@ async function saveFlow(single){
  if(F.layout==='trace')clearDraft();
  var after=F.after,qt=F.quiet;fHide();if(!qt)toast(r.value!=null?comma(r.value)+' °C enregistré'+(st==='ok'?'':' ('+LAB[st].toLowerCase()+')'):'Enregistré');
  if(after)after(r);kick()}
-function compress(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.55))};im.src=fr.result};fr.readAsDataURL(file)}
+function parseDlc(s){s=String(s||'').trim();var M={jan:1,fev:2,feb:2,mar:3,avr:4,apr:4,mai:5,may:5,jui:6,jun:6,juil:7,jul:7,aou:8,aug:8,sep:9,oct:10,nov:11,dec:12},m=s.match(/(\d{1,2})\s*[\/.\- ]\s*(\d{1,2})\s*[\/.\- ]\s*(\d{4}|\d{2})/),d,mo,y;
+ if(m){d=+m[1];mo=+m[2];y=+m[3]}else{m=s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/(\d{1,2})\s*[\/.\- ]?\s*([a-z]{3,5})\.?\s*[\/.\- ]?\s*(\d{4}|\d{2})/);if(!m||!M[m[2].slice(0,3)])return '';d=+m[1];mo=M[m[2].slice(0,3)];y=+m[3]}
+ if(y<100)y+=2000;if(mo<1||mo>12||d<1||d>31||y<2020||y>2100)return '';return y+'-'+pad(mo)+'-'+pad(d)}
+var OCRBUSY=false;
+function readLabel(img){if(OCRBUSY)return;if(!window.QVSYNC||!QVSYNC.on||!QVSYNC.ocr||!QVSYNC.on()){return}
+ OCRBUSY=true;toast('Lecture de l’étiquette…');
+ QVSYNC.ocr(img).then(function(r){OCRBUSY=false;if(!F||!F.tabs||F.tabs.indexOf('lots')<0)return;var lot=r&&r.lot?String(r.lot).replace(/^\s*(lot|n°|no|batch)\s*[:.\-]?\s*/i,'').trim():'',dl=r&&r.dlc?parseDlc(r.dlc):'';
+  if(lot)F.lotIn=lot;if(dl){F.dlcIn=dl;F.dlcAuto=false}
+  if(lot||dl){drawFlow();toast((lot?'Lot '+lot:'Aucun numéro de lot détecté')+(dl?(lot?' et ':' · ')+'DLC '+frd(dl)+' détectée':(lot?' · aucune DLC détectée':'')))}
+  else toast('Aucun numéro de lot détecté, aucune DLC détectée.')}).catch(function(e){OCRBUSY=false;var m=String(e&&e.message||e);toast(/501|ai-off/.test(m)?'Lecture automatique pas encore activée sur le serveur.':'Lecture automatique impossible (connexion ?).')})}
+function compress(file,cb,mx,ql){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,(mx||640)/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',ql||.55))};im.src=fr.result};fr.readAsDataURL(file)}
 
 /* ouverture des saisies par module */
 function openTemp(eq){openFlow({module:'temp',title:eq.name,subt:eq.kind==='cong'?'Congélation':'Réfrigération',ref:eq.id,label:eq.name+' ('+(eq.kind==='cong'?'congélation':'réfrigération')+')',spec:{min:eq.min,max:eq.max,limite:eq.limite},specRequired:true,tabs:['temp','moment','notes']})}
@@ -1946,6 +1956,8 @@ document.addEventListener('click',async function(ev){
  if(k==='prPick'){zSet(v);window.__zoff=false;fHide();render();return}
  if(k==='prDel'){var l2=prList().filter(function(x){return x.ip!==v});prSave(l2);if(zIP()===v)zSet('');openPrinters();return}
  if(k==='prTest'){var z=zpl('Étiquette test','DLC',frd(addDays(today(),3)),frd(today()),operator(),'TEST123',1,addDays(today(),3));zSend(z).then(function(r){toast(r.ok?'Étiquette test envoyée.':btWhy(r));if(!r.ok&&r.why==='net')zFile(z);if(BTLOG)openPrinters()});return}
+  if(k==='anH'){try{localStorage.setItem('qv-plh',tsGet('qv-plh',30)>=40?'30':'40')}catch(e){}openPrinters();return}
+  if(k==='anOy'){try{localStorage.setItem('qv-poy',String(tsGet('qv-poy',0)+(+v)))}catch(e){}openPrinters();return}
   if(k==='anLang'){try{localStorage.setItem('qv-plang',zLang()==='tspl'?'zpl':'tspl')}catch(e){}openPrinters();return}
   if(k==='anTest'){var ip=zIP();if(!ip||ip.indexOf('an:')!==0){toast('Choisissez d’abord l’imprimante.');return}BTLOG='Test '+v+' en cours…';openPrinters();anProbe(ip.slice(3),AN_T[v]).then(function(r){BTLOG='Test '+v+' : '+(r.ok?'envoyé. Réponse imprimante : '+(String(r.msg).replace(/^R:/,'')||'(aucune)'):'échec '+(r.msg||''));openPrinters()});return}
   if(k==='anPick'){var ap=v.split('|'),an=ap.slice(1).join('|');var l1=prList().filter(function(x){return x.ip!=='an:'+ap[0]});l1.push({name:an+' (Bluetooth)',ip:'an:'+ap[0]});prSave(l1);zSet('an:'+ap[0]);window.__zoff=false;BTLOG='';toast('Imprimante choisie : '+an);openPrinters();return}
@@ -2225,7 +2237,7 @@ document.addEventListener('change',function(ev){
  if(F&&ev.target.getAttribute&&ev.target.getAttribute('data-tagsel')){var tv=ev.target.value;if(tv){var ig=ev.target.getAttribute('data-ing');if(ig&&(F.recIng!==ig||!F.prod))selIng(ig,ev.target.getAttribute('data-c')||'');var tb=document.createElement('button');tb.setAttribute('data-k','usetag');tb.setAttribute('data-v',tv);tb.style.display='none';document.getElementById('modal').appendChild(tb);tb.click();tb.remove()}return}
  if(TF&&ev.target.getAttribute&&ev.target.getAttribute('data-tf')){tfInput(ev.target);return}
  var id=ev.target.id;
- if(F&&id==='mfile'&&ev.target.files&&ev.target.files[0]){var ff0=ev.target.files[0];ev.target.value='';compress(ff0,function(d){if(F){F.photos.push(d);drawFlow()}});return}
+ if(F&&id==='mfile'&&ev.target.files&&ev.target.files[0]){var ff0=ev.target.files[0];ev.target.value='';compress(ff0,function(d){if(F){F.photos.push(d);drawFlow()}});if(F&&F.tabs&&F.tabs.indexOf('lots')>=0)compress(ff0,readLabel,1280,.8);return}
   var ck=ev.target.getAttribute('data-ik');
  if(ck&&ev.target.tagName==='SELECT'){var ci=+ev.target.getAttribute('data-i'),val=ev.target.value;
   if(ck==='icat'||ck==='rcat'||ck==='rrcat'){
@@ -2255,22 +2267,25 @@ function zClean(t){return String(t==null?'':t).replace(/[\^~\\]/g,' ')}
 function dayTag(iso){if(!iso)return null;var p=String(iso).split('-'),d=new Date(+p[0],+p[1]-1,+p[2]);if(isNaN(d.getTime()))return null;var s=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'][d.getDay()];return {name:s,a:s[0],b:s.slice(1,3)}}
 function zLang(){var ip=zIP()||'';if(ip.indexOf('an:')!==0)return 'zpl';try{return localStorage.getItem('qv-plang')||'tspl'}catch(e){return 'tspl'}}
 function tsC(s){return String(s==null?'':s).replace(/œ/g,'oe').replace(/Œ/g,'OE').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7e]/g,' ').replace(/"/g,"'")}
+function tsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:+v}catch(e){return d}}
 function tspl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){
- var t=dayTag(dlc),x=t?114:12,o=['SIZE 58 mm,40 mm','GAP 2 mm,0 mm','DIRECTION 1','CLS'],W=[0,0,12,16,24,32];
- function fit(s,px,y,f){s=tsC(s);var room=458-px;while(f>2&&s.length*W[f]>room)f--;o.push('TEXT '+px+','+y+',"'+f+'",0,1,1,"'+s+'"')}
- function ctr(s,px,pw,y,f){s=tsC(s);o.push('TEXT '+(px+Math.max(0,Math.floor((pw-s.length*W[f])/2)))+','+y+',"'+f+'",0,1,1,"'+s+'"')}
- var nm=tsC(name).toUpperCase().replace(/\s+/g,' ').trim(),l1=nm,l2='';
- if(nm.length>18){var cut=nm.lastIndexOf(' ',18);if(cut<6)cut=18;l1=nm.slice(0,cut).trim();l2=nm.slice(cut).trim().slice(0,18)}
- o.push('BOX 8,8,456,84,3');
- if(l2){ctr(l1,8,448,12,4);ctr(l2,8,448,46,4)}else ctr(l1,8,448,28,4);
- if(t){ctr(t.a,8,96,104,5);ctr(t.b,8,96,160,3)}
- fit('Ent./Fab. : '+fab,x,98,3);
- var dl=mention+' : '+(dlcTxt||'-');fit(dl,x,130,(!t||dl.length<=16)?4:3);
- fit('Par '+String(who||'').toUpperCase(),x,184,3);
- fit('Lot '+lot+(bete?'  Bete '+bete:''),12,230,3);
+ var H=tsGet('qv-plh',30),oy=tsGet('qv-poy',0),tall=H>=40,t=dayTag(dlc),x=t?114:12,W=[0,0,12,16,24,32],o=['SIZE 58 mm,'+H+' mm','GAP 2 mm,0 mm','DIRECTION 1','CLS'];
+ var Y=tall?{bx:8,bh:76,l1:12,l2:46,l0:28,f0:4,f1:4,ta:104,tb:160,rt:92,rh:126,fab:98,dl:130,par:184,lot:230,bc:268,bch:34}:{bx:6,bh:58,l1:10,l2:36,l0:18,f0:4,f1:3,ta:78,tb:128,rt:74,rh:84,fab:74,dl:100,par:138,lot:166,bc:194,bch:34};
+ function fit(s,px,y,f){s=tsC(s);var room=458-px;while(f>2&&s.length*W[f]>room)f--;o.push('TEXT '+px+','+(y+oy)+',"'+f+'",0,1,1,"'+s+'"')}
+ function ctr(s,px,pw,y,f){s=tsC(s);o.push('TEXT '+(px+Math.max(0,Math.floor((pw-s.length*W[f])/2)))+','+(y+oy)+',"'+f+'",0,1,1,"'+s+'"')}
+ var lim=Math.floor(444/W[Y.f1]),nm=tsC(name).toUpperCase().replace(/\s+/g,' ').trim(),l1=nm,l2='';
+ var single=nm.length<=Math.floor(444/W[Y.f0]);
+ if(!single){var cut=nm.lastIndexOf(' ',lim);if(cut<6)cut=lim;l1=nm.slice(0,cut).trim();l2=nm.slice(cut).trim().slice(0,lim)}
+ o.push('BOX 8,'+(Y.bx+oy)+',456,'+(Y.bx+Y.bh+oy)+',3');
+ if(single)ctr(l1,8,448,Y.l0,Y.f0);else{ctr(l1,8,448,Y.l1,Y.f1);ctr(l2,8,448,Y.l2,Y.f1)}
+ if(t){ctr(t.a,8,96,Y.ta,5);ctr(t.b,8,96,Y.tb,3)}
+ fit('Ent./Fab. : '+fab,x,Y.fab,3);
+ var dl=mention+' : '+(dlcTxt||'-');fit(dl,x,Y.dl,(!t||dl.length<=16)?4:3);
+ fit('Par '+String(who||'').toUpperCase(),x,Y.par,3);
+ fit('Lot '+lot+(bete?'  Bete '+bete:''),12,Y.lot,3);
  var L=tsC(lot).length||1,mod=11*(L+3)+13;
- o.push('BARCODE 12,268,"128",34,0,0,'+(mod*2<=440?2:1)+',2,"'+tsC(lot)+'"');
- if(t){o.push('REVERSE 8,92,96,126')}
+ o.push('BARCODE 12,'+(Y.bc+oy)+',"128",'+Y.bch+',0,0,'+(mod*2<=440?2:1)+',2,"'+tsC(lot)+'"');
+ if(t)o.push('REVERSE 8,'+(Y.rt+oy)+',96,'+Y.rh);
  o.push('PRINT '+(n||1)+',1');return o.join('\r\n')+'\r\n'}
 function zpl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){if(zLang()==='tspl')return tspl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete);return zplZ(name,mention,dlcTxt,fab,who,lot,n,dlc,bete)}
 function zplZ(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){
