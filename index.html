@@ -767,7 +767,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.37-b</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.38-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -785,7 +785,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.37-b</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.38-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -1378,7 +1378,7 @@ function prCur(){var ip=zIP();if(!ip)return null;return prList().filter(function
 function openPrinters(){
  F={tabs:[]};
  document.getElementById('modal').className='on';
- document.getElementById('modal').innerHTML='<div class="sheet"><h2>Imprimante</h2><div class="sbody" style="min-height:0;text-align:center">'+(prCur()?'<div class="selprod" style="margin-bottom:14px">🖨 '+esc(prCur().name)+' ✓</div>':'')+'<button class="btn primary" data-k="prBt" style="width:100%;min-height:60px;font-size:1.1rem">🔍 Chercher une imprimante Bluetooth</button>'+(qvN()&&zIP()&&zIP().indexOf('an:')===0?'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px"><button class="btn" data-k="anTest" data-v="id">Identifier</button><button class="btn" data-k="anTest" data-v="zpl">Test ZPL</button><button class="btn" data-k="anTest" data-v="tspl">Test TSPL</button><button class="btn" data-k="anTest" data-v="cpcl">Test CPCL</button><button class="btn" data-k="anTest" data-v="esc">Test ESC/POS</button></div>':'')+(BTLOG?'<div class="meta" style="margin-top:12px;word-break:break-all">'+esc(BTLOG)+'</div>':'')+'</div>'+
+ document.getElementById('modal').innerHTML='<div class="sheet"><h2>Imprimante</h2><div class="sbody" style="min-height:0;text-align:center">'+(prCur()?'<div class="selprod" style="margin-bottom:14px">🖨 '+esc(prCur().name)+' ✓</div>':'')+'<button class="btn primary" data-k="prBt" style="width:100%;min-height:60px;font-size:1.1rem">🔍 Chercher une imprimante Bluetooth</button>'+(qvN()&&zIP()&&zIP().indexOf('an:')===0?'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px"><button class="btn" data-k="anTest" data-v="id">Identifier</button><button class="btn" data-k="anTest" data-v="zpl">Test ZPL</button><button class="btn" data-k="anTest" data-v="tspl">Test TSPL</button><button class="btn" data-k="anTest" data-v="cpcl">Test CPCL</button><button class="btn" data-k="anTest" data-v="esc">Test ESC/POS</button></div><button class="btn" data-k="anLang" style="margin-top:10px;width:100%">Langage d’impression : '+zLang().toUpperCase()+' (changer)</button>':'')+(BTLOG?'<div class="meta" style="margin-top:12px;word-break:break-all">'+esc(BTLOG)+'</div>':'')+'</div>'+
  '<div class="sfoot"><button class="btn" data-k="cancel">Fermer</button></div></div>'}
 
 /* suivi DLC */
@@ -1946,6 +1946,7 @@ document.addEventListener('click',async function(ev){
  if(k==='prPick'){zSet(v);window.__zoff=false;fHide();render();return}
  if(k==='prDel'){var l2=prList().filter(function(x){return x.ip!==v});prSave(l2);if(zIP()===v)zSet('');openPrinters();return}
  if(k==='prTest'){var z=zpl('Étiquette test','DLC',frd(addDays(today(),3)),frd(today()),operator(),'TEST123',1,addDays(today(),3));zSend(z).then(function(r){toast(r.ok?'Étiquette test envoyée.':btWhy(r));if(!r.ok&&r.why==='net')zFile(z);if(BTLOG)openPrinters()});return}
+  if(k==='anLang'){try{localStorage.setItem('qv-plang',zLang()==='tspl'?'zpl':'tspl')}catch(e){}openPrinters();return}
   if(k==='anTest'){var ip=zIP();if(!ip||ip.indexOf('an:')!==0){toast('Choisissez d’abord l’imprimante.');return}BTLOG='Test '+v+' en cours…';openPrinters();anProbe(ip.slice(3),AN_T[v]).then(function(r){BTLOG='Test '+v+' : '+(r.ok?'envoyé. Réponse imprimante : '+(String(r.msg).replace(/^R:/,'')||'(aucune)'):'échec '+(r.msg||''));openPrinters()});return}
   if(k==='anPick'){var ap=v.split('|'),an=ap.slice(1).join('|');var l1=prList().filter(function(x){return x.ip!=='an:'+ap[0]});l1.push({name:an+' (Bluetooth)',ip:'an:'+ap[0]});prSave(l1);zSet('an:'+ap[0]);window.__zoff=false;BTLOG='';toast('Imprimante choisie : '+an);openPrinters();return}
   if(k==='anBt'){try{qvN().btSettings()}catch(e){}return}
@@ -2252,7 +2253,27 @@ function zIP(){try{return localStorage.getItem('qv-zebra')||''}catch(e){return '
 function zSet(v){try{localStorage.setItem('qv-zebra',v)}catch(e){}}
 function zClean(t){return String(t==null?'':t).replace(/[\^~\\]/g,' ')}
 function dayTag(iso){if(!iso)return null;var p=String(iso).split('-'),d=new Date(+p[0],+p[1]-1,+p[2]);if(isNaN(d.getTime()))return null;var s=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'][d.getDay()];return {name:s,a:s[0],b:s.slice(1,3)}}
-function zpl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){
+function zLang(){var ip=zIP()||'';if(ip.indexOf('an:')!==0)return 'zpl';try{return localStorage.getItem('qv-plang')||'tspl'}catch(e){return 'tspl'}}
+function tsC(s){return String(s==null?'':s).replace(/œ/g,'oe').replace(/Œ/g,'OE').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7e]/g,' ').replace(/"/g,"'")}
+function tspl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){
+ var t=dayTag(dlc),x=t?114:12,o=['SIZE 58 mm,40 mm','GAP 2 mm,0 mm','DIRECTION 1','CLS'],W=[0,0,12,16,24,32];
+ function fit(s,px,y,f){s=tsC(s);var room=458-px;while(f>2&&s.length*W[f]>room)f--;o.push('TEXT '+px+','+y+',"'+f+'",0,1,1,"'+s+'"')}
+ function ctr(s,px,pw,y,f){s=tsC(s);o.push('TEXT '+(px+Math.max(0,Math.floor((pw-s.length*W[f])/2)))+','+y+',"'+f+'",0,1,1,"'+s+'"')}
+ var nm=tsC(name).toUpperCase().replace(/\s+/g,' ').trim(),l1=nm,l2='';
+ if(nm.length>18){var cut=nm.lastIndexOf(' ',18);if(cut<6)cut=18;l1=nm.slice(0,cut).trim();l2=nm.slice(cut).trim().slice(0,18)}
+ o.push('BOX 8,8,456,84,3');
+ if(l2){ctr(l1,8,448,12,4);ctr(l2,8,448,46,4)}else ctr(l1,8,448,28,4);
+ if(t){ctr(t.a,8,96,104,5);ctr(t.b,8,96,160,3)}
+ fit('Ent./Fab. : '+fab,x,98,3);
+ var dl=mention+' : '+(dlcTxt||'-');fit(dl,x,130,(!t||dl.length<=16)?4:3);
+ fit('Par '+String(who||'').toUpperCase(),x,184,3);
+ fit('Lot '+lot+(bete?'  Bete '+bete:''),12,230,3);
+ var L=tsC(lot).length||1,mod=11*(L+3)+13;
+ o.push('BARCODE 12,268,"128",34,0,0,'+(mod*2<=440?2:1)+',2,"'+tsC(lot)+'"');
+ if(t){o.push('REVERSE 8,92,96,126')}
+ o.push('PRINT '+(n||1)+',1');return o.join('\r\n')+'\r\n'}
+function zpl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){if(zLang()==='tspl')return tspl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete);return zplZ(name,mention,dlcTxt,fab,who,lot,n,dlc,bete)}
+function zplZ(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){
  var t=dayTag(dlc),x=t?114:12,dl=zClean(mention)+' : '+zClean(dlcTxt||'-'),big=!t||dl.length<=16;
  return '^XA^CI28^PW464^LL320^LH0,0^MD10^PQ'+(n||1)+
  '^FO8,8^GB448,76,3^FS^FO14,14^FB436,2,0,C,0^A0N,32,30^FD'+zClean(name).toUpperCase()+'^FS'+
