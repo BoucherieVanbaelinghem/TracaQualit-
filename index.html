@@ -497,7 +497,7 @@ async function localDB(){
    get:async function(){var o=(mem[coll]||{})[id];return {exists:!!o,id:id,data:function(){return o}}}}};
   return q}};
 }
-function localDL(){return {save:function(o){return new Promise(function(ok){var b=new Blob([o.data],{type:'application/octet-stream'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();ok()},500)})}}}
+function localDL(){return {save:function(o){return new Promise(function(ok){if(window.QV&&window.QV.saveText){try{window.QV.saveText(o.filename,typeof o.data==='string'?o.data:String(o.data))}catch(e){}ok();return}var b=new Blob([o.data],{type:'application/octet-stream'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=o.filename;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();ok()},500)})}}}
 async function initData(){
   var HC=(typeof claude!=='undefined'&&claude&&claude.use);
  try{DB=HC?await claude.use('db'):await localDB()}catch(e){DB=null}
@@ -663,6 +663,8 @@ function optCodeDialog(){
  document.getElementById('ocX').onclick=closeForm;document.getElementById('ocOk').onclick=ok;i.onkeydown=function(e){if(e.key==='Enter')ok()}}
 
 var CHANGELOG=[
+['v10.37','18 nov. 2026','Application Android et Bluetooth classique Zebra',['Application Android « Qualité Vanbaelinghem » (installée à la main) qui contient le logiciel','Impression des étiquettes en Bluetooth classique : choix de l’imprimante parmi celles jumelées à la tablette','Impressions de documents (bons de livraison, rapports) par l’impression Android, exports enregistrés dans Téléchargements']],
+['v10.36','17 nov. 2026','Impression Zebra par Bluetooth',['Fenêtre Imprimante simplifiée : un seul bouton « Chercher une imprimante Bluetooth » (Wi-Fi retiré)','Envoi Bluetooth direct amélioré (blocs plus gros, repli automatique, diagnostic affiché)','Second chemin pour le Bluetooth classique : relais par l’application Zebra Browser Print']],
 ['v10.35','17 nov. 2026','Journal des mises à jour, réception et traçabilité améliorées',['Options : journal de toutes les mises à jour du projet, avec impression','Nettoyages postes : onglets Check-list / Moment / Notes de nouveau visibles','Étiquette perdue : recherche par mots (pluriels, mots composés) dans les réceptions, fiches et fabrications, jusqu’à 20 entrées','Réception : nouvelle fenêtre « Quel produit réceptionnez-vous ? » avec suggestions selon la catégorie et le fournisseur (fruits et légumes, viandes, poissons, épicerie, crémerie, surgelés)','Le produit reçu est enregistré et retrouvable en traçabilité','Accueil : icônes de même taille, tuiles à hauteur identique','Étiquettes : impression par Bluetooth (recherche de l’imprimante depuis l’application) (Wi-Fi retiré pour simplifier)']],
 ['v10.34','17 nov. 2026','Tornade de réinitialisation et tolérance du glisser-déposer',['Animation « tornade » : à la réinitialisation, les tuiles tourbillonnent puis se rangent une par une dans l’ordre d’origine','Correction de la dernière image de l’animation (plus de retour en arrière)','Glisser-déposer des tuiles moins sensible : temps d’attente court et tolérance quand deux tuiles se touchent']],
 ['v10.33','17 nov. 2026','Accueil adapté à l’écran, animations, étiquettes simplifiées',['Les tuiles de l’accueil s’adaptent à la taille de l’écran : plus besoin de défiler','Animation fluide quand les tuiles se décalent pour faire de la place','Étiquette produit : bouton « Enregistrer » retiré, parcours simplifié (produit, quantité, valider, imprimer)']],
@@ -682,7 +684,7 @@ function openLog(){
  m.innerHTML='<div class="sheet" style="width:min(560px,100%)"><h2>Journal des mises à jour</h2><div class="banner" style="margin:0 0 10px">'+CHANGELOG.length+' versions · '+nb+' évolutions · du 4 nov. au 17 nov. 2026</div><div class="sbody" style="min-height:0;overflow:auto;max-height:60vh">'+h+'<p class="meta">Les entrées antérieures au 12 nov. sont reconstituées et peuvent être précisées.</p></div><div class="sfoot"><button class="btn ghost" id="lgX" style="margin-right:auto">Retour</button><button class="btn primary" id="lgP">Imprimer</button></div></div>';
  fShow();
  document.getElementById('lgX').onclick=function(){openOptions()};
- document.getElementById('lgP').onclick=function(){var w=window.open('','_blank');if(!w)return;w.document.write('<title>Journal des mises à jour</title><body style="font-family:sans-serif;max-width:700px;margin:20px auto"><h1>Qualité Vanbaelinghem — Journal des mises à jour</h1>'+h+'</body>');w.document.close();w.print()}}
+ document.getElementById('lgP').onclick=function(){var w=qvWin();if(!w)return;w.document.write('<title>Journal des mises à jour</title><body style="font-family:sans-serif;max-width:700px;margin:20px auto"><h1>Qualité Vanbaelinghem — Journal des mises à jour</h1>'+h+'</body>');w.document.close();w.print()}}
 function openOptions(msg,confirmDel){
  var m=document.getElementById('modal'),n=simCount();FORM={onSave:null};
  m.innerHTML='<div class="sheet" style="width:min(520px,100%)"><h2>Options</h2>'+(window.QVSYNC?'<div style="margin:0 0 10px"><button class="btn primary" id="osSync">⇄ Synchronisation (téléphone / tablette)</button></div>':'')+'<div style="margin:0 0 10px"><button class="btn" id="osLog">📋 Journal des mises à jour</button></div><div class="sub-h">Données de test</div><div class="sbody" style="min-height:0"><p style="margin:0 0 12px">Crée des <b>recettes</b> (couscous, tajine, chili…), leurs <b>ingrédients reçus</b> avec photo d’étiquette, lot et DLC, des <b>plats étiquetés</b>, des <b>fabrications du jour</b> et des <b>fiches de traçabilité</b> fictifs, pour essayer l’application comme en production (suivi des DLC, historique, favoris, recherche de lot…).</p><p class="meta" style="margin:0 0 14px">Les données de test sont repérées et peuvent toutes être effacées d’un seul geste. Vos fournisseurs, ingrédients et recettes réels ne sont jamais touchés.</p><div class="banner" style="margin:0 0 6px">'+(n?n+' élément(s) de test présent(s)':'Aucune donnée de test pour le moment')+'</div>'+(msg?'<p class="meta" style="margin:8px 0 0">'+esc(msg)+'</p>':'')+'</div><div class="sfoot" style="flex-wrap:wrap"><button class="btn ghost" id="osX" style="margin-right:auto">Fermer</button><button class="btn danger" id="osDel" '+(n?'':'disabled')+'>'+(confirmDel?'Confirmer : tout effacer':'Tout effacer')+'</button><button class="btn primary" id="osGen">Générer des données de test</button></div></div>';
@@ -765,7 +767,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.35-f</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.37-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -783,7 +785,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.35-f</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.37-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -932,7 +934,8 @@ function rfReportHtml(){var R=rfReport(),n=function(st){return R.tr.filter(funct
  '<div class="col"><div class="box"><div class="bt">REFROIDISSEMENT</div><table><tr><th>PLAN</th><th class="c">HEURE</th></tr>'+(Rr||'<tr><td colspan="2" class="none">Aucun refroidissement enregistré aujourd’hui.</td></tr>')+'</table></div>'+
  '<div class="box"><div class="bt">LÉGENDE</div><div class="lg"><div><i style="background:#cfe0f1"></i>FROID — pas de refroidissement requis</div><div><i style="background:#d4ecd0"></i>OK — refroidissement enregistré</div><div><i style="background:#f5c9c9"></i>NON SAISI — non enregistré ⚠</div></div></div>'+
  '<div class="box"><div class="bt">RÉCAPITULATIF</div><div class="rc"><span>Produits tracés</span><b>'+R.tr.length+'</b></div><div class="rc"><span>Refroidissements OK</span><b>'+n('ok')+'</b></div><div class="rc"><span>Produits froids</span><b>'+n('cold')+'</b></div><div class="rc"><span>Non saisis</span><b>'+n('no')+'</b></div></div></div></div></body></html>'}
-function rfPrint(){var f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
+function rfPrint(){if(qvN()){qvN().printHtml(rfReportHtml());return}
+ var f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
  var d=f.contentWindow.document;d.open();d.write(rfReportHtml());d.close();
  setTimeout(function(){try{f.contentWindow.focus();f.contentWindow.print()}catch(e){toast('Impression impossible sur cet appareil.')}setTimeout(function(){f.remove()},60000)},400)}
 setInterval(function(){if(S.screen==='refroid'&&S.profile&&!F&&!FORM&&!TF&&!document.getElementById('modal').className)render()},30000);
@@ -1754,7 +1757,7 @@ function recPage(){
    sub=tg.length?'<select data-tagsel="1" data-ing="'+esc(g.name)+'" data-c="'+esc(g.cat)+'" aria-label="Dernières entrées de '+esc(g.name)+'" style="width:100%;margin:8px 0 6px;min-height:52px;font-size:1rem"><option value="">Choisir une entrée de '+esc(g.name)+'…</option>'+tg.map(function(t){var d=t.ts?new Date(t.ts):null;return '<option value="'+esc(t.id)+'">'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit'})+' · '+hhmm(d)+' · ':'')+esc(t.kind)+' · '+esc(t.name)+((t.lots||[]).length?' · Lot '+esc(t.lots[0].lot):'')+((t.lots||[]).length&&t.lots[0].dlc?' · DLC '+esc(frd(t.lots[0].dlc)):'')+(t.sup?' · '+esc(t.sup):'')+'</option>'}).join('')+'</select><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-k="tagprint" data-v="'+esc(tg[0].id)+'">🖨 Imprimer la dernière</button><button class="btn sm" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'">Photographier</button></div>':'<div class="meta" style="margin:8px 0">Aucune entrée précédente pour cet ingrédient.</div><button class="btn sm" data-k="recing" data-v="'+esc(g.name)+'" data-c="'+esc(g.cat)+'">Photographier</button>'}
   return '<div class="selprod" style="margin-bottom:10px"><button class="sess" data-k="recopen" data-v="'+esc(g.name)+'" style="width:100%;text-align:left"><span style="flex:1"><b style="font-size:1.1rem">'+esc(g.name)+'</b><br><span class="meta">'+(g.extra?'<b>Ajouté · </b>':'')+(dn?'✓ Fiche faite à '+hhmm(new Date(dn.ts)):'Traçabilité à faire')+'</span></span><span class="btn sm">'+(op?'▲':'▼')+'</span></button>'+sub+'</div>'}).join('')+addUi;
  return h}
-function printTag(t){var w=window.open('','_blank');if(!w){toast('Impression bloquée par le navigateur.');return}
+function printTag(t){var w=qvWin();if(!w){toast('Impression bloquée par le navigateur.');return}
  var d=t.ts?new Date(t.ts):null;
  w.document.write('<!doctype html><meta charset="utf-8"><title>'+esc(t.name)+'</title><style>body{font:16px sans-serif;margin:20px}img{max-width:100%;margin:8px 0;display:block}</style><h2>'+esc(t.name)+'</h2><p>'+(d?frd(dKey(d),{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+hhmm(d):'')+(t.sup?' · '+esc(t.sup):'')+'</p>'+(t.lots||[]).map(function(l){return '<p><b>Lot '+esc(l.lot)+'</b>'+(l.dlc?' · DLC '+esc(frd(l.dlc)):'')+'</p>'}).join('')+(t.photos||[]).map(function(ph){return '<img src="'+ph+'">'}).join(''));
  w.document.close();setTimeout(function(){try{w.focus();w.print()}catch(e){}},500)}
@@ -1943,7 +1946,14 @@ document.addEventListener('click',async function(ev){
  if(k==='prPick'){zSet(v);window.__zoff=false;fHide();render();return}
  if(k==='prDel'){var l2=prList().filter(function(x){return x.ip!==v});prSave(l2);if(zIP()===v)zSet('');openPrinters();return}
  if(k==='prTest'){var z=zpl('Étiquette test','DLC',frd(addDays(today(),3)),frd(today()),operator(),'TEST123',1,addDays(today(),3));zSend(z).then(function(r){toast(r.ok?'Étiquette test envoyée.':btWhy(r));if(!r.ok&&r.why==='net')zFile(z);if(BTLOG)openPrinters()});return}
-  if(k==='prBt'){btPair().then(async function(r){if(!r.ok){toast(btWhy(r));return}var id=r.dev.id,nm=(r.dev.name||'Imprimante Bluetooth'),l=prList().filter(function(x){return x.ip!=='bt:'+id});l.push({name:nm+' (Bluetooth)',ip:'bt:'+id});prSave(l);zSet('bt:'+id);window.__zoff=false;var pb=await btSend(id,null);toast(pb.ok?'Imprimante Bluetooth prête.':btWhy(pb));openPrinters()});return}
+  if(k==='anPick'){var ap=v.split('|'),an=ap.slice(1).join('|');var l1=prList().filter(function(x){return x.ip!=='an:'+ap[0]});l1.push({name:an+' (Bluetooth)',ip:'an:'+ap[0]});prSave(l1);zSet('an:'+ap[0]);window.__zoff=false;BTLOG='';toast('Imprimante choisie : '+an);openPrinters();return}
+  if(k==='anBt'){try{qvN().btSettings()}catch(e){}return}
+  if(k==='prBack'){openPrinters();return}
+  if(k==='prBt'){if(qvN()){anPick();return}btPair().then(async function(r){
+   if(!r.ok){var dv=(r.why==='cancel'||r.why==='bt-conn'||r.why==='nobt')?await bpDefault():null;
+    if(dv){var l0=prList().filter(function(x){return x.ip.indexOf('bp:')!==0});l0.push({name:(dv.name||'Zebra')+' (Bluetooth)',ip:'bp:'+(dv.uid||dv.name)});prSave(l0);zSet('bp:'+(dv.uid||dv.name));window.__zoff=false;BTLOG='';toast('Imprimante Zebra prête (Zebra Browser Print).');openPrinters();return}
+    toast(btWhy(r));return}
+   var id=r.dev.id,nm=(r.dev.name||'Imprimante Bluetooth'),l=prList().filter(function(x){return x.ip!=='bt:'+id});l.push({name:nm+' (Bluetooth)',ip:'bt:'+id});prSave(l);zSet('bt:'+id);window.__zoff=false;var pb=await btSend(id,null);toast(pb.ok?'Imprimante Bluetooth prête.':btWhy(pb));openPrinters()});return}
  if(k==='prAdd'){var ip=(document.getElementById('pri').value||'').trim(),nm=(document.getElementById('prn').value||'').trim();if(!ip){toast('Indiquez l’adresse IP.');return}var l3=prList().filter(function(x){return x.ip!==ip});l3.push({name:nm||ip,ip:ip});prSave(l3);zSet(ip);window.__zoff=false;fHide();render();return}
   if(k==='wnext'&&F.wizOne){rfBatchSave();return}if(k==='rfun'){if(S.rfSel)delete S.rfSel[F.rfKey];fHide();render();return}if(k==='wnext'){F.wstep=2;F.tab=F.spec?'temp':'moment';drawFlow();flowSlide('r');return}
   if(k==='wback'){if(F.tab==='alerte'){F.tab=F.spec?'temp':'moment'}else{F.wstep=1;F.tab='checks'}drawFlow();flowSlide('l');return}
@@ -2254,8 +2264,8 @@ function zpl(name,mention,dlcTxt,fab,who,lot,n,dlc,bete){
 /* impression Bluetooth (BLE, Chrome Android) : l'appairage des réglages de la tablette n'est pas visible d'une page web, on choisit l'imprimante ici */
 var BTD={},BTLOG='',BT_SVC=['38eb4a80-c570-11e3-9507-0002a5d5c51b','0000ffe0-0000-1000-8000-00805f9b34fb','0000ff00-0000-1000-8000-00805f9b34fb','49535343-fe7d-4ae5-8fa9-9fafd205e455','e7810a71-73ae-499d-8c15-faa9aef0c3f2','000018f0-0000-1000-8000-00805f9b34fb','0000fee7-0000-1000-8000-00805f9b34fb','0000ae00-0000-1000-8000-00805f9b34fb','0000fff0-0000-1000-8000-00805f9b34fb','0000ffb0-0000-1000-8000-00805f9b34fb','0000fe59-0000-1000-8000-00805f9b34fb','00001800-0000-1000-8000-00805f9b34fb'];
 function btOk(){return !!(window.isSecureContext&&navigator.bluetooth&&navigator.bluetooth.requestDevice)}
-function btWhy(r){var w=r&&r.why;return btWhy0(w)+(BTLOG&&w&&w.indexOf('bt-')===0?' ['+BTLOG+']':'')}
-function btWhy0(w){return w==='nobt'?'Bluetooth indisponible dans ce navigateur : ouvrez l’application dans Chrome (adresse https), pas dans le lien Claude.':w==='bt-dev'?'Imprimante Bluetooth non reconnue : ouvrez Imprimante et choisissez-la de nouveau.':w==='bt-nowrite'?'Imprimante trouvée, mais elle n’accepte pas l’envoi par Bluetooth depuis une page web.':w==='bt-conn'?'Connexion Bluetooth impossible : imprimante allumée et proche ?':w==='cancel'?'Aucune imprimante choisie.':w==='ip'?'Choisissez d’abord une imprimante.':'Imprimante injoignable depuis cette page.'}
+function btWhy(r){var w=r&&r.why;return btWhy0(w)+(BTLOG&&w&&(w.indexOf('bt-')===0||w.indexOf('an-')===0)?' ['+BTLOG+']':'')}
+function btWhy0(w){return w==='an-perm'?'Autorisez le Bluetooth pour l’application (Paramètres › Applications › Qualité › Autorisations).':w==='an-off'?'Le Bluetooth de la tablette est éteint.':w==='an-conn'?'Impossible de joindre l’imprimante : allumée, proche, et jumelée dans les réglages Bluetooth ?':w==='bp-none'?'L’application Zebra Browser Print ne répond pas : ouvrez-la sur la tablette (autorisez ce site) puis réessayez.':w==='bp-err'?'Zebra Browser Print n’a pas pu envoyer l’étiquette à l’imprimante.':w==='nobt'?'Bluetooth indisponible dans ce navigateur : ouvrez l’application dans Chrome (adresse https), pas dans le lien Claude.':w==='bt-dev'?'Imprimante Bluetooth non reconnue : ouvrez Imprimante et choisissez-la de nouveau.':w==='bt-nowrite'?'Imprimante trouvée, mais elle n’accepte pas l’envoi par Bluetooth depuis une page web.':w==='bt-conn'?'Connexion Bluetooth impossible : imprimante allumée et proche ?':w==='cancel'?'Aucune imprimante choisie.':w==='ip'?'Choisissez d’abord une imprimante.':'Imprimante injoignable depuis cette page.'}
 async function btDev(id){if(BTD[id])return BTD[id];try{var l=navigator.bluetooth.getDevices?await navigator.bluetooth.getDevices():[];l.forEach(function(d){BTD[d.id]=d})}catch(e){}return BTD[id]||null}
 async function btPair(){if(!btOk())return {ok:false,why:'nobt'};
  try{var d=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:BT_SVC});BTD[d.id]=d;return {ok:true,dev:d}}
@@ -2272,13 +2282,35 @@ async function btSend(id,code){
  BTLOG=(d.name||'?')+' · '+(info.join(' ; ')||'aucun service visible');
  if(!ch)return {ok:false,why:'bt-nowrite',info:info};
  if(code==null)return {ok:true,probe:true};
- try{var data=new TextEncoder().encode(code),nr=ch.properties.writeWithoutResponse;
-  for(var o=0;o<data.length;o+=20){var part=data.slice(o,o+20);if(nr)await ch.writeValueWithoutResponse(part);else await ch.writeValue(part);await new Promise(function(r){setTimeout(r,12)})}
-  return {ok:true}}catch(e){BTLOG+=' · envoi : '+(e&&e.message||e);return {ok:false,why:'bt-conn'}}}
+ var data=new TextEncoder().encode(code),sizes=[100,20];
+ for(var si=0;si<sizes.length;si++){
+  try{var sz=sizes[si];
+   for(var o=0;o<data.length;o+=sz){var part=data.slice(o,o+sz);if(ch.properties.write){if(ch.writeValueWithResponse)await ch.writeValueWithResponse(part);else await ch.writeValue(part)}else await ch.writeValueWithoutResponse(part);await new Promise(function(r){setTimeout(r,si?25:8)})}
+   return {ok:true}}catch(e){BTLOG+=' · envoi('+sizes[si]+') : '+(e&&e.message||e)}}
+ return {ok:false,why:'bt-conn'}}
+
+/* Zebra Browser Print (application Android, Bluetooth classique) : relais local http://127.0.0.1:9100 */
+/* application Android « Qualité Vanbaelinghem » (WebView) : pont natif QV */
+function qvN(){return window.QV&&window.QV.version?window.QV:null}
+function qvWin(){var N=qvN();if(!N)return window.open('','_blank');var buf='';return {document:{write:function(h){buf+=h},close:function(){}},focus:function(){},print:function(){N.printHtml(buf)}}}
+var QVP={},QVI=0;window.__qvPr=function(id,ok,msg){var r=QVP[id];if(r){delete QVP[id];r({ok:ok,why:ok?'':'an-'+(/perm/.test(msg)?'perm':/off/.test(msg)?'off':'conn'),msg:msg})}};
+function anSend(mac,code){return new Promise(function(res){var id=++QVI;QVP[id]=res;setTimeout(function(){if(QVP[id]){delete QVP[id];res({ok:false,why:'an-conn',msg:'délai dépassé'})}},25000);try{qvN().print(mac,code,id)}catch(e){delete QVP[id];res({ok:false,why:'an-conn',msg:String(e)})}}).then(function(r){BTLOG=r.ok?'':(r.msg||'');return r})}
+function anPick(){var N=qvN();if(!N)return;var o;try{o=JSON.parse(N.printers())}catch(e){o={perm:false,list:[]}}
+ if(!o.perm){toast('Autorisez le Bluetooth pour l’application, puis réessayez.');return}
+ if(o.on===false){toast('Le Bluetooth de la tablette est éteint.');return}
+ var m=document.getElementById('modal');F={tabs:[]};m.className='on';
+ m.innerHTML='<div class="sheet"><h2>Choisissez l’imprimante</h2><div class="sbody" style="min-height:0">'+(o.list.length?o.list.map(function(x){return '<button class="btn" data-k="anPick" data-v="'+esc(x.a+'|'+x.n)+'" style="width:100%;min-height:58px;margin:0 0 8px;text-align:left;font-size:1.05rem">'+(x.p?'🖨 ':'')+esc(x.n)+'</button>'}).join(''):'<p class="meta">Aucun appareil jumelé. Jumelez l’imprimante dans les réglages Bluetooth de la tablette, puis revenez ici.</p>')+'<button class="btn" data-k="anBt" style="width:100%;min-height:52px;margin-top:6px">Ouvrir les réglages Bluetooth</button></div><div class="sfoot"><button class="btn" data-k="prBack">Retour</button></div></div>'}
+async function bpCall(path,opt){var ac=new AbortController(),t=setTimeout(function(){ac.abort()},2500);
+ try{var r=await fetch('http://127.0.0.1:9100'+path,Object.assign({signal:ac.signal},opt||{}));clearTimeout(t);return r}catch(e){clearTimeout(t);return null}}
+async function bpDefault(){var r=await bpCall('/default?type=printer');if(!r||!r.ok)return null;try{var tx=(await r.text()).trim();if(!tx)return null;var d=JSON.parse(tx);return d&&d.uid?d:(d&&d.name?d:null)}catch(e){return null}}
+async function bpSend(code){var d=await bpDefault();if(!d)return {ok:false,why:'bp-none'};
+ var r=await bpCall('/write',{method:'POST',body:JSON.stringify({device:d,data:code})});return r&&r.ok?{ok:true}:{ok:false,why:'bp-err'}}
 async function zSend(code){
  var ip=zIP();
  if(!ip)return {ok:false,why:'ip'};
- if(ip.indexOf('bt:')===0)return btSend(ip.slice(3),code);
+ if(ip.indexOf('an:')===0)return anSend(ip.slice(3),code);
+ if(ip.indexOf('bp:')===0)return bpSend(code);
+ if(ip.indexOf('bt:')===0){var rb=await btSend(ip.slice(3),code);if(rb.ok)return rb;var rp=await bpSend(code);return rp.ok?rp:rb}
  try{await fetch('http://'+ip+'/pstprnt',{method:'POST',mode:'no-cors',body:code});return {ok:true}}
  catch(e){return {ok:false,why:'net'}}}
 function zFile(code){if(DL)DL.save({filename:'etiquettes-'+today()+'.zpl',data:code}).then(function(){toast('Fichier ZPL enregistré.')},function(){})}
@@ -2380,7 +2412,7 @@ function vMagForm(){var G=S.mg,out=G.mode==='out',stock=out?mgStock(G.store):[];
  h+='<div><label class="f" for="mgnote">Note (facultatif)</label><input type="text" id="mgnote" data-mg="note|0" value="'+esc(G.note||'')+'" style="width:100%"></div>';
  return h+'<div style="display:flex;gap:10px;margin-top:16px"><button class="btn primary" data-a="mgsave" style="min-height:56px;flex:2">'+(out?'Enregistrer le retrait':'Enregistrer le bon de livraison')+'</button><button class="btn" data-a="mgcancel" style="min-height:56px;flex:1">Annuler</button></div></div>'}
 function vMagScr(){if(!S.mg)S.mg={store:MAGS[0].id,tab:'stock'};return S.screen==='mag'?vMag():S.screen==='magf'?vMagForm():vMagSt()}
-function mgPrint(m){var w=window.open('','_blank');if(!w){toast('Impression bloquée par le navigateur.');return}
+function mgPrint(m){var w=qvWin();if(!w){toast('Impression bloquée par le navigateur.');return}
  w.document.write('<!doctype html><meta charset="utf-8"><title>'+esc(m.num)+'</title><style>body{font:15px sans-serif;margin:24px}h1{margin:0 0 4px}table{width:100%;border-collapse:collapse;margin:16px 0}th,td{border:1px solid #888;padding:8px;text-align:left}.sig{display:flex;gap:40px;margin-top:40px}.sig div{flex:1;border-top:1px solid #000;padding-top:6px}</style><h1>Bon de livraison '+esc(m.num)+'</h1><p><b>SARL Vanbaelinghem</b> — atelier de Téteghem<br>Destinataire : <b>'+esc(mgName(m.store))+'</b><br>Date : '+esc(frd(m.date,{day:'2-digit',month:'2-digit',year:'numeric'}))+' · Préparé par : '+esc(m.who||'')+'</p><table><tr><th>Produit</th><th>Quantité</th><th>Lot</th><th>DLC</th></tr>'+(m.items||[]).map(function(i){return '<tr><td>'+esc(i.name)+'</td><td>'+esc(mgQty(i.qty,i.unit))+'</td><td>'+esc(i.lot||'')+'</td><td>'+(i.dlc?esc(frd(i.dlc,{day:'2-digit',month:'2-digit',year:'numeric'})):'')+'</td></tr>'}).join('')+'</table>'+(m.note?'<p>Note : '+esc(m.note)+'</p>':'')+'<div class="sig"><div>Signature atelier</div><div>Signature magasin (réception)</div></div>');
  w.document.close();setTimeout(function(){try{w.focus();w.print()}catch(e){}},500)}
 function mgSug(i,q){var box=document.getElementById('mgsug'+i);if(!box)return;var n=favNrm(q);
