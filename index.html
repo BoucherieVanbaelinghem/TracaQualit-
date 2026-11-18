@@ -463,7 +463,7 @@ async function localDB(){
  document.addEventListener('visibilitychange',function(){if(!document.hidden)cycle()});window.addEventListener('online',cycle);
  QVSYNC=window.QVSYNC={
   on:function(){return !!cfg},
-  ocr:async function(d){if(!cfg)throw new Error('off');return api('/ocr',{method:'POST',body:JSON.stringify({image:d})})},
+  ocr:async function(d){if(!cfg)throw new Error('off');var r=await fetch(cfg.url.replace(/\/+$/,'')+'/ocr',{method:'POST',headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'},body:JSON.stringify({image:d})}),j=null;try{j=await r.json()}catch(e){}if(r.status===401)throw new Error('Code refusé');if(r.status===404)throw new Error('v-old');if(!r.ok)throw new Error((j&&j.error)||('Serveur '+r.status));return j},
   cfg:function(){return cfg?{url:cfg.url}:null},
   label:function(){return !cfg?'Local':st.err?'Synchro ✕':'Synchro ✓'},
   status:function(){return !cfg?'Cet appareil fonctionne seul (pas de synchronisation).':st.err?'Erreur : '+st.err+(meta.q.length?' · '+meta.q.length+' modification(s) en attente':''):'Connecté · '+(st.last?'dernière synchro à '+new Date(st.last).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'en cours…')+(meta.q.length?' · '+meta.q.length+' en attente':'')},
@@ -770,7 +770,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.39-a</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.39-b</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -788,7 +788,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.39-a</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.39-b</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -1875,7 +1875,7 @@ function readLabel(img){if(OCRBUSY)return;if(!window.QVSYNC||!QVSYNC.on||!QVSYNC
  QVSYNC.ocr(img).then(function(r){OCRBUSY=false;if(!F||!F.tabs||F.tabs.indexOf('lots')<0)return;var lot=r&&r.lot?String(r.lot).replace(/^\s*(lot|n°|no|batch)\s*[:.\-]?\s*/i,'').trim():'',dl=r&&r.dlc?parseDlc(r.dlc):'';
   if(lot)F.lotIn=lot;if(dl){F.dlcIn=dl;F.dlcAuto=false}
   if(lot||dl){drawFlow();toast((lot?'Lot '+lot:'Aucun numéro de lot détecté')+(dl?(lot?' et ':' · ')+'DLC '+frd(dl)+' détectée':(lot?' · aucune DLC détectée':'')))}
-  else toast('Aucun numéro de lot détecté, aucune DLC détectée.')}).catch(function(e){OCRBUSY=false;var m=String(e&&e.message||e);toast(/501|ai-off/.test(m)?'Lecture automatique pas encore activée sur le serveur.':'Lecture automatique impossible (connexion ?).')})}
+  else toast('Aucun numéro de lot détecté, aucune DLC détectée.')}).catch(function(e){OCRBUSY=false;var m=String(e&&e.message||e);toast(/501|ai-off/.test(m)?'Lecture automatique pas encore activée sur le serveur (liaison Workers AI).':/v-old/.test(m)?'Le serveur n’a pas la nouvelle version : collez le code worker-ocr.js dans Cloudflare puis Deploy.':'Lecture impossible : '+m.slice(0,160))})}
 function compress(file,cb,mx,ql){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,(mx||640)/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',ql||.55))};im.src=fr.result};fr.readAsDataURL(file)}
 
 /* ouverture des saisies par module */
