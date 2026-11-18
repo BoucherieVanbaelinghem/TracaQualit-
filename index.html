@@ -664,7 +664,7 @@ function optCodeDialog(){
  document.getElementById('ocX').onclick=closeForm;document.getElementById('ocOk').onclick=ok;i.onkeydown=function(e){if(e.key==='Enter')ok()}}
 
 var CHANGELOG=[
-['v10.39','18 nov. 2026','Lecture automatique du lot et de la DLC sur photo',['Traçabilité : à chaque photo d’étiquette, l’IA lit le n° de lot et la DLC et remplit les champs','Message « Aucun numéro de lot détecté, aucune DLC détectée » quand rien n’est lisible','Demande l’activation de « Workers AI » sur le serveur de synchronisation'],],
+['v10.39','18 nov. 2026','Lecture automatique du lot et de la DLC sur photo',['Traçabilité : à chaque photo d’étiquette, l’IA lit le n° de lot, la DLC et le fournisseur et remplit les champs','Message « Aucun numéro de lot détecté, aucune DLC détectée » quand rien n’est lisible','Demande l’activation de « Workers AI » sur le serveur de synchronisation'],],
 ['v10.38','18 nov. 2026','Étiquettes TSPL, logo, plus de fenêtre de sortie de cellule',['Étiquettes imprimées en TSPL (imprimante Bluetooth), format 58 × 30 mm réglable, avec réglage du décalage','Nouveau logo vert','Plus de fenêtre automatique pour les sorties de cellule : elles se confirment dans Refroidissement'],],
 ['v10.37','18 nov. 2026','Application Android et Bluetooth classique Zebra',['Application Android « Qualité Vanbaelinghem » (installée à la main) qui contient le logiciel','Impression des étiquettes en Bluetooth classique : choix de l’imprimante parmi celles jumelées à la tablette','Impressions de documents (bons de livraison, rapports) par l’impression Android, exports enregistrés dans Téléchargements']],
 ['v10.36','17 nov. 2026','Impression Zebra par Bluetooth',['Fenêtre Imprimante simplifiée : un seul bouton « Chercher une imprimante Bluetooth » (Wi-Fi retiré)','Envoi Bluetooth direct amélioré (blocs plus gros, repli automatique, diagnostic affiché)','Second chemin pour le Bluetooth classique : relais par l’application Zebra Browser Print']],
@@ -770,7 +770,7 @@ function header(){
  if(!S.profile)return (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+(DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
  var back=S.screen!=='home'&&S.profile?'<button class="btn" data-a="home" aria-label="Retour à l’accueil">← Accueil</button>':'';
  var who=S.profile?'<button class="btn ghost who" data-a="switch"><span class="dot">'+esc(S.profile[0])+'</span>'+esc(S.profile)+'</button>':'';
- return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.39-b</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
+ return '<header class="bar">'+back+'<div class="brand">Qualité Vanbaelinghem<small>Autocontrôles · PMS · v10.39-c</small></div><div class="spacer"></div><div class="clock"><span id="cdate"></span><b class="num" id="ctime"></b></div>'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+who+'</header>'+
   (!DB?'<div class="banner">Données partagées indisponibles. Ouvrez ce lien depuis l’application Claude, avec le compte de l’entreprise.</div>':'')+
   (DBERR?'<div class="banner">Erreur de lecture de la base ('+esc(DBERR)+'). Rechargez la page.</div>':'');
 }
@@ -788,7 +788,7 @@ function vWho(){
  var names=D.profils.length?D.profils.slice().sort(byName).map(function(p){return p.name}):['Boucherie','Traiteur','Julien','Nettoyage'];
  var st=whoStats(),R=124,C=2*Math.PI*R,off=C*(1-st.pct/100);
  var d=new Date(),dl=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dl=dl.charAt(0).toUpperCase()+dl.slice(1);
- return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.39-b</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
+ return '<div class="whoscreen"><aside class="whopanel">'+fsBtn()+'<button class="btn ghost theme" data-a="theme" aria-label="Changer le thème (clair / sombre)" title="Clair / sombre">'+themeIcon()+'</button>'+'<div class="whologo">Qualité<br>Vanbaelinghem</div><div style="font-size:.8rem;opacity:.75;margin-top:-6px">v10.39-c</div><div class="whodate" id="pdate">'+esc(dl)+'</div><div class="whotime num" id="ptime">'+pad(d.getHours())+':'+pad(d.getMinutes())+'</div>'+
  '<div class="ring"><svg viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="14"/><circle cx="140" cy="140" r="'+R+'" fill="none" stroke="#7fd69a" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 140 140)"/></svg><div class="ringin"><b class="num">'+st.pct+'%</b><span>du planning du<br>jour réalisé</span></div></div>'+
  '<div class="wholate">'+ic('plan')+'<span>'+(st.late?'Vous avez '+st.late+' tâche'+(st.late>1?'s':'')+' en retard':'Aucune tâche en retard')+'</span></div>'+
  '<div class="whobtns"><button class="wb" data-a="wnet"><span class="wc">'+ic('wifi')+(DB?'<i class="wd"></i>':'')+'</span>'+(DB?(window.QVSYNC?QVSYNC.label():'Connecté'):'Hors ligne')+'</button><button class="wb" data-a="wsupp"><span class="wc">'+ic('help')+'</span>Assistance</button><button class="wb" data-a="wopt"><span class="wc">'+ic('gear')+'</span>Options</button></div></aside>'+
@@ -1581,7 +1581,7 @@ function fBody(){
  if(t==='moment'){
   return '<p style="margin:0;text-align:center;color:var(--muted)">À quel moment est effectué ce relevé ?</p><div class="moments">'+[['matin','Matin','☀'],['soir','Soir','☾'],['maintenant','Maintenant','◷']].map(function(m){return '<button class="mom" data-k="mom" data-v="'+m[0]+'" aria-pressed="'+(F.moment===m[0])+'"><i>'+m[2]+'</i>'+m[1]+'</button>'}).join('')+'</div><label class="f" for="mdate">Date</label><input type="date" id="mdate" value="'+F.date+'" max="'+today()+'">'}
  if(t==='lots'){
-  return '<div class="fields"><div><label class="f" for="lotin">N° de lot</label><div style="display:flex;gap:8px"><input type="text" id="lotin" value="'+esc(F.lotIn)+'" placeholder="Laissez vide pour un lot automatique"><button class="btn" data-k="autolot">Auto</button></div></div><div><label class="f" for="dlcin">DLC</label><input type="date" id="dlcin" value="'+esc(F.dlcIn)+'"></div><button class="btn" data-k="addlot">+ Ajouter ce lot</button></div>'+
+  return '<div class="fields"><div><label class="f" for="lotin">N° de lot</label><div style="display:flex;gap:8px"><input type="text" id="lotin" value="'+esc(F.lotIn)+'" placeholder="Laissez vide pour un lot automatique"><button class="btn" data-k="autolot">Auto</button></div></div><div><label class="f" for="dlcin">DLC</label><input type="date" id="dlcin" value="'+esc(F.dlcIn)+'"></div><div><label class="f" for="suppin">Fournisseur</label><input type="text" id="suppin" value="'+esc(F.suppIn||'')+'" placeholder="Lu sur l’étiquette (modifiable)"></div><button class="btn" data-k="addlot">+ Ajouter ce lot</button></div>'+
   '<div class="lotlist">'+(F.lots.length?F.lots.map(function(l,i){return '<div class="lotrow"><span class="num"><b>'+esc(l.lot)+'</b> · DLC '+frd(l.dlc)+'</span><button data-k="rmlot" data-i="'+i+'" aria-label="Retirer">✕</button></div>'}).join(''):'<p class="meta" style="margin:0">Aucun lot ajouté.</p>')+'</div>'}
  if(t==='prod'){
   var cats=catList('prod'),cur=F.prodCat||cats[0];
@@ -1696,7 +1696,7 @@ function smartMatch(name,q){var n=favNrm(name),ws=String(q||'').split(/\s+/).fil
  for(var i=0;i<ws.length;i++){var w=ws[i];if(n.indexOf(w)===0)sc+=0;else if(nw.some(function(x){return x.indexOf(w)===0}))sc+=1;else if(n.indexOf(w)>-1)sc+=2;else return -1}return sc}
 function favNrm(x){return String(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim()}
 /* étiquettes retrouvables : fiches de traçabilité, réceptions et ingrédients des fabrications (photo et/ou lot) */
-function tagOf(r){return {id:r.id,kind:r.module==='reception'?'Réception':'Traçabilité',name:r.prod||r.label||r.itemName||'',ts:r.ts||0,who:r.who||'',photos:r.photos||[],lots:r.lots||[],sup:'',fabId:r.module==='trace'?(r.fabId||''):''}}
+function tagOf(r){return {id:r.id,kind:r.module==='reception'?'Réception':'Traçabilité',name:r.prod||r.label||r.itemName||'',ts:r.ts||0,who:r.who||'',photos:r.photos||[],lots:r.lots||[],sup:r.supplier||'',fabId:r.module==='trace'?(r.fabId||''):''}}
 var TG_STOP={de:1,du:1,des:1,la:1,le:1,les:1,et:1,au:1,aux:1,en:1,sur:1,avec:1,pour:1,kg:1,bio:1,frais:1,fraiche:1,fraiches:1,surgele:1,surgeles:1,surgelee:1,cuit:1,cuite:1,cru:1,crue:1,extra:1,gros:1,petit:1,grand:1};
 function tgToks(x){var o=[];favNrm(x).split(/[^a-z0-9]+/).forEach(function(w){if(!w||TG_STOP[w]||w.length<3&&!/^\d+$/.test(w))return;if(w.length>3&&/[sx]$/.test(w))w=w.slice(0,-1);if(o.indexOf(w)<0)o.push(w)});return o}
 function tgScore(qt,txt){if(!txt)return 0;var rt=tgToks(txt),sc=0;qt.forEach(function(t){for(var i=0;i<rt.length;i++){var u=rt[i];if(u===t||(t.length>=4&&u.length>=4&&(u.indexOf(t)===0||t.indexOf(u)===0))){sc++;return}}});return sc}
@@ -1849,6 +1849,7 @@ async function saveFlow(single){
  if(F.checks){r.checksTotal=F.checks.length;r.checksDone=F.checked.filter(Boolean).length;r.undone=F.checks.filter(function(_,i){return !F.checked[i]})}
  if(F.mesuresOn){var m={};['tin','tout','dur'].forEach(function(k){if(F.mesures[k]!==undefined&&F.mesures[k]!=='')m[k]=parseFloat(F.mesures[k])});if(Object.keys(m).length)r.mesures=m}
  if(F.lots.length)r.lots=F.lots.map(function(l){return {lot:l.lot,dlc:l.dlc}});
+  if((F.suppIn||'').trim())r.supplier=F.suppIn.trim();
  if(F.prod){r.prod=F.prod.name;if(F.prod.fabId)r.fabId=F.prod.fabId}
  if(F.layout==='trace'&&F.srcTag)r.srcTag=F.srcTag;
  if(F.layout==='trace'&&F.srcFab){r.srcFab=F.srcFab.name;r.srcFiches=F.srcFab.ids}
@@ -1873,8 +1874,9 @@ var OCRBUSY=false;
 function readLabel(img){if(OCRBUSY)return;if(!window.QVSYNC||!QVSYNC.on||!QVSYNC.ocr||!QVSYNC.on()){return}
  OCRBUSY=true;toast('Lecture de l’étiquette…');
  QVSYNC.ocr(img).then(function(r){OCRBUSY=false;if(!F||!F.tabs||F.tabs.indexOf('lots')<0)return;var lot=r&&r.lot?String(r.lot).replace(/^\s*(lot|n°|no|batch)\s*[:.\-]?\s*/i,'').trim():'',dl=r&&r.dlc?parseDlc(r.dlc):'';
-  if(lot)F.lotIn=lot;if(dl){F.dlcIn=dl;F.dlcAuto=false}
-  if(lot||dl){drawFlow();toast((lot?'Lot '+lot:'Aucun numéro de lot détecté')+(dl?(lot?' et ':' · ')+'DLC '+frd(dl)+' détectée':(lot?' · aucune DLC détectée':'')))}
+  var sp=r&&r.fournisseur?String(r.fournisseur).replace(/^\s*(commercialis[ée]e?|emball[ée]e?|fabriqu[ée]e?|distribu[ée]e?|exp[ée]di[ée]e?|produit)\s+par\s*[:.\-]?\s*/i,'').trim().slice(0,60):'';
+  if(lot)F.lotIn=lot;if(dl){F.dlcIn=dl;F.dlcAuto=false}if(sp)F.suppIn=sp;
+  if(lot||dl||sp){drawFlow();toast((lot?'Lot '+lot:'Aucun numéro de lot détecté')+(dl?(lot?' et ':' · ')+'DLC '+frd(dl)+' détectée':(lot?' · aucune DLC détectée':''))+(sp?' · Fournisseur '+sp:' · fournisseur non lu'))}
   else toast('Aucun numéro de lot détecté, aucune DLC détectée.')}).catch(function(e){OCRBUSY=false;var m=String(e&&e.message||e);toast(/501|ai-off/.test(m)?'Lecture automatique pas encore activée sur le serveur (liaison Workers AI).':/v-old/.test(m)?'Le serveur n’a pas la nouvelle version : collez le code worker-ocr.js dans Cloudflare puis Deploy.':'Lecture impossible : '+m.slice(0,160))})}
 function compress(file,cb,mx,ql){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,(mx||640)/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',ql||.55))};im.src=fr.result};fr.readAsDataURL(file)}
 
@@ -2210,6 +2212,7 @@ document.addEventListener('input',function(ev){
   else if(id==='pq'){F.prodQ=ev.target.value;var g=document.getElementById('pgrid');if(g)g.innerHTML=prodGrid();document.querySelectorAll('.chip[data-k=pcat]').forEach(function(c){c.setAttribute('aria-pressed',F.prodQ?'false':c.getAttribute('aria-pressed'))})}
   else if(id==='rpin'){F.recProd=ev.target.value;rpChips();refreshFoot()}
   else if(id==='lotin'){F.lotIn=ev.target.value}
+  else if(id==='suppin'){F.suppIn=ev.target.value}
   else if(id==='dlcin'){F.dlcIn=ev.target.value;F.dlcAuto=false}
   else if(ev.target.getAttribute('data-m')){F.mesures[ev.target.getAttribute('data-m')]=ev.target.value;refreshFoot()}
   return}
